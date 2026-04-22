@@ -1,0 +1,2637 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CrypyoCash</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+/* ════════════════════════════════════════════════════════════
+   RESET & CSS VARS
+════════════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --p:    #6B00C2;
+  --pd:   #4A0085;
+  --pl:   #9B30FF;
+  --pu:   #C580FF;
+  --pg:   rgba(107,0,194,.38);
+  --blk:  #0F0F0F;
+  --gr:   #6B7280;
+  --grm:  #9CA3AF;
+  --brd:  #E5E7EB;
+  --wht:  #FFFFFF;
+  --grn:  #22C55E;
+  --red:  #EF4444;
+  --dbg:  #0D0717;
+  --dbg2: #1A1030;
+  --dc:   rgba(255,255,255,.045);
+  --dbd:  rgba(155,48,255,.18);
+  --dt:   #F0EAF8;
+  --dm:   #9080A8;
+}
+html, body { width:100%; min-height:100vh; font-family:'Outfit',sans-serif; overflow-x:hidden; }
+
+/* ════════════════════════════════════════════════════════════
+   SPA VIEWS
+════════════════════════════════════════════════════════════ */
+.view { display:none; min-height:100vh; }
+.view.active { display:block; }
+
+/* ════════════════════════════════════════════════════════════
+   TICKER BG
+════════════════════════════════════════════════════════════ */
+.bgw { position:fixed; inset:0; display:flex; flex-direction:column; justify-content:space-around; pointer-events:none; overflow:hidden; z-index:0; }
+.bgr { display:flex; white-space:nowrap; gap:60px; padding:8px 0; }
+.bgr:nth-child(odd)  { animation:sL 34s linear infinite; }
+.bgr:nth-child(even) { animation:sR 28s linear infinite; }
+@keyframes sL { from{transform:translateX(0)}    to{transform:translateX(-50%)} }
+@keyframes sR { from{transform:translateX(-50%)} to{transform:translateX(0)}    }
+.ta .bgt { font-size:clamp(16px,2.5vw,34px); font-weight:900; letter-spacing:.04em; color:var(--pu); opacity:.11; text-transform:uppercase; user-select:none; flex-shrink:0; }
+.ta .bgs { color:var(--pl); opacity:.14; font-size:1.3em; flex-shrink:0; user-select:none; }
+.td .bgt { font-size:clamp(14px,2vw,28px); font-weight:900; letter-spacing:.04em; color:#9B30FF; opacity:.04; text-transform:uppercase; user-select:none; flex-shrink:0; }
+.td .bgs { color:#6B00C2; opacity:.06; font-size:1.2em; flex-shrink:0; user-select:none; }
+
+/* ════════════════════════════════════════════════════════════
+   AUTH (LOGIN + CADASTRO)
+════════════════════════════════════════════════════════════ */
+#view-login,#view-cadastro { background:var(--wht); color:var(--blk); }
+.auth-page { position:relative; z-index:1; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:48px 20px 72px; gap:22px; }
+
+.logo-wrap { display:flex; align-items:center; gap:10px; animation:fD .7s cubic-bezier(.22,1,.36,1) both; cursor:pointer; }
+@keyframes fD { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
+.logo-icon { width:68px; height:68px; flex-shrink:0; }
+.logo-tw { display:flex; align-items:baseline; }
+.logo-c { font-size:38px; font-weight:800; color:var(--blk); letter-spacing:-.5px; line-height:1; }
+.logo-k { font-size:38px; font-weight:800; letter-spacing:-.5px; line-height:1; background:linear-gradient(135deg,#6B00C2,#9B30FF); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+.tbadge { display:inline-flex; align-items:center; gap:9px; background:rgba(107,0,194,.06); border:1.5px solid rgba(107,0,194,.14); border-radius:50px; padding:8px 18px 8px 12px; animation:fU .7s .1s cubic-bezier(.22,1,.36,1) both; }
+.bdot { width:9px; height:9px; background:var(--grn); border-radius:50%; flex-shrink:0; animation:pd 1.8s ease-in-out infinite; box-shadow:0 0 0 3px rgba(34,197,94,.22); }
+@keyframes pd { 0%,100%{box-shadow:0 0 0 3px rgba(34,197,94,.22)} 50%{box-shadow:0 0 0 7px rgba(34,197,94,.07)} }
+.blabel { font-size:12.5px; font-weight:600; color:var(--p); letter-spacing:.01em; }
+
+.acard { background:var(--wht); border-radius:24px; border:1px solid rgba(107,0,194,.09); box-shadow:0 2px 4px rgba(107,0,194,.04),0 16px 48px rgba(107,0,194,.11); padding:46px 50px 42px; width:100%; max-width:430px; animation:fU .8s .18s cubic-bezier(.22,1,.36,1) both; }
+@keyframes fU { from{opacity:0;transform:translateY(26px)} to{opacity:1;transform:translateY(0)} }
+.acard-t { font-size:23px; font-weight:700; color:var(--blk); margin-bottom:5px; line-height:1.25; }
+.acard-t .hl { background:linear-gradient(135deg,#6B00C2,#9B30FF); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.acard-s { font-size:13.5px; color:var(--gr); font-weight:400; margin-bottom:32px; }
+
+/* Fields */
+.af { display:flex; flex-direction:column; gap:6px; margin-bottom:18px; }
+.af label { font-size:11.5px; font-weight:700; color:#374151; letter-spacing:.07em; text-transform:uppercase; }
+.iw { position:relative; display:flex; align-items:center; }
+.ii { position:absolute; left:14px; color:var(--grm); pointer-events:none; transition:color .2s; display:flex; align-items:center; }
+.iw:focus-within .ii { color:var(--p); }
+.af input { width:100%; padding:13px 16px 13px 42px; border:1.5px solid var(--brd); border-radius:12px; font-size:14.5px; font-family:'Outfit',sans-serif; color:var(--blk); background:#FAFAFA; outline:none; transition:border-color .2s,box-shadow .2s,background .2s; -webkit-appearance:none; }
+.af input::placeholder { color:#B0B8C4; font-weight:300; }
+.af input:focus { border-color:var(--p); background:var(--wht); box-shadow:0 0 0 4px rgba(107,0,194,.10); }
+.af.err input { border-color:var(--red); box-shadow:0 0 0 4px rgba(239,68,68,.10); }
+.af-em { font-size:11.5px; color:var(--red); font-weight:500; display:none; margin-top:2px; }
+.af.err .af-em { display:block; }
+.tpass { position:absolute; right:14px; background:none; border:none; cursor:pointer; color:var(--grm); padding:0; display:flex; align-items:center; transition:color .2s; z-index:1; }
+.tpass:hover { color:var(--p); }
+
+.frow { display:flex; justify-content:flex-end; margin-top:-8px; margin-bottom:28px; }
+.flink { font-size:12.5px; font-weight:500; color:var(--p); text-decoration:none; cursor:pointer; transition:opacity .18s; }
+.flink:hover { opacity:.65; }
+
+/* Btn auth */
+.btn-a { width:100%; padding:15px; background:linear-gradient(135deg,#5500A0,#9B30FF); color:#fff; border:none; border-radius:13px; font-size:15.5px; font-weight:700; font-family:'Outfit',sans-serif; letter-spacing:.03em; cursor:pointer; position:relative; overflow:hidden; transition:transform .15s,box-shadow .15s,filter .15s,opacity .2s; box-shadow:0 5px 22px var(--pg); display:flex; align-items:center; justify-content:center; gap:8px; }
+.btn-a::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(255,255,255,.18),transparent 55%); pointer-events:none; }
+.btn-a:not(:disabled):hover { transform:translateY(-2px); box-shadow:0 10px 30px rgba(107,0,194,.48); filter:brightness(1.06); }
+.btn-a:disabled { cursor:not-allowed; opacity:.75; }
+
+.spin { width:18px; height:18px; border:2.5px solid rgba(255,255,255,.35); border-top-color:#fff; border-radius:50%; animation:sp .75s linear infinite; display:none; flex-shrink:0; }
+@keyframes sp { to{transform:rotate(360deg)} }
+
+/* Toast auth */
+.ato { display:flex; align-items:center; gap:10px; padding:12px 18px; border-radius:12px; font-size:13px; font-weight:500; margin-top:16px; opacity:0; transform:translateY(6px); transition:opacity .25s,transform .25s; pointer-events:none; }
+.ato.show { opacity:1; transform:translateY(0); pointer-events:auto; }
+.ato.error   { background:rgba(239,68,68,.08);  border:1px solid rgba(239,68,68,.2);  color:#DC2626; }
+.ato.success { background:rgba(34,197,94,.08);  border:1px solid rgba(34,197,94,.2);  color:#16A34A; }
+
+.adiv { display:flex; align-items:center; gap:12px; margin:24px 0 0; }
+.adiv-l { flex:1; height:1px; background:var(--brd); }
+.adiv-t { font-size:11.5px; color:var(--grm); font-weight:500; letter-spacing:.05em; text-transform:uppercase; }
+
+.stip { display:flex; align-items:flex-start; gap:8px; background:rgba(107,0,194,.04); border:1px solid rgba(107,0,194,.10); border-radius:10px; padding:10px 14px; margin-top:20px; }
+.stip-i { font-size:14px; flex-shrink:0; margin-top:1px; }
+.stip-t { font-size:11.5px; color:var(--gr); line-height:1.5; }
+
+.srow { display:flex; align-items:center; gap:10px; animation:fU .8s .36s cubic-bezier(.22,1,.36,1) both; }
+.srow span { font-size:13.5px; color:var(--gr); }
+.btn-sw { padding:10px 24px; background:linear-gradient(135deg,#5500A0,#9B30FF); color:#fff; border:none; border-radius:50px; font-size:13.5px; font-weight:700; font-family:'Outfit',sans-serif; cursor:pointer; letter-spacing:.02em; transition:transform .15s,box-shadow .15s,filter .15s; box-shadow:0 3px 14px rgba(107,0,194,.32); }
+.btn-sw:hover { transform:translateY(-1px); filter:brightness(1.08); }
+.btn-swo { padding:10px 24px; background:transparent; color:var(--p); border:1.5px solid var(--p); border-radius:50px; font-size:13.5px; font-weight:700; font-family:'Outfit',sans-serif; cursor:pointer; letter-spacing:.02em; transition:background .18s,color .18s,transform .15s; }
+.btn-swo:hover { background:var(--p); color:#fff; transform:translateY(-1px); }
+
+.afooter { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); font-size:11.5px; color:#CBD5E1; font-weight:400; letter-spacing:.03em; white-space:nowrap; z-index:2; }
+.afooter a { color:#9B30FF; text-decoration:none; font-weight:600; cursor:pointer; }
+
+/* Cadastro extras */
+.bonus-box { background:linear-gradient(135deg,rgba(107,0,194,.06),rgba(155,48,255,.06)); border:1px solid rgba(107,0,194,.15); border-radius:12px; padding:16px; margin-bottom:22px; }
+.bonus-tag { font-size:12px; font-weight:700; color:var(--p); text-transform:uppercase; letter-spacing:.06em; margin-bottom:4px; }
+.bonus-v   { font-size:22px; font-weight:800; color:var(--blk); margin:4px 0 2px; }
+.bonus-apy { font-size:12px; font-weight:600; color:#16A34A; }
+.ureqs { background:#F9FAFB; border-radius:10px; padding:12px 14px; margin-top:-8px; margin-bottom:6px; }
+.ureqs p { font-size:11px; color:var(--gr); font-weight:600; margin-bottom:6px; text-transform:uppercase; letter-spacing:.04em; }
+.ri { display:flex; align-items:center; gap:6px; font-size:11.5px; color:var(--grm); margin-bottom:3px; transition:color .2s; }
+.ri.ok { color:var(--grn); }
+.rd { width:6px; height:6px; border-radius:50%; background:var(--grm); flex-shrink:0; transition:background .2s; }
+.ri.ok .rd { background:var(--grn); }
+
+/* Modal chave */
+.kmo { position:fixed; inset:0; background:rgba(15,15,15,.55); backdrop-filter:blur(6px); z-index:300; display:flex; align-items:center; justify-content:center; padding:20px; opacity:0; pointer-events:none; transition:opacity .3s; }
+.kmo.show { opacity:1; pointer-events:auto; }
+.km { background:#fff; border-radius:28px; border:1px solid rgba(107,0,194,.12); box-shadow:0 8px 30px rgba(107,0,194,.18),0 40px 80px rgba(15,15,15,.18); padding:48px 44px 44px; width:100%; max-width:460px; text-align:center; transform:translateY(24px) scale(.97); transition:transform .35s cubic-bezier(.22,1,.36,1); }
+.kmo.show .km { transform:translateY(0) scale(1); }
+.km-ico { width:70px; height:70px; background:linear-gradient(135deg,rgba(34,197,94,.12),rgba(34,197,94,.06)); border:2px solid rgba(34,197,94,.3); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; font-size:30px; animation:pop .5s .15s cubic-bezier(.22,1,.36,1) both; }
+@keyframes pop { from{opacity:0;transform:scale(.5)} to{opacity:1;transform:scale(1)} }
+.km-t  { font-size:22px; font-weight:800; color:#0F0F0F; margin-bottom:6px; }
+.km-s  { font-size:13.5px; color:#6B7280; margin-bottom:28px; line-height:1.5; }
+.cbox  { background:linear-gradient(135deg,rgba(107,0,194,.06),rgba(155,48,255,.06)); border:2px solid rgba(107,0,194,.18); border-radius:18px; padding:24px 20px 20px; margin-bottom:20px; }
+.cbox-l { font-size:10.5px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--p); opacity:.7; margin-bottom:10px; }
+.ccode  { font-size:34px; font-weight:900; letter-spacing:.18em; background:linear-gradient(135deg,#4A0085,#9B30FF); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; user-select:all; line-height:1; margin-bottom:8px; }
+.chint  { font-size:11px; color:#9CA3AF; }
+.kwarn  { display:flex; align-items:flex-start; gap:8px; background:rgba(234,179,8,.07); border:1px solid rgba(234,179,8,.25); border-radius:10px; padding:10px 14px; margin-bottom:20px; text-align:left; }
+.kwi    { font-size:15px; flex-shrink:0; margin-top:1px; }
+.kwt    { font-size:12px; color:#92400E; font-weight:500; line-height:1.5; }
+.btn-ck { width:100%; padding:14px; background:linear-gradient(135deg,#5500A0,#9B30FF); color:#fff; border:none; border-radius:13px; font-size:15px; font-weight:700; font-family:'Outfit',sans-serif; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:12px; position:relative; overflow:hidden; transition:transform .15s,box-shadow .15s,filter .15s,background .3s; box-shadow:0 5px 22px rgba(107,0,194,.38); }
+.btn-ck::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(255,255,255,.18),transparent 55%); pointer-events:none; }
+.btn-ck:hover { transform:translateY(-2px); filter:brightness(1.06); }
+.btn-ck.cop { background:linear-gradient(135deg,#16A34A,#22C55E)!important; box-shadow:0 5px 22px rgba(34,197,94,.38)!important; }
+.btn-gl { width:100%; padding:13px; background:transparent; color:var(--p); border:1.5px solid rgba(107,0,194,.3); border-radius:13px; font-size:14.5px; font-weight:600; font-family:'Outfit',sans-serif; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; transition:background .18s,border-color .18s,transform .15s; }
+.btn-gl:hover { background:rgba(107,0,194,.06); border-color:var(--p); transform:translateY(-1px); }
+
+/* ════════════════════════════════════════════════════════════
+   DASHBOARD
+════════════════════════════════════════════════════════════ */
+#view-dash { background:var(--dbg); color:var(--dt); }
+.shell { position:relative; z-index:1; max-width:1100px; margin:0 auto; padding:0 20px 100px; }
+
+/* ── HEADER ── */
+.dh {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 0 24px;
+  gap: 12px;
+  flex-wrap: nowrap; /* nunca quebra linha */
+}
+.dh-left { display:flex; align-items:center; gap:12px; flex-shrink:0; }
+.dh-right { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+
+/* Logo pequeno */
+.lsm { display:flex; align-items:center; gap:7px; cursor:pointer; text-decoration:none; flex-shrink:0; }
+.lsm svg { width:36px; height:36px; }
+.lsm .lc { font-size:20px; font-weight:800; color:#fff; }
+.lsm .lp { font-size:20px; font-weight:800; background:linear-gradient(135deg,#9B30FF,#C580FF); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+/* Badge usuário + sair — ficam juntos */
+.ubadge { display:flex; align-items:center; gap:6px; background:rgba(155,48,255,.12); border:1px solid rgba(155,48,255,.25); border-radius:50px; padding:6px 12px 6px 8px; }
+.uavt { width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg,#5500A0,#9B30FF); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; color:#fff; flex-shrink:0; }
+.uname { font-size:13px; font-weight:600; color:var(--dt); white-space:nowrap; }
+
+/* Botão sair — compacto */
+.btn-sair {
+  display:flex; align-items:center; gap:5px;
+  padding:7px 14px;
+  background:rgba(239,68,68,.1);
+  border:1px solid rgba(239,68,68,.25); border-radius:50px;
+  color:#FC8181; font-size:12.5px; font-weight:600;
+  font-family:'Outfit',sans-serif; cursor:pointer;
+  transition:background .2s,transform .15s;
+  white-space:nowrap;
+}
+.btn-sair:hover { background:rgba(239,68,68,.2); transform:translateY(-1px); }
+
+/* Badge live (some no mobile pequeno) */
+.bl { display:inline-flex; align-items:center; gap:7px; background:rgba(34,197,94,.08); border:1px solid rgba(34,197,94,.2); border-radius:50px; padding:6px 12px 6px 10px; }
+.bld { width:7px; height:7px; background:var(--grn); border-radius:50%; animation:pd 1.8s ease-in-out infinite; box-shadow:0 0 0 3px rgba(34,197,94,.2); }
+.blt { font-size:11px; font-weight:600; color:var(--grn); }
+
+/* Grids */
+.g1 { margin-bottom:16px; }
+.g3 { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:16px; }
+
+/* Card base */
+.dc { background:var(--dc); border:1px solid var(--dbd); border-radius:18px; padding:22px 24px; backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); position:relative; overflow:hidden; }
+.dc::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(155,48,255,.35),transparent); }
+
+/* Card saldo */
+.dc-bal { background:linear-gradient(145deg,rgba(85,0,160,.35),rgba(107,0,194,.2)); border-color:rgba(155,48,255,.3); }
+.dc-bal::after { content:''; position:absolute; width:260px; height:260px; background:radial-gradient(circle,rgba(155,48,255,.15),transparent 70%); top:-60px; right:-60px; pointer-events:none; }
+.bal-l  { font-size:11.5px; font-weight:600; color:#C580FF; letter-spacing:.08em; text-transform:uppercase; margin-bottom:8px; }
+.bal-v  { font-size:clamp(28px,5vw,48px); font-weight:900; letter-spacing:-.5px; background:linear-gradient(135deg,#fff,#D4B0FF); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; line-height:1; margin-bottom:6px; font-variant-numeric:tabular-nums; }
+.bal-ch { display:inline-flex; align-items:center; gap:5px; font-size:13px; font-weight:600; color:var(--grn); background:rgba(34,197,94,.12); border:1px solid rgba(34,197,94,.22); border-radius:50px; padding:4px 10px; }
+.bal-sb { font-size:12px; color:var(--dm); margin-top:10px; }
+.bal-ac { display:flex; gap:10px; margin-top:18px; flex-wrap:wrap; }
+
+/* Btns dash */
+.btn-dp { padding:10px 20px; background:linear-gradient(135deg,#5500A0,#9B30FF); color:#fff; border:none; border-radius:50px; font-size:13px; font-weight:700; font-family:'Outfit',sans-serif; cursor:pointer; transition:transform .15s,box-shadow .15s,filter .15s; box-shadow:0 4px 18px rgba(107,0,194,.4); display:flex; align-items:center; gap:6px; }
+.btn-dp:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(107,0,194,.5); filter:brightness(1.06); }
+.btn-ds { padding:10px 20px; background:rgba(255,255,255,.06); color:var(--dt); border:1px solid rgba(255,255,255,.15); border-radius:50px; font-size:13px; font-weight:600; font-family:'Outfit',sans-serif; cursor:pointer; transition:background .2s,transform .15s; display:flex; align-items:center; gap:6px; }
+.btn-ds:hover { background:rgba(255,255,255,.12); transform:translateY(-1px); }
+
+/* Stats */
+.sc-l { font-size:11px; font-weight:600; color:var(--dm); letter-spacing:.06em; text-transform:uppercase; margin-bottom:8px; }
+.sc-v { font-size:22px; font-weight:800; color:#fff; margin-bottom:4px; }
+.sc-s { font-size:11.5px; color:var(--dm); }
+.sc-i { font-size:26px; margin-bottom:10px; display:block; }
+.sc-grn .sc-v { color:#4ADE80; }
+.sc-yel .sc-v { color:#FCD34D; }
+
+/* Chart */
+.ch-hd { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:18px; flex-wrap:wrap; gap:10px; }
+.ch-t  { font-size:15px; font-weight:700; color:#fff; margin-bottom:3px; }
+.ch-s  { font-size:12px; color:var(--dm); }
+.ch-b  { background:rgba(34,197,94,.12); border:1px solid rgba(34,197,94,.22); border-radius:50px; padding:5px 12px; font-size:12px; font-weight:700; color:#4ADE80; white-space:nowrap; }
+.ch-w  { position:relative; height:170px; }
+
+/* Section */
+.sh { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:8px; }
+.sh-t  { font-size:16px; font-weight:700; color:#fff; }
+.sh-s  { font-size:11.5px; color:var(--dm); margin-top:2px; }
+.btn-gh { background:none; border:1px solid rgba(155,48,255,.3); border-radius:50px; padding:5px 13px; color:#C580FF; font-size:12px; font-weight:600; font-family:'Outfit',sans-serif; cursor:pointer; transition:background .2s; }
+.btn-gh:hover { background:rgba(155,48,255,.1); }
+
+/* Txns */
+.tl { display:flex; flex-direction:column; gap:8px; }
+.ti { display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07); border-radius:12px; padding:12px 16px; transition:background .2s; }
+.ti:hover { background:rgba(155,48,255,.07); }
+.ti-l { display:flex; align-items:center; gap:10px; min-width:0; }
+.ti-ico { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+.ti-ico.deposito   { background:rgba(34,197,94,.12);  border:1px solid rgba(34,197,94,.2);  }
+.ti-ico.saque      { background:rgba(239,68,68,.12);  border:1px solid rgba(239,68,68,.2);  }
+.ti-ico.rendimento { background:rgba(107,0,194,.15);  border:1px solid rgba(155,48,255,.25);}
+.ti-ico.indicacao  { background:rgba(245,158,11,.12); border:1px solid rgba(245,158,11,.2); }
+.ti-d  { font-size:13px; font-weight:600; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ti-dt { font-size:11px; color:var(--dm); margin-top:2px; }
+.ti-a  { font-size:13.5px; font-weight:700; flex-shrink:0; margin-left:8px; }
+.ti-a.plus  { color:#4ADE80; }
+.ti-a.minus { color:#FC8181; }
+.te { text-align:center; padding:36px 20px; color:var(--dm); font-size:14px; }
+
+/* Referral */
+.ref-c { background:linear-gradient(145deg,rgba(245,158,11,.08),rgba(107,0,194,.12)); border-color:rgba(245,158,11,.2); }
+.ref-h { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+.ref-bi { font-size:32px; }
+.ref-t  { font-size:17px; font-weight:800; color:#fff; margin-bottom:3px; }
+.ref-s  { font-size:12.5px; color:var(--dm); }
+.ref-sg { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:18px; }
+.ref-si { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); border-radius:12px; padding:14px; }
+.ref-sl { font-size:11px; color:var(--dm); text-transform:uppercase; letter-spacing:.06em; font-weight:600; margin-bottom:4px; }
+.ref-sv { font-size:20px; font-weight:800; color:#fff; }
+.ref-sv.gold { color:#FCD34D; }
+.ref-lb { background:rgba(255,255,255,.04); border:1px solid rgba(155,48,255,.2); border-radius:12px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px; flex-wrap:wrap; }
+.ref-lu { font-size:12.5px; color:#C580FF; font-weight:500; word-break:break-all; flex:1; }
+.btn-cr { padding:7px 15px; background:linear-gradient(135deg,#5500A0,#9B30FF); color:#fff; border:none; border-radius:50px; font-size:12px; font-weight:700; font-family:'Outfit',sans-serif; cursor:pointer; white-space:nowrap; transition:filter .15s,transform .15s; box-shadow:0 3px 12px rgba(107,0,194,.3); }
+.btn-cr:hover { filter:brightness(1.08); transform:translateY(-1px); }
+.btn-cr.cop { background:linear-gradient(135deg,#16A34A,#22C55E); }
+.btn-wpp { width:100%; padding:11px; background:#25D366; color:#fff; border:none; border-radius:12px; font-size:13.5px; font-weight:700; font-family:'Outfit',sans-serif; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:filter .15s,transform .15s; box-shadow:0 4px 16px rgba(37,211,102,.3); }
+.btn-wpp:hover { filter:brightness(1.06); transform:translateY(-1px); }
+.ref-ft { font-size:12.5px; font-weight:700; color:var(--dm); text-transform:uppercase; letter-spacing:.06em; margin:14px 0 8px; }
+.fri { display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.06); border-radius:10px; padding:10px 14px; margin-bottom:6px; }
+.fri-n { font-size:13px; font-weight:600; color:#fff; }
+.fri-d { font-size:11px; color:var(--dm); }
+.fri-c { font-size:13px; font-weight:700; color:#FCD34D; }
+.ref-ep { font-size:13px; color:var(--dm); text-align:center; padding:14px 0; }
+
+/* ── MODAIS DASH ── */
+.dmo { position:fixed; inset:0; background:rgba(5,2,15,.78); backdrop-filter:blur(8px); z-index:200; display:flex; align-items:center; justify-content:center; padding:20px; opacity:0; pointer-events:none; transition:opacity .3s; }
+.dmo.show { opacity:1; pointer-events:auto; }
+.dm { background:#1A1030; border:1px solid rgba(155,48,255,.25); border-radius:24px; box-shadow:0 12px 60px rgba(0,0,0,.5); padding:32px 36px; width:100%; max-width:440px; transform:translateY(24px) scale(.97); transition:transform .35s cubic-bezier(.22,1,.36,1); position:relative; }
+.dmo.show .dm { transform:translateY(0) scale(1); }
+.dm-t  { font-size:19px; font-weight:800; color:#fff; margin-bottom:5px; }
+.dm-s  { font-size:12.5px; color:var(--dm); margin-bottom:22px; line-height:1.5; }
+.dm-x  { position:absolute; top:14px; right:16px; background:none; border:none; color:var(--dm); font-size:22px; cursor:pointer; padding:4px; line-height:1; transition:color .2s; }
+.dm-x:hover { color:#fff; }
+.mf    { display:flex; flex-direction:column; gap:6px; margin-bottom:18px; }
+.mf label { font-size:11px; font-weight:700; color:var(--dm); text-transform:uppercase; letter-spacing:.06em; }
+.mf input { width:100%; padding:12px 14px; border:1.5px solid rgba(155,48,255,.25); border-radius:12px; font-size:14.5px; font-family:'Outfit',sans-serif; color:#fff; background:rgba(255,255,255,.05); outline:none; transition:border-color .2s,box-shadow .2s; }
+.mf input::placeholder { color:rgba(255,255,255,.25); }
+.mf input:focus { border-color:#9B30FF; box-shadow:0 0 0 4px rgba(155,48,255,.12); }
+.mf .hint { font-size:11px; color:var(--dm); margin-top:4px; }
+.btn-mm { width:100%; padding:13px; background:linear-gradient(135deg,#5500A0,#9B30FF); color:#fff; border:none; border-radius:13px; font-size:14.5px; font-weight:700; font-family:'Outfit',sans-serif; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 5px 20px rgba(107,0,194,.4); transition:transform .15s,box-shadow .15s,filter .15s,opacity .2s; }
+.btn-mm:not(:disabled):hover { transform:translateY(-2px); filter:brightness(1.07); }
+.btn-mm:disabled { opacity:.6; cursor:not-allowed; }
+.merr { font-size:12px; color:#FC8181; margin-bottom:12px; display:none; }
+
+/* ════════════════════════════════════════════════════════════
+   NOVO: MODAL DE AVISO DE REGRAS DE SAQUE
+   Tom amigável, transparente, sem intimidar
+════════════════════════════════════════════════════════════ */
+#dm-saque-aviso .dm { max-width: 480px; }
+
+/* Caixa de regras dentro do modal */
+.saque-rules-box {
+  background: rgba(155,48,255,.06);
+  border: 1px solid rgba(155,48,255,.2);
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin: 16px 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.saque-rule-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.saque-rule-ico {
+  font-size: 16px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.saque-rule-text {
+  font-size: 13px;
+  color: var(--dt);
+  line-height: 1.5;
+}
+.saque-rule-text strong { color: #C580FF; }
+.saque-rule-text .sub {
+  font-size: 11.5px;
+  color: var(--dm);
+  display: block;
+  margin-top: 3px;
+}
+
+/* Botões do modal de aviso — lado a lado */
+.saque-aviso-btns {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+.btn-cancelar {
+  flex: 1;
+  padding: 12px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 12px;
+  color: var(--dm);
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'Outfit', sans-serif;
+  cursor: pointer;
+  transition: background .2s, color .2s;
+}
+.btn-cancelar:hover { background: rgba(255,255,255,.1); color: #fff; }
+.btn-confirmar-saque {
+  flex: 1;
+  padding: 12px;
+  background: linear-gradient(135deg,#5500A0,#9B30FF);
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: 'Outfit', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(107,0,194,.38);
+  transition: filter .15s, transform .15s;
+}
+.btn-confirmar-saque:hover { filter: brightness(1.07); transform: translateY(-1px); }
+
+/* Badge de status do saque — aparece no topo do aviso */
+.saque-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border-radius: 50px;
+  padding: 5px 13px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  align-self: flex-start;
+}
+.saque-status-badge.ok   { background: rgba(34,197,94,.12); border: 1px solid rgba(34,197,94,.3); color: #4ADE80; }
+.saque-status-badge.warn { background: rgba(245,158,11,.12); border: 1px solid rgba(245,158,11,.3); color: #FCD34D; }
+
+/* ── TOAST GLOBAL ── */
+.gt { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(10px); background:#1A1030; border:1px solid rgba(155,48,255,.3); border-radius:14px; padding:12px 20px; font-size:13px; font-weight:600; color:#fff; z-index:999; display:flex; align-items:center; gap:9px; box-shadow:0 8px 32px rgba(0,0,0,.4); opacity:0; pointer-events:none; transition:opacity .25s,transform .25s; white-space:nowrap; max-width:90vw; }
+.gt.show { opacity:1; transform:translateX(-50%) translateY(0); pointer-events:auto; }
+.gt.success { border-color:rgba(34,197,94,.35); }
+.gt.error   { border-color:rgba(239,68,68,.35); }
+
+/* ════════════════════════════════════════════════════════════
+   NOTIFICAÇÃO AO VIVO — canto superior direito
+════════════════════════════════════════════════════════════ */
+#live-notif-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+.live-notif {
+  background: #1A1030;
+  border: 1px solid rgba(34,197,94,.35);
+  border-radius: 14px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.5), 0 0 0 1px rgba(34,197,94,.1);
+  min-width: 240px;
+  max-width: 300px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(30px);
+  transition: opacity .35s, transform .35s;
+}
+.live-notif.show { opacity:1; transform:translateX(0); }
+.live-notif.hide { opacity:0; transform:translateX(30px); }
+.ln-ico { font-size:22px; flex-shrink:0; }
+.ln-body { flex:1; min-width:0; }
+.ln-user { font-size:13px; font-weight:700; color:#fff; }
+.ln-text { font-size:11.5px; color:var(--dm); margin-top:2px; }
+.ln-val  { font-size:14px; font-weight:800; color:#4ADE80; white-space:nowrap; }
+
+/* ════════════════════════════════════════════════════════════
+   FAB + CHAT
+════════════════════════════════════════════════════════════ */
+.fab { position:fixed; bottom:28px; right:24px; z-index:150; width:54px; height:54px; border-radius:50%; background:linear-gradient(135deg,#5500A0,#9B30FF); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:24px; box-shadow:0 6px 24px rgba(107,0,194,.5); transition:transform .2s,box-shadow .2s; }
+.fab:hover { transform:scale(1.08); box-shadow:0 10px 32px rgba(107,0,194,.6); }
+.fab-b { position:absolute; top:-2px; right:-2px; width:18px; height:18px; background:var(--grn); border-radius:50%; border:2px solid var(--dbg); display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:800; color:#fff; }
+
+.cw { position:fixed; bottom:92px; right:24px; z-index:149; width:330px; max-height:500px; background:#12082A; border:1px solid rgba(155,48,255,.25); border-radius:20px; box-shadow:0 16px 48px rgba(0,0,0,.5); display:flex; flex-direction:column; overflow:hidden; opacity:0; pointer-events:none; transform:translateY(14px) scale(.97); transition:opacity .25s,transform .25s; }
+.cw.open { opacity:1; pointer-events:auto; transform:translateY(0) scale(1); }
+.ch { background:linear-gradient(135deg,#3A006A,#5500A0); padding:13px 16px; display:flex; align-items:center; gap:9px; }
+.ch-ico { font-size:20px; }
+.ch-ti  { font-size:13.5px; font-weight:700; color:#fff; }
+.ch-si  { font-size:11px; color:rgba(255,255,255,.6); }
+.ch-cl  { margin-left:auto; background:none; border:none; color:rgba(255,255,255,.6); cursor:pointer; font-size:20px; line-height:1; }
+.cm { flex:1; overflow-y:auto; padding:14px; display:flex; flex-direction:column; gap:9px; }
+.cm::-webkit-scrollbar { width:4px; }
+.cm::-webkit-scrollbar-thumb { background:rgba(155,48,255,.3); border-radius:4px; }
+.msg { max-width:85%; padding:9px 13px; border-radius:14px; font-size:12.5px; line-height:1.5; }
+.msg.bot  { background:rgba(107,0,194,.2); border:1px solid rgba(155,48,255,.2); color:var(--dt); align-self:flex-start; border-bottom-left-radius:4px; }
+.msg.user { background:linear-gradient(135deg,#5500A0,#9B30FF); color:#fff; align-self:flex-end; border-bottom-right-radius:4px; }
+.mt { font-size:10px; color:var(--dm); margin-top:3px; }
+.qr { display:flex; flex-wrap:wrap; gap:5px; padding:0 14px 10px; }
+.qrb { padding:5px 11px; background:rgba(155,48,255,.12); border:1px solid rgba(155,48,255,.25); border-radius:50px; font-size:11px; font-weight:600; color:#C580FF; font-family:'Outfit',sans-serif; cursor:pointer; transition:background .2s; white-space:nowrap; }
+.qrb:hover { background:rgba(155,48,255,.25); }
+.ci { display:flex; gap:7px; padding:10px 14px; border-top:1px solid rgba(255,255,255,.06); }
+.cinp { flex:1; background:rgba(255,255,255,.06); border:1px solid rgba(155,48,255,.2); border-radius:50px; padding:8px 13px; font-size:12.5px; font-family:'Outfit',sans-serif; color:#fff; outline:none; }
+.cinp::placeholder { color:rgba(255,255,255,.3); }
+.cinp:focus { border-color:#9B30FF; }
+.csend { width:34px; height:34px; background:linear-gradient(135deg,#5500A0,#9B30FF); border:none; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:filter .15s; }
+.csend:hover { filter:brightness(1.1); }
+
+/* ════════════════════════════════════════════════════════════
+   NOVO: ESTILOS — ABA BÔNUS DE INDICAÇÃO
+════════════════════════════════════════════════════════════ */
+.bonus-hero {
+  background: linear-gradient(145deg,rgba(245,158,11,.12),rgba(107,0,194,.08));
+  border: 1px solid rgba(245,158,11,.25);
+  border-radius: 18px;
+  padding: 24px 22px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.bonus-hero-left { flex: 1; min-width: 180px; }
+.bonus-hero-ico-big { font-size: 36px; margin-bottom: 6px; display: block; }
+.bonus-hero-label {
+  font-size: 11px; font-weight: 700; color: #FCD34D;
+  text-transform: uppercase; letter-spacing: .08em; margin-bottom: 4px;
+}
+.bonus-hero-valor {
+  font-size: 34px; font-weight: 900;
+  background: linear-gradient(135deg,#FCD34D,#F59E0B);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; line-height: 1;
+}
+.bonus-hero-sub { font-size: 12px; color: var(--dm); margin-top: 5px; }
+.btn-sacar-bonus {
+  padding: 12px 22px;
+  background: linear-gradient(135deg,#92400E,#F59E0B);
+  border: none; border-radius: 12px;
+  color: #fff; font-size: 14px; font-weight: 700;
+  font-family: 'Outfit',sans-serif; cursor: pointer;
+  box-shadow: 0 4px 16px rgba(245,158,11,.35);
+  transition: filter .15s, transform .15s;
+  white-space: nowrap;
+}
+.btn-sacar-bonus:hover  { filter: brightness(1.1); transform: translateY(-1px); }
+.btn-sacar-bonus:disabled { opacity: .45; cursor: default; filter: none; transform: none; }
+
+.bonus-info-box {
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(245,158,11,.15);
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-bottom: 14px;
+  display: flex; gap: 10px; align-items: flex-start;
+}
+.bonus-info-ico { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.bonus-info-txt { font-size: 12.5px; color: var(--dm); line-height: 1.6; }
+.bonus-info-txt strong { color: #FCD34D; }
+
+/* Histórico de saques de bônus */
+.bonus-hist-title {
+  font-size: 13px; font-weight: 700; color: var(--dm);
+  text-transform: uppercase; letter-spacing: .06em;
+  margin-bottom: 10px;
+}
+.bonus-hist-empty {
+  text-align: center; padding: 28px 20px;
+  color: var(--dm); font-size: 13.5px;
+}
+
+/* Modal de saque de bônus */
+#dm-bonus .dm-t { color: #FCD34D; }
+
+/* ════════════════════════════════════════════════════════════
+   NOVO: ESTILOS — ABA SOBRE A PLATAFORMA
+════════════════════════════════════════════════════════════ */
+.sobre-hero {
+  background: linear-gradient(145deg, rgba(107,0,194,.18), rgba(155,48,255,.08));
+  border: 1px solid rgba(155,48,255,.22);
+  border-radius: 18px;
+  padding: 28px 26px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+.sobre-hero-ico { font-size: 40px; margin-bottom: 10px; }
+.sobre-hero-t {
+  font-size: 20px;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+.sobre-hero-s {
+  font-size: 13.5px;
+  color: var(--dm);
+  line-height: 1.6;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.sobre-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.sobre-card {
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(155,48,255,.15);
+  border-radius: 16px;
+  padding: 20px;
+}
+.sobre-card-ico { font-size: 28px; margin-bottom: 10px; display: block; }
+.sobre-card-t {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 7px;
+}
+.sobre-card-txt {
+  font-size: 12.5px;
+  color: var(--dm);
+  line-height: 1.6;
+}
+.sobre-card-txt strong { color: #C580FF; }
+
+.sobre-news-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(155,48,255,.15);
+}
+.sobre-news-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  text-decoration: none;
+  transition: background .2s, border-color .2s;
+  cursor: pointer;
+}
+.sobre-news-item:hover {
+  background: rgba(155,48,255,.07);
+  border-color: rgba(155,48,255,.25);
+}
+.sobre-news-ico { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+.sobre-news-body { flex: 1; }
+.sobre-news-t {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4px;
+  line-height: 1.35;
+}
+.sobre-news-d {
+  font-size: 12px;
+  color: var(--dm);
+  line-height: 1.5;
+}
+.sobre-news-src {
+  font-size: 10.5px;
+  color: #9B30FF;
+  font-weight: 600;
+  margin-top: 5px;
+}
+@media(max-width:600px){
+  .sobre-grid { grid-template-columns: 1fr; }
+}
+
+/* Navegação de abas do dashboard */
+.dash-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 20px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(155,48,255,.15);
+  border-radius: 14px;
+  padding: 5px;
+}
+.dash-tab {
+  flex: 1;
+  padding: 9px 12px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--dm);
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Outfit', sans-serif;
+  cursor: pointer;
+  transition: background .2s, color .2s;
+  white-space: nowrap;
+  text-align: center;
+}
+.dash-tab.active {
+  background: linear-gradient(135deg, #5500A0, #9B30FF);
+  color: #fff;
+  box-shadow: 0 3px 12px rgba(107,0,194,.35);
+}
+.dash-tab:not(.active):hover { background: rgba(155,48,255,.1); color: var(--dt); }
+
+/* Seções do dashboard */
+.dash-section { display: none; }
+.dash-section.active { display: block; }
+
+/* Filtros de categoria de notícias */
+.news-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.nf-btn {
+  padding: 6px 16px;
+  border-radius: 50px;
+  border: 1px solid rgba(155,48,255,.25);
+  background: rgba(255,255,255,.04);
+  color: var(--dm);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'Outfit', sans-serif;
+  cursor: pointer;
+  transition: all .2s;
+}
+.nf-btn.active, .nf-btn:hover {
+  background: rgba(155,48,255,.18);
+  border-color: #9B30FF;
+  color: #C580FF;
+}
+
+/* Grid de cards de notícias */
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+}
+.news-card {
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(155,48,255,.15);
+  border-radius: 16px;
+  padding: 18px 20px;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: background .2s, border-color .2s, transform .2s;
+  cursor: pointer;
+}
+.news-card:hover {
+  background: rgba(155,48,255,.08);
+  border-color: rgba(155,48,255,.35);
+  transform: translateY(-2px);
+}
+.news-cat {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 50px;
+  display: inline-flex;
+  align-self: flex-start;
+}
+.news-cat.inv  { background: rgba(34,197,94,.12);  color: #4ADE80;  border: 1px solid rgba(34,197,94,.25);  }
+.news-cat.ia   { background: rgba(107,0,194,.18);  color: #C580FF;  border: 1px solid rgba(155,48,255,.3); }
+.news-cat.cresc{ background: rgba(245,158,11,.12); color: #FCD34D;  border: 1px solid rgba(245,158,11,.25); }
+.news-ico { font-size: 26px; }
+.news-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.35;
+}
+.news-desc {
+  font-size: 12.5px;
+  color: var(--dm);
+  line-height: 1.55;
+  flex: 1;
+}
+.news-link-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #9B30FF;
+  margin-top: 4px;
+}
+@media(max-width:500px){
+  .news-grid { grid-template-columns: 1fr; }
+  .dash-tab { font-size: 11.5px; padding: 8px 6px; }
+}
+@media(max-width:720px){
+  .g3 { grid-template-columns:1fr 1fr; }
+  .ref-sg { grid-template-columns:1fr; }
+  .bal-v { font-size:34px; }
+}
+@media(max-width:500px){
+  .g3 { grid-template-columns:1fr; }
+  .shell { padding:0 14px 100px; }
+  .dc { padding:16px; }
+  .dm { padding:26px 20px; max-height:88vh; overflow-y:auto; }
+  .cw { width:calc(100vw - 32px); right:16px; }
+  .bl { display:none; }
+  /* Header mobile — sem sobreposição */
+  .lsm .lc, .lsm .lp { font-size:17px; }
+  .lsm svg { width:28px; height:28px; }
+  .uname { max-width:70px; overflow:hidden; text-overflow:ellipsis; }
+  .btn-sair span { display:none; }
+  /* Notif fica ABAIXO do header no mobile (~62px de altura) */
+  #live-notif-container { top:68px; right:12px; }
+  .live-notif { min-width:195px; max-width:235px; }
+  /* FAB + chat sem colidir */
+  .fab { bottom:20px; right:16px; }
+  .cw  { bottom:82px; }
+}
+@media(max-width:360px){
+  .acard { padding:30px 18px 26px; }
+  .logo-c,.logo-k { font-size:28px; }
+  .logo-icon { width:44px; height:44px; }
+  .srow { flex-direction:column; gap:8px; }
+  .km { padding:28px 18px; }
+  .ccode { font-size:22px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════
+     VIEW LOGIN
+══════════════════════════════════════════════════════════ -->
+<div class="view active" id="view-login">
+  <div class="bgw ta" aria-hidden="true">
+    <div class="bgr"><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span></div>
+    <div class="bgr"><span class="bgt">CrypyoCash</span><span class="bgs">◆</span><span class="bgt">Saque Rápido</span><span class="bgs">◆</span><span class="bgt">CrypyoCash</span><span class="bgs">◆</span><span class="bgt">Saque Rápido</span><span class="bgs">◆</span></div>
+    <div class="bgr"><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span></div>
+    <div class="bgr"><span class="bgt">Plataforma Segura</span><span class="bgs">◆</span><span class="bgt">CrypyoCash</span><span class="bgs">◆</span><span class="bgt">Plataforma Segura</span><span class="bgs">◆</span><span class="bgt">CrypyoCash</span><span class="bgs">◆</span></div>
+    <div class="bgr"><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span></div>
+    <div class="bgr"><span class="bgt">Pagamentos Rápidos</span><span class="bgs">◆</span><span class="bgt">CrypyoCash</span><span class="bgs">◆</span><span class="bgt">Pagamentos Rápidos</span><span class="bgs">◆</span><span class="bgt">CrypyoCash</span><span class="bgs">◆</span></div>
+  </div>
+  <div class="auth-page">
+    <div class="logo-wrap" onclick="goTo('login')">
+      <svg class="logo-icon" viewBox="0 0 68 68" fill="none" aria-hidden="true">
+        <defs><linearGradient id="lg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#4A0085"/><stop offset="100%" stop-color="#9B30FF"/></linearGradient><linearGradient id="lg2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6B00C2" stop-opacity="0.6"/><stop offset="100%" stop-color="#C580FF" stop-opacity="0.6"/></linearGradient></defs>
+        <path d="M56 34C56 46.15 46.15 56 34 56C21.85 56 12 46.15 12 34C12 21.85 21.85 12 34 12" stroke="url(#lg1)" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <path d="M62 34C62 49.46 49.46 62 34 62C18.54 62 6 49.46 6 34" stroke="url(#lg2)" stroke-width="5" stroke-linecap="round" fill="none"/>
+        <circle cx="34" cy="12" r="5" fill="url(#lg1)"/>
+      </svg>
+      <div class="logo-tw"><span class="logo-c">crypyo</span><span class="logo-k">cash</span></div>
+    </div>
+    <div class="tbadge"><div class="bdot" aria-hidden="true"></div><span class="blabel">+98 pessoas receberam pagamento essa semana</span></div>
+    <section class="acard" aria-label="Login">
+      <h1 class="acard-t">Entrar na <span class="hl">CrypyoCash</span></h1>
+      <p class="acard-s">Acesse sua conta com segurança e rapidez</p>
+      <div class="af" id="lf-u">
+        <label for="l-u">Usuário</label>
+        <div class="iw">
+          <span class="ii" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+          <input id="l-u" type="text" placeholder="Seu nome de usuário" autocomplete="username" maxlength="60">
+        </div>
+        <span class="af-em" id="l-u-e"></span>
+      </div>
+      <div class="af" id="lf-k">
+        <label for="l-k">Chave de Segurança</label>
+        <div class="iw">
+          <span class="ii" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+          <input id="l-k" type="password" placeholder="Sua chave de acesso" autocomplete="current-password">
+          <button class="tpass" type="button" aria-label="Mostrar chave" onclick="togglePass('l-k',this)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <span class="af-em" id="l-k-e"></span>
+      </div>
+      <div class="frow"><span class="flink">Esqueceu sua chave?</span></div>
+      <button class="btn-a" id="btn-login" onclick="handleLogin()">
+        <span class="spin" id="sp-l"></span><span id="btn-l-lbl">Entrar</span>
+      </button>
+      <div class="ato" id="l-to"><span id="l-to-i"></span><span id="l-to-m"></span></div>
+      <div class="stip"><span class="stip-i">🔒</span><p class="stip-t">Nunca compartilhe sua chave. A CrypyoCash jamais a solicita por mensagem ou telefone.</p></div>
+      <div class="adiv"><div class="adiv-l"></div><span class="adiv-t">ou</span><div class="adiv-l"></div></div>
+    </section>
+    <div class="srow"><span>Não tem conta?</span><button class="btn-sw" onclick="goTo('cadastro')">Cadastrar-se</button></div>
+  </div>
+  <div class="afooter">© 2026 <a onclick="goTo('login')">CrypyoCash</a> — Todos os direitos reservados</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     VIEW CADASTRO
+══════════════════════════════════════════════════════════ -->
+<div class="view" id="view-cadastro">
+  <div class="bgw ta" aria-hidden="true">
+    <div class="bgr"><span class="bgt">Crie sua conta agora</span><span class="bgs">✦</span><span class="bgt">Crie sua conta agora</span><span class="bgs">✦</span><span class="bgt">Crie sua conta agora</span><span class="bgs">✦</span><span class="bgt">Crie sua conta agora</span><span class="bgs">✦</span></div>
+    <div class="bgr"><span class="bgt">CrypyoCash</span><span class="bgs">◆</span><span class="bgt">Acesso Seguro</span><span class="bgs">◆</span><span class="bgt">CrypyoCash</span><span class="bgs">◆</span><span class="bgt">Acesso Seguro</span><span class="bgs">◆</span></div>
+    <div class="bgr"><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span></div>
+    <div class="bgr"><span class="bgt">Plataforma Segura</span><span class="bgs">◆</span><span class="bgt">Cadastro Gratuito</span><span class="bgs">◆</span><span class="bgt">Plataforma Segura</span><span class="bgs">◆</span><span class="bgt">Cadastro Gratuito</span><span class="bgs">◆</span></div>
+    <div class="bgr"><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span></div>
+    <div class="bgr"><span class="bgt">Bônus de Boas-vindas</span><span class="bgs">◆</span><span class="bgt">CrypyoCash</span><span class="bgs">◆</span><span class="bgt">Bônus de Boas-vindas</span><span class="bgs">◆</span><span class="bgt">CrypyoCash</span><span class="bgs">◆</span></div>
+  </div>
+  <div class="auth-page">
+    <div class="logo-wrap" onclick="goTo('login')">
+      <svg class="logo-icon" viewBox="0 0 68 68" fill="none" aria-hidden="true">
+        <defs><linearGradient id="cg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#4A0085"/><stop offset="100%" stop-color="#9B30FF"/></linearGradient><linearGradient id="cg2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6B00C2" stop-opacity="0.6"/><stop offset="100%" stop-color="#C580FF" stop-opacity="0.6"/></linearGradient></defs>
+        <path d="M56 34C56 46.15 46.15 56 34 56C21.85 56 12 46.15 12 34C12 21.85 21.85 12 34 12" stroke="url(#cg1)" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <path d="M62 34C62 49.46 49.46 62 34 62C18.54 62 6 49.46 6 34" stroke="url(#cg2)" stroke-width="5" stroke-linecap="round" fill="none"/>
+        <circle cx="34" cy="12" r="5" fill="url(#cg1)"/>
+      </svg>
+      <div class="logo-tw"><span class="logo-c">crypyo</span><span class="logo-k">cash</span></div>
+    </div>
+    <div class="tbadge"><div class="bdot" aria-hidden="true"></div><span class="blabel">Cadastro gratuito — comece em segundos</span></div>
+    <section class="acard" aria-label="Cadastro">
+      <h1 class="acard-t">Criar conta na <span class="hl">CrypyoCash</span></h1>
+      <p class="acard-s">Escolha um usuário e receba sua chave gerada automaticamente</p>
+      <div class="bonus-box">
+        <div class="bonus-tag">🎁 Bônus de boas-vindas</div>
+        <div class="bonus-v">R$ 50,00</div>
+        <!-- ALTERAÇÃO 4: Rentabilidade corrigida para 40% ao mês -->
+        <div class="bonus-apy">▲ 40% ao mês — 10% por semana — Começa a render imediatamente</div>
+        <div style="font-size:13px;color:#6B7280;margin-top:5px;">Saldo inicial creditado ao criar sua conta.</div>
+      </div>
+      <div class="af" id="cf-u">
+        <label for="c-u">Usuário</label>
+        <div class="iw">
+          <span class="ii" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+          <input id="c-u" type="text" placeholder="Ex: joao_silva ou maria123" autocomplete="username" maxlength="30" oninput="checkReqs()">
+        </div>
+        <span class="af-em" id="c-u-e"></span>
+      </div>
+      <div class="ureqs">
+        <p>Requisitos:</p>
+        <div class="ri" id="req-min"><span class="rd"></span> Mínimo 3 caracteres</div>
+        <div class="ri" id="req-chars"><span class="rd"></span> Letras, números e _ (underline)</div>
+        <div class="ri" id="req-start"><span class="rd"></span> Deve começar com uma letra</div>
+      </div>
+      <div class="af" id="cf-r" style="margin-top:8px;">
+        <label for="c-r">Código de Indicação (opcional)</label>
+        <div class="iw">
+          <span class="ii" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></span>
+          <input id="c-r" type="text" placeholder="Ex: ABC12345" maxlength="10" style="text-transform:uppercase;" oninput="this.value=this.value.toUpperCase()">
+        </div>
+      </div>
+      <button class="btn-a" id="btn-cad" onclick="handleCadastro()">
+        <span class="spin" id="sp-c"></span><span id="btn-c-lbl">Criar Chave de Acesso</span>
+      </button>
+      <div class="ato error" id="c-to" style="margin-top:14px;"><span>⚠️</span><span id="c-to-m"></span></div>
+      <div class="stip" style="margin-top:18px;"><span class="stip-i">🛡️</span><p class="stip-t">Sua chave é gerada com criptografia segura. Guarde-a — sem ela não é possível acessar sua conta.</p></div>
+      <div class="adiv"><div class="adiv-l"></div><span class="adiv-t">ou</span><div class="adiv-l"></div></div>
+    </section>
+    <div class="srow"><span>Já tem uma conta?</span><button class="btn-swo" onclick="goTo('login')">Entrar</button></div>
+  </div>
+  <div class="afooter">© 2026 <a onclick="goTo('login')">CrypyoCash</a> — Todos os direitos reservados</div>
+</div>
+
+<!-- Modal Chave -->
+<div class="kmo" id="kmo">
+  <div class="km">
+    <div class="km-ico">🔐</div>
+    <h2 class="km-t">Chave de Acesso gerada!</h2>
+    <p class="km-s">Bem-vindo à CrypyoCash, <strong id="km-u"></strong>!<br>Guarde sua chave com muito cuidado.</p>
+    <div class="cbox"><p class="cbox-l">Sua Chave de Acesso</p><p class="ccode" id="km-k">——</p><p class="chint">Toque para selecionar • Guarde em local seguro</p></div>
+    <div class="kwarn"><span class="kwi">⚠️</span><p class="kwt"><strong>Guarde agora!</strong> Esta é a única forma de acessar sua conta. Não será possível recuperar depois.</p></div>
+    <button class="btn-ck" id="btn-ck" onclick="copiarChave()"><span id="ck-i">📋</span><span id="ck-l">Copiar Chave de Acesso</span></button>
+    <button class="btn-gl" onclick="closeKeyModal()">← Ir para o Login</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     VIEW DASHBOARD
+══════════════════════════════════════════════════════════ -->
+<div class="view" id="view-dash">
+  <div class="bgw td" aria-hidden="true">
+    <div class="bgr"><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span></div>
+    <div class="bgr"><span class="bgt">CrypyoCash</span><span class="bgs">◆</span><span class="bgt">Saque Rápido</span><span class="bgs">◆</span><span class="bgt">CrypyoCash</span><span class="bgs">◆</span><span class="bgt">Saque Rápido</span><span class="bgs">◆</span></div>
+    <div class="bgr"><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span></div>
+    <div class="bgr"><span class="bgt">Plataforma Segura</span><span class="bgs">◆</span><span class="bgt">CrypyoCash</span><span class="bgs">◆</span><span class="bgt">Plataforma Segura</span><span class="bgs">◆</span><span class="bgt">CrypyoCash</span><span class="bgs">◆</span></div>
+    <div class="bgr"><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span></div>
+    <div class="bgr"><span class="bgt">Pagamentos Rápidos</span><span class="bgs">◆</span><span class="bgt">CrypyoCash</span><span class="bgs">◆</span><span class="bgt">Pagamentos Rápidos</span><span class="bgs">◆</span><span class="bgt">CrypyoCash</span><span class="bgs">◆</span></div>
+  </div>
+
+  <!-- NOTIFICAÇÕES AO VIVO -->
+  <div id="live-notif-container" aria-live="polite"></div>
+
+  <div class="shell">
+    <!-- HEADER -->
+    <header class="dh">
+      <div class="dh-left">
+        <div class="lsm" onclick="goTo('dash')">
+          <svg viewBox="0 0 68 68" fill="none">
+            <defs><linearGradient id="dg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#4A0085"/><stop offset="100%" stop-color="#9B30FF"/></linearGradient><linearGradient id="dg2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6B00C2" stop-opacity="0.6"/><stop offset="100%" stop-color="#C580FF" stop-opacity="0.6"/></linearGradient></defs>
+            <path d="M56 34C56 46.15 46.15 56 34 56C21.85 56 12 46.15 12 34C12 21.85 21.85 12 34 12" stroke="url(#dg1)" stroke-width="7" stroke-linecap="round" fill="none"/>
+            <path d="M62 34C62 49.46 49.46 62 34 62C18.54 62 6 49.46 6 34" stroke="url(#dg2)" stroke-width="5" stroke-linecap="round" fill="none"/>
+            <circle cx="34" cy="12" r="5" fill="url(#dg1)"/>
+          </svg>
+          <span class="lc">crypyo</span><span class="lp">cash</span>
+        </div>
+        <!-- Badge usuário -->
+        <div class="ubadge">
+          <div class="uavt" id="hdr-av">?</div>
+          <span class="uname" id="hdr-un">—</span>
+        </div>
+      </div>
+      <div class="dh-right">
+        <!-- Badge live — some no mobile -->
+        <div class="bl"><div class="bld"></div><span class="blt">Online</span></div>
+        <!-- Sair ao lado do nome -->
+        <button class="btn-sair" onclick="logout()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          <span>Sair</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ALTERAÇÃO 7: Navegação de abas — Dashboard | Notícias | Bônus | Sobre -->
+    <div class="dash-tabs">
+      <button class="dash-tab active" onclick="switchTab('tab-dash', this)">📊 Dashboard</button>
+      <button class="dash-tab" onclick="switchTab('tab-news', this)">📰 Notícias</button>
+      <button class="dash-tab" onclick="switchTab('tab-bonus', this); renderTabBonus()">🎁 Bônus</button>
+      <button class="dash-tab" onclick="switchTab('tab-sobre', this)">🧠 Sobre</button>
+    </div>
+
+    <!-- ── SEÇÃO DASHBOARD (original) ── -->
+    <div class="dash-section active" id="tab-dash">
+
+    <!-- SALDO TOTAL -->
+    <div class="g1">
+      <div class="dc dc-bal">
+        <div class="bal-l">💰 Saldo Total</div>
+        <div class="bal-v" id="d-bal">R$ 0,00</div>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:8px;flex-wrap:wrap;">
+          <span class="bal-ch" id="d-mon">▲ +R$ 0,00 este mês</span>
+          <!-- ALTERAÇÃO 4: Corrigido para 40% ao mês (era 8.4% APY) -->
+        <span style="font-size:12px;color:#9B30FF;font-weight:600;">40% ao mês</span>
+        </div>
+        <div class="bal-sb" id="d-bsb">Saldo disponível para saque imediato</div>
+        <div class="bal-ac">
+          <button class="btn-dp" onclick="openDM('dm-saque-aviso'); verificarElegibilidadeSaque()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+            Solicitar Saque
+          </button>
+          <button class="btn-ds" onclick="openDM('dm-d')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+            Adicionar Saldo
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="g3">
+      <div class="dc sc-grn"><span class="sc-i">📈</span><div class="sc-l">Rendimento Total</div><div class="sc-v" id="d-earn">R$ 0,00</div><div class="sc-s">Desde o início</div></div>
+      <!-- ALTERAÇÃO 1: "Total Depositado" mostra apenas principal real, sem bônus -->
+      <div class="dc"><span class="sc-i">💳</span><div class="sc-l">Total Depositado</div><div class="sc-v" id="d-dep">R$ 0,00</div><div class="sc-s">Seu capital principal</div></div>
+      <!-- ALTERAÇÃO 1: Bônus separado — boas-vindas + indicações -->
+      <div class="dc sc-yel"><span class="sc-i">🎁</span><div class="sc-l">Bônus Recebidos</div><div class="sc-v" id="d-ref">R$ 0,00</div><div class="sc-s">Bônus + indicações (50%)</div></div>
+    </div>
+
+    <!-- GRÁFICO -->
+    <div class="g1">
+      <div class="dc">
+        <!-- ALTERAÇÃO 4: Badge corrigido para 40% ao mês -->
+        <div class="ch-hd"><div><div class="ch-t">📊 Evolução do Saldo</div><div class="ch-s">Últimos 7 dias</div></div><div class="ch-b">▲ 40% ao mês</div></div>
+        <div class="ch-w"><canvas id="balChart"></canvas></div>
+      </div>
+    </div>
+
+    <!-- TRANSAÇÕES -->
+    <div class="g1">
+      <div class="dc">
+        <div class="sh"><div><div class="sh-t">📋 Minhas Transações</div><div class="sh-s">Histórico ordenado por data</div></div><button class="btn-gh" onclick="renderTxns(true)">Ver todas</button></div>
+        <div class="tl" id="txn-l"><div class="te">Carregando...</div></div>
+      </div>
+    </div>
+
+    <!-- INDICAÇÃO -->
+    <div class="g1">
+      <div class="dc ref-c">
+        <div class="ref-h"><div class="ref-bi">🎯</div><div><div class="ref-t">Programa de Indicação</div><div class="ref-s">Indique amigos e ganhe 50% do saldo inicial deles</div></div></div>
+        <div class="ref-sg">
+          <div class="ref-si"><div class="ref-sl">Amigos Indicados</div><div class="ref-sv" id="r-cnt">0</div></div>
+          <div class="ref-si"><div class="ref-sl">Ganhos c/ Indicação</div><div class="ref-sv gold" id="r-earn">R$ 0,00</div></div>
+        </div>
+        <div style="font-size:11.5px;color:var(--dm);margin-bottom:8px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;">Seu Link de Indicação</div>
+        <div class="ref-lb"><span class="ref-lu" id="r-link">—</span><button class="btn-cr" id="btn-cr" onclick="copyRef()">Copiar</button></div>
+        <button class="btn-wpp" onclick="shareWpp()">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+          Compartilhar no WhatsApp
+        </button>
+        <div class="ref-ft">Amigos indicados</div>
+        <div id="r-friends"><div class="ref-ep">Nenhum amigo indicado ainda. Compartilhe seu link!</div></div>
+      </div>
+    </div>
+    </div><!-- /tab-dash -->
+
+    <!-- ══════════════════════════════════════════════════════
+         ALTERAÇÃO 7: ABA NOTÍCIAS & OPORTUNIDADES
+    ══════════════════════════════════════════════════════ -->
+    <div class="dash-section" id="tab-news">
+      <div class="g1">
+        <div class="dc">
+          <div class="sh">
+            <div>
+              <div class="sh-t">📰 Notícias & Oportunidades</div>
+              <div class="sh-s">Investimentos • Inteligência Artificial • Crescimento Pessoal e Financeiro</div>
+            </div>
+          </div>
+
+          <!-- Filtros de categoria -->
+          <div class="news-filters">
+            <button class="nf-btn active" onclick="filterNews('all', this)">🌐 Todas</button>
+            <button class="nf-btn" onclick="filterNews('inv', this)">📈 Investimentos</button>
+            <button class="nf-btn" onclick="filterNews('ia', this)">🤖 Inteligência Artificial</button>
+            <button class="nf-btn" onclick="filterNews('cresc', this)">🌱 Crescimento Pessoal</button>
+          </div>
+
+          <!-- Grid de notícias -->
+          <div class="news-grid" id="news-grid">
+
+            <!-- CARD 1 — Investimentos -->
+            <a class="news-card" href="https://www.infomoney.com.br/guias/renda-variavel/" target="_blank" rel="noopener" data-cat="inv">
+              <span class="news-cat inv">📈 Investimentos</span>
+              <span class="news-ico">💰</span>
+              <div class="news-title">Renda Variável em 2025: como aproveitar as oportunidades do mercado</div>
+              <div class="news-desc">O mercado financeiro está em plena transformação. Entenda como investidores inteligentes estão diversificando e multiplicando seu patrimônio mesmo em cenários incertos.</div>
+              <div class="news-link-row">Ler no InfoMoney <span>→</span></div>
+            </a>
+
+            <!-- CARD 2 — IA -->
+            <a class="news-card" href="https://www.canaltech.com.br/inteligencia-artificial/" target="_blank" rel="noopener" data-cat="ia">
+              <span class="news-cat ia">🤖 Inteligência Artificial</span>
+              <span class="news-ico">🧠</span>
+              <div class="news-title">Como a IA está transformando o mercado financeiro em 2025</div>
+              <div class="news-desc">Algoritmos e modelos de linguagem agora analisam mercados em tempo real, identificam padrões e geram lucros que seriam impossíveis para humanos sozinhos. Entenda o fenômeno.</div>
+              <div class="news-link-row">Ler no Canaltech <span>→</span></div>
+            </a>
+
+            <!-- CARD 3 — Crescimento Pessoal -->
+            <a class="news-card" href="https://www.youtube.com/results?search_query=mentalidade+financeira+2025" target="_blank" rel="noopener" data-cat="cresc">
+              <span class="news-cat cresc">🌱 Crescimento Pessoal</span>
+              <span class="news-ico">🎯</span>
+              <div class="news-title">A mentalidade dos que ficam ricos: os 5 hábitos que separam quem prospera</div>
+              <div class="news-desc">Educação financeira começa na forma como você pensa sobre dinheiro. Descubra os padrões de comportamento das pessoas que constroem riqueza real ao longo do tempo.</div>
+              <div class="news-link-row">Ver no YouTube <span>→</span></div>
+            </a>
+
+            <!-- CARD 4 — Investimentos -->
+            <a class="news-card" href="https://www.sunoresearch.com.br/artigos/juros-compostos/" target="_blank" rel="noopener" data-cat="inv">
+              <span class="news-cat inv">📈 Investimentos</span>
+              <span class="news-ico">📊</span>
+              <div class="news-title">Juros compostos: por que Einstein chamou de "oitava maravilha do mundo"</div>
+              <div class="news-desc">Entenda como o crescimento composto funciona na prática e por que começar a investir hoje — mesmo que seja com pouco — faz uma diferença brutal no longo prazo.</div>
+              <div class="news-link-row">Ler na Suno <span>→</span></div>
+            </a>
+
+            <!-- CARD 5 — IA -->
+            <a class="news-card" href="https://tecnoblog.net/especiais/inteligencia-artificial/" target="_blank" rel="noopener" data-cat="ia">
+              <span class="news-cat ia">🤖 Inteligência Artificial</span>
+              <span class="news-ico">⚡</span>
+              <div class="news-title">ChatGPT, Gemini e Claude: como usar IA para ganhar dinheiro em 2025</div>
+              <div class="news-desc">Pessoas estão usando ferramentas de IA para criar negócios, automatizar tarefas e gerar renda extra. Veja cases reais e como você pode começar agora mesmo.</div>
+              <div class="news-link-row">Ler no Tecnoblog <span>→</span></div>
+            </a>
+
+            <!-- CARD 6 — Crescimento Pessoal -->
+            <a class="news-card" href="https://www.youtube.com/results?search_query=liberdade+financeira+brasil+2025" target="_blank" rel="noopener" data-cat="cresc">
+              <span class="news-cat cresc">🌱 Crescimento Pessoal</span>
+              <span class="news-ico">🔥</span>
+              <div class="news-title">Liberdade financeira antes dos 40: estratégias reais de quem conseguiu</div>
+              <div class="news-desc">Brasileiros estão alcançando independência financeira mais cedo do que nunca. Descubra as estratégias combinadas de renda passiva, indicações e reinvestimento que funcionam.</div>
+              <div class="news-link-row">Ver no YouTube <span>→</span></div>
+            </a>
+
+            <!-- CARD 7 — Investimentos -->
+            <a class="news-card" href="https://exame.com/invest/guia/renda-passiva-o-que-e-como-funciona/" target="_blank" rel="noopener" data-cat="inv">
+              <span class="news-cat inv">📈 Investimentos</span>
+              <span class="news-ico">🏆</span>
+              <div class="news-title">Renda passiva: como fazer seu dinheiro trabalhar enquanto você dorme</div>
+              <div class="news-desc">A renda passiva é o caminho mais consistente para a liberdade financeira. Conheça as modalidades disponíveis no Brasil e como combiná-las para maximizar seus retornos.</div>
+              <div class="news-link-row">Ler na Exame Invest <span>→</span></div>
+            </a>
+
+            <!-- CARD 8 — IA -->
+            <a class="news-card" href="https://www.terra.com.br/noticias/tecnologia/inteligencia-artificial/" target="_blank" rel="noopener" data-cat="ia">
+              <span class="news-cat ia">🤖 Inteligência Artificial</span>
+              <span class="news-ico">🌍</span>
+              <div class="news-title">IA e o futuro do trabalho: quem vai prosperar na próxima década</div>
+              <div class="news-desc">A automação inteligente está mudando quais habilidades têm valor. Especialistas mostram quais profissões e perfis têm mais chances de crescer com o avanço da IA.</div>
+              <div class="news-link-row">Ler no Terra <span>→</span></div>
+            </a>
+
+            <!-- CARD 9 — Crescimento Pessoal -->
+            <a class="news-card" href="https://www.instagram.com/explore/tags/educacaofinanceira/" target="_blank" rel="noopener" data-cat="cresc">
+              <span class="news-cat cresc">🌱 Crescimento Pessoal</span>
+              <span class="news-ico">💡</span>
+              <div class="news-title">O poder das indicações: como redes de pessoas constroem riqueza coletiva</div>
+              <div class="news-desc">Marketing de indicação não é novo, mas quando bem estruturado se torna uma das formas mais poderosas de gerar renda. Veja como comunidades financeiras crescem juntas.</div>
+              <div class="news-link-row">Ver no Instagram <span>→</span></div>
+            </a>
+
+            <!-- CARD 10 — Investimentos -->
+            <a class="news-card" href="https://valor.globo.com/financas-pessoais/" target="_blank" rel="noopener" data-cat="inv">
+              <span class="news-cat inv">📈 Investimentos</span>
+              <span class="news-ico">📱</span>
+              <div class="news-title">Fintech e investimentos digitais: as plataformas que estão democratizando o acesso</div>
+              <div class="news-desc">Novas plataformas digitais estão permitindo que qualquer pessoa, com qualquer valor disponível, acesse formas de investimento que antes eram exclusivas de grandes investidores.</div>
+              <div class="news-link-row">Ler no Valor Econômico <span>→</span></div>
+            </a>
+
+          </div><!-- /news-grid -->
+        </div>
+      </div>
+    </div><!-- /tab-news -->
+
+    <!-- ══════════════════════════════════════════════════════
+         NOVO: ABA BÔNUS DE INDICAÇÃO
+         Saque livre, sem restrições, a qualquer momento
+    ══════════════════════════════════════════════════════ -->
+    <div class="dash-section" id="tab-bonus">
+      <div class="g1">
+        <div class="dc">
+
+          <!-- Hero com saldo de bônus -->
+          <div class="bonus-hero">
+            <div class="bonus-hero-left">
+              <span class="bonus-hero-ico-big">🎁</span>
+              <div class="bonus-hero-label">Bônus de Indicação Disponível</div>
+              <div class="bonus-hero-valor" id="bonus-tab-valor">R$ 0,00</div>
+              <div class="bonus-hero-sub">50% do valor de cada amigo indicado — liberado na hora</div>
+            </div>
+            <button class="btn-sacar-bonus" id="btn-tab-sacar-bonus" onclick="abrirModalBonus()">
+              💰 Sacar Bônus Agora
+            </button>
+          </div>
+
+          <!-- Explicação da regra -->
+          <div class="bonus-info-box">
+            <span class="bonus-info-ico">✅</span>
+            <div class="bonus-info-txt">
+              <strong>Saque completamente livre.</strong> Os bônus de indicação são liberados imediatamente quando você indica alguém.
+              Você pode sacar qualquer valor a qualquer momento — <strong>sem prazo mínimo, sem indicação extra, sem nenhuma restrição.</strong>
+              Cada amigo que você indica e deposita ao menos R$ 25,00 gera 50% de bônus direto para você.
+            </div>
+          </div>
+
+          <!-- Stats rápidos -->
+          <div class="ref-sg" style="margin-bottom:16px;">
+            <div class="ref-si">
+              <div class="ref-sl">Amigos Indicados</div>
+              <div class="ref-sv" id="bonus-tab-cnt">0</div>
+            </div>
+            <div class="ref-si">
+              <div class="ref-sl">Total de Bônus Recebido</div>
+              <div class="ref-sv gold" id="bonus-tab-total">R$ 0,00</div>
+            </div>
+          </div>
+
+          <!-- Histórico de saques de bônus -->
+          <div class="bonus-hist-title">📋 Histórico de Saques de Bônus</div>
+          <div id="bonus-hist-list">
+            <div class="bonus-hist-empty">Nenhum saque de bônus ainda.<br>Indique amigos e saque seus ganhos!</div>
+          </div>
+
+        </div>
+      </div>
+    </div><!-- /tab-bonus -->
+
+    <!-- ══════════════════════════════════════════════════════
+         ABA SOBRE A PLATAFORMA
+    ══════════════════════════════════════════════════════ -->
+    <div class="dash-section" id="tab-sobre">
+      <div class="g1">
+        <div class="dc">
+
+          <!-- Hero -->
+          <div class="sobre-hero">
+            <div class="sobre-hero-ico">🧠⚡</div>
+            <div class="sobre-hero-t">Por que a CrypyoCash existe?</div>
+            <p class="sobre-hero-s">
+              Vivemos em uma era onde a inteligência artificial está transformando o mundo — mas esse avanço tem um custo real.
+              Treinar e rodar modelos de IA exige servidores poderosos que consomem energia, água e processamento em escala gigantesca.
+              A CrypyoCash conecta pessoas que querem fazer seu dinheiro crescer com a infraestrutura que sustenta o futuro da IA.
+            </p>
+          </div>
+
+          <!-- Cards explicativos -->
+          <div class="sobre-grid">
+            <div class="sobre-card">
+              <span class="sobre-card-ico">🌊</span>
+              <div class="sobre-card-t">IA consome bilhões de litros de água</div>
+              <div class="sobre-card-txt">
+                Os data centers que rodam modelos como GPT e Gemini usam água para resfriar seus servidores.
+                Estima-se que o ChatGPT consume <strong>cerca de 500ml de água</strong> a cada 20 perguntas respondidas.
+                Escalar essa infraestrutura exige investimento contínuo e inteligente.
+              </div>
+            </div>
+
+            <div class="sobre-card">
+              <span class="sobre-card-ico">⚡</span>
+              <div class="sobre-card-t">Energia: o maior custo da IA moderna</div>
+              <div class="sobre-card-txt">
+                Treinar um único modelo de linguagem grande pode consumir tanta energia quanto
+                <strong>centenas de casas por um ano inteiro</strong>. Manter esses sistemas rodando 24h
+                exige uma cadeia de suporte financeiro distribuído e eficiente.
+              </div>
+            </div>
+
+            <div class="sobre-card">
+              <span class="sobre-card-ico">🔗</span>
+              <div class="sobre-card-t">Sua participação importa de verdade</div>
+              <div class="sobre-card-txt">
+                Ao investir na CrypyoCash, você faz parte de uma rede que ajuda a financiar
+                a infraestrutura de processamento de IA de forma colaborativa.
+                <strong>Cada indicação fortalece a rede</strong> e aumenta a capacidade coletiva do sistema.
+              </div>
+            </div>
+
+            <div class="sobre-card">
+              <span class="sobre-card-ico">📈</span>
+              <div class="sobre-card-t">Crescimento real, compartilhado</div>
+              <div class="sobre-card-txt">
+                O modelo de <strong>10% por semana (40% ao mês)</strong> reflete o crescimento
+                acelerado da demanda por IA no mundo. Quanto mais pessoas participam,
+                mais forte e sustentável fica a rede — e mais você ganha.
+              </div>
+            </div>
+          </div>
+
+          <!-- Notícias sobre IA e consumo de recursos -->
+          <div class="sobre-news-title">📰 O que dizem sobre o custo da IA no mundo</div>
+
+          <a class="sobre-news-item" href="https://www.canaltech.com.br/inteligencia-artificial/chatgpt-consome-agua-500ml-20-perguntas/" target="_blank" rel="noopener">
+            <span class="sobre-news-ico">💧</span>
+            <div class="sobre-news-body">
+              <div class="sobre-news-t">ChatGPT bebe água: cada 20 perguntas consomem 500ml de H₂O</div>
+              <div class="sobre-news-d">Pesquisadores calcularam o consumo hídrico dos grandes modelos de linguagem. O resultado surpreende e explica por que a infraestrutura de IA precisa de investimento constante.</div>
+              <div class="sobre-news-src">Canaltech → Ler matéria completa</div>
+            </div>
+          </a>
+
+          <a class="sobre-news-item" href="https://tecnoblog.net/especiais/inteligencia-artificial/consumo-energia-ia/" target="_blank" rel="noopener">
+            <span class="sobre-news-ico">⚡</span>
+            <div class="sobre-news-body">
+              <div class="sobre-news-t">IA vai consumir mais eletricidade que países inteiros até 2026</div>
+              <div class="sobre-news-d">A demanda energética dos data centers de IA está crescendo em ritmo acelerado. Especialistas debatem como financiar essa expansão de forma sustentável e distribuída.</div>
+              <div class="sobre-news-src">Tecnoblog → Ler matéria completa</div>
+            </div>
+          </a>
+
+          <a class="sobre-news-item" href="https://www.infomoney.com.br/guias/investimentos-em-tecnologia/" target="_blank" rel="noopener">
+            <span class="sobre-news-ico">🌐</span>
+            <div class="sobre-news-body">
+              <div class="sobre-news-t">Investir em infraestrutura de tecnologia: por que é a tendência de 2025</div>
+              <div class="sobre-news-d">Com a corrida pela IA, empresas e indivíduos buscam formas de participar do crescimento tecnológico. Entenda como redes colaborativas estão mudando quem pode se beneficiar desse mercado.</div>
+              <div class="sobre-news-src">InfoMoney → Ler matéria completa</div>
+            </div>
+          </a>
+
+          <a class="sobre-news-item" href="https://valor.globo.com/empresas/tecnologia/" target="_blank" rel="noopener">
+            <span class="sobre-news-ico">🏗️</span>
+            <div class="sobre-news-body">
+              <div class="sobre-news-t">Data centers: a nova corrida do ouro do século XXI</div>
+              <div class="sobre-news-d">Bilhões estão sendo investidos em servidores ao redor do mundo. Quem financia essa infraestrutura colhe os frutos do crescimento exponencial da IA nos próximos anos.</div>
+              <div class="sobre-news-src">Valor Econômico → Ler matéria completa</div>
+            </div>
+          </a>
+
+        </div>
+      </div>
+    </div><!-- /tab-sobre -->
+
+  </div><!-- /shell -->
+
+  <!-- FAB -->
+  <button class="fab" onclick="toggleChat()" aria-label="Suporte IA">🤖<div class="fab-b">IA</div></button>
+
+  <!-- CHAT -->
+  <div class="cw" id="cwin">
+    <div class="ch"><div class="ch-ico">🤖</div><div><div class="ch-ti">Suporte IA CrypyoCash</div><div class="ch-si">● Online 24h</div></div><button class="ch-cl" onclick="toggleChat()">×</button></div>
+    <div class="cm" id="cmsg"></div>
+    <div class="qr">
+      <button class="qrb" onclick="qr('Como solicitar saque?')">💸 Como sacar?</button>
+      <button class="qrb" onclick="qr('Qual meu saldo?')">💰 Meu saldo</button>
+      <button class="qrb" onclick="qr('Como funciona a indicação?')">🎯 Indicação</button>
+      <button class="qrb" onclick="qr('Como funciona o rendimento?')">📈 Rendimento</button>
+    </div>
+    <div class="ci">
+      <input class="cinp" id="cinp" placeholder="Digite sua mensagem..." onkeydown="if(event.key==='Enter')sendChat()">
+      <button class="csend" onclick="sendChat()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       CORREÇÃO: MODAL DE REGRAS DE SAQUE — dois caminhos separados:
+       [Sacar Rendimentos] sempre ativo | [Saque Total] bloqueável por regras
+  ══════════════════════════════════════════════════════ -->
+  <div class="dmo" id="dm-saque-aviso">
+    <div class="dm" style="max-width:490px;">
+      <button class="dm-x" onclick="closeDM('dm-saque-aviso')">×</button>
+      <div class="dm-t">📋 Como funciona o saque?</div>
+      <p class="dm-s">Escolha o tipo de saque conforme as regras da plataforma:</p>
+
+      <!-- ── OPÇÃO 1: SAQUE DE RENDIMENTOS — sempre disponível ── -->
+      <div id="saque-rend-card" style="
+        background:rgba(34,197,94,.07);
+        border:1.5px solid rgba(34,197,94,.3);
+        border-radius:14px;
+        padding:16px 18px;
+        margin-bottom:12px;
+      ">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+          <span style="font-size:20px;">💸</span>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#fff;">Saque de Rendimentos</div>
+            <div style="font-size:11.5px;color:#4ADE80;font-weight:600;">✅ Disponível a qualquer momento</div>
+          </div>
+        </div>
+        <div style="font-size:12.5px;color:var(--dm);margin-bottom:12px;line-height:1.5;">
+          Saque apenas os rendimentos acumulados no seu saldo — sem restrições de prazo ou indicação.
+        </div>
+        <!-- Valor de rendimentos disponíveis -->
+        <div style="
+          background:rgba(34,197,94,.1);
+          border-radius:10px;
+          padding:10px 14px;
+          display:flex;
+          justify-content:space-between;
+          align-items:center;
+          margin-bottom:12px;
+        ">
+          <span style="font-size:12px;color:var(--dm);font-weight:600;">Rendimentos disponíveis</span>
+          <span id="aviso-rend-valor" style="font-size:16px;font-weight:800;color:#4ADE80;">R$ 0,00</span>
+        </div>
+        <button id="btn-sacar-rendimentos"
+          onclick="abrirSaqueRendimentos()"
+          style="
+            width:100%;padding:11px;
+            background:linear-gradient(135deg,#16A34A,#22C55E);
+            border:none;border-radius:11px;
+            color:#fff;font-size:14px;font-weight:700;
+            font-family:'Outfit',sans-serif;cursor:pointer;
+            transition:filter .15s,transform .15s;
+            box-shadow:0 4px 14px rgba(34,197,94,.3);
+          "
+          onmouseover="this.style.filter='brightness(1.08)'"
+          onmouseout="this.style.filter=''"
+        >💸 Sacar Rendimentos Agora</button>
+      </div>
+
+      <!-- ── OPÇÃO 2: SAQUE TOTAL — sujeito a regras ── -->
+      <div id="saque-total-card" style="
+        border-radius:14px;
+        padding:16px 18px;
+        margin-bottom:4px;
+      ">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+          <span style="font-size:20px;">🏦</span>
+          <div style="flex:1;">
+            <div style="font-size:14px;font-weight:700;color:#fff;">Saque Total (Principal + Rendimentos)</div>
+            <!-- Badge de status dinâmico -->
+            <div id="saque-total-badge" class="saque-status-badge ok" style="margin-top:4px;">✅ Liberado</div>
+          </div>
+        </div>
+
+        <!-- Requisitos -->
+        <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:10px;">
+          <div id="req-7dias" style="display:flex;align-items:center;gap:8px;font-size:12px;">
+            <span id="req-7dias-ico" style="font-size:14px;">⏳</span>
+            <span id="req-7dias-txt" style="color:var(--dm);">7 dias desde o depósito</span>
+          </div>
+          <div id="req-indicacao" style="display:flex;align-items:center;gap:8px;font-size:12px;">
+            <span id="req-ind-ico" style="font-size:14px;">🤝</span>
+            <span id="req-ind-txt" style="color:var(--dm);">Indicar 1 amigo (depósito mín. R$ 25)</span>
+          </div>
+        </div>
+
+        <!-- Mensagem de status extra -->
+        <div id="saque-total-msg" style="font-size:12px;color:var(--dm);margin-bottom:10px;line-height:1.5;"></div>
+
+        <button id="btn-sacar-total"
+          onclick="abrirSaqueTotal()"
+          style="
+            width:100%;padding:11px;
+            background:linear-gradient(135deg,#5500A0,#9B30FF);
+            border:none;border-radius:11px;
+            color:#fff;font-size:14px;font-weight:700;
+            font-family:'Outfit',sans-serif;cursor:pointer;
+            transition:filter .15s,transform .15s,opacity .2s;
+            box-shadow:0 4px 16px rgba(107,0,194,.38);
+          "
+          onmouseover="if(!this.disabled)this.style.filter='brightness(1.07)'"
+          onmouseout="this.style.filter=''"
+        >🏦 Confirmar Saque Total</button>
+      </div>
+
+      <!-- Botão Cancelar -->
+      <button class="btn-cancelar" style="width:100%;margin-top:10px;" onclick="closeDM('dm-saque-aviso')">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- MODAL SAQUE RENDIMENTOS — abre direto sem valor fixo -->
+  <div class="dmo" id="dm-s-rend">
+    <div class="dm">
+      <button class="dm-x" onclick="closeDM('dm-s-rend')">×</button>
+      <div class="dm-t">💸 Sacar Rendimentos</div>
+      <div class="dm-s" style="color:#4ADE80;">✅ Liberado a qualquer momento — sem restrições.</div>
+      <div class="mf">
+        <label>Valor a sacar (R$) — máx: <span id="s-rend-max">R$ 0,00</span></label>
+        <input id="s-rend-v" type="number" placeholder="Ex: 5.00" min="0.01" step="0.01">
+        <div class="hint" id="s-rend-h">Rendimentos disponíveis: R$ 0,00</div>
+      </div>
+      <div class="mf"><label>Chave PIX</label><input id="s-rend-p" type="text" placeholder="CPF, e-mail, telefone ou chave aleatória"></div>
+      <div class="merr" id="s-rend-e"></div>
+      <button class="btn-mm" id="btn-s-rend" onclick="processSaqueRendimentos()" style="background:linear-gradient(135deg,#16A34A,#22C55E);box-shadow:0 5px 20px rgba(34,197,94,.35);">
+        <span class="spin" id="sp-s-rend"></span><span id="btn-s-rend-l">Confirmar Saque de Rendimentos</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL SAQUE TOTAL (abre após aprovação das regras) -->
+  <div class="dmo" id="dm-s">
+    <div class="dm">
+      <button class="dm-x" onclick="closeDM('dm-s')">×</button>
+      <div class="dm-t">🏦 Saque Total</div>
+      <div class="dm-s">Principal + rendimentos. Processado em até 24h via PIX.</div>
+      <div class="mf"><label>Valor do Saque (R$)</label><input id="s-v" type="number" placeholder="Ex: 150.00" min="10" step="0.01"><div class="hint" id="s-h">Saldo disponível: R$ 0,00</div></div>
+      <div class="mf"><label>Chave PIX</label><input id="s-p" type="text" placeholder="CPF, e-mail, telefone ou chave aleatória"></div>
+      <div class="merr" id="s-e"></div>
+      <button class="btn-mm" id="btn-s" onclick="processSaque()"><span class="spin" id="sp-s"></span><span id="btn-s-l">Confirmar Saque Total</span></button>
+    </div>
+  </div>
+
+  <!-- MODAL SAQUE BÔNUS DE INDICAÇÃO — livre, sem restrições -->
+  <div class="dmo" id="dm-bonus">
+    <div class="dm">
+      <button class="dm-x" onclick="closeDM('dm-bonus')">×</button>
+      <div class="dm-t">🎁 Sacar Bônus de Indicação</div>
+      <div class="dm-s" style="color:#FCD34D;">✅ Liberado a qualquer momento — sem nenhuma restrição.</div>
+      <div class="mf">
+        <label>Valor a sacar (R$) — disponível: <span id="bonus-modal-max">R$ 0,00</span></label>
+        <input id="bonus-v" type="number" placeholder="Ex: 25.00" min="0.01" step="0.01">
+        <div class="hint" id="bonus-h">Bônus disponível para saque imediato</div>
+      </div>
+      <div class="mf">
+        <label>Chave PIX</label>
+        <input id="bonus-p" type="text" placeholder="CPF, e-mail, telefone ou chave aleatória">
+      </div>
+      <div class="merr" id="bonus-e"></div>
+      <button class="btn-mm" id="btn-bonus-conf" onclick="processSaqueBonus()"
+        style="background:linear-gradient(135deg,#92400E,#F59E0B);box-shadow:0 5px 20px rgba(245,158,11,.35);">
+        <span class="spin" id="sp-bonus"></span>
+        <span id="btn-bonus-l">Confirmar Saque de Bônus</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL DEPÓSITO -->
+  <div class="dmo" id="dm-d">
+    <div class="dm">
+      <button class="dm-x" onclick="closeDM('dm-d')">×</button>
+      <div class="dm-t">💳 Adicionar Saldo</div>
+      <!-- ALTERAÇÃO 4: Corrigido para 40% ao mês -->
+      <div class="dm-s">Simule um aporte para ver seu saldo crescer com 10% por semana (40% ao mês).</div>
+      <div class="mf"><label>Valor do Depósito (R$)</label><input id="d-v" type="number" placeholder="Ex: 100.00" min="10" step="0.01"></div>
+      <button class="btn-mm" id="btn-d" onclick="processDeposito()"><span class="spin" id="sp-d"></span><span id="btn-d-l">Confirmar Depósito</span></button>
+    </div>
+  </div>
+
+  <!-- TOAST GLOBAL -->
+  <div class="gt" id="gto"><span id="gto-i"></span><span id="gto-m"></span></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     JAVASCRIPT UNIFICADO
+══════════════════════════════════════════════════════════ -->
+<script>
+'use strict';
+
+/* ════════════════════════════════════════════════════════════
+   ESTADO GLOBAL
+════════════════════════════════════════════════════════════ */
+let CU          = null;   // usuário atual
+let VIEW        = 'login';
+let chartInst   = null;
+let chatReady   = false;
+let chatOpen    = false;
+
+/* Saldo ao vivo */
+let liveBalance      = 0;    // valor float em memória
+let liveEarnMonth    = 0;    // rendimentos mensais ao vivo
+let liveEarnTotal    = 0;    // rendimento total ao vivo
+let liveBalanceTimer = null; // setInterval do centavo
+
+/* Notificações */
+let notifTimer = null;
+
+/* ════════════════════════════════════════════════════════════
+   BANCO DE DADOS
+════════════════════════════════════════════════════════════ */
+const DB = {
+  getUsers:   ()       => JSON.parse(localStorage.getItem('cc_users') || '[]'),
+  saveUsers:  (u)      => localStorage.setItem('cc_users', JSON.stringify(u)),
+  getUser:    (id)     => DB.getUsers().find(u => u.id === id),
+  findByName: (n)      => DB.getUsers().find(u => u.username.toLowerCase() === n.toLowerCase()),
+  getTxns:    (uid)    => JSON.parse(localStorage.getItem(`cc_txns_${uid}`) || '[]'),
+  saveTxns:   (uid,t)  => localStorage.setItem(`cc_txns_${uid}`, JSON.stringify(t)),
+  addTxn:     (uid,t)  => { const ts=DB.getTxns(uid); ts.unshift(t); DB.saveTxns(uid,ts); },
+  getSession: ()       => JSON.parse(localStorage.getItem('cc_session') || 'null'),
+  setSession: (u)      => localStorage.setItem('cc_session', JSON.stringify({id:u.id,username:u.username,loginAt:Date.now()})),
+  clearSession:()      => localStorage.removeItem('cc_session'),
+  updateUser: (id,p)   => {
+    const us=DB.getUsers(); const i=us.findIndex(u=>u.id===id);
+    if(i!==-1){Object.assign(us[i],p);DB.saveUsers(us);return us[i];}
+    return null;
+  },
+};
+
+/* ════════════════════════════════════════════════════════════
+   ROTEADOR
+════════════════════════════════════════════════════════════ */
+function goTo(view) {
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+view).classList.add('active');
+  VIEW = view;
+  window.scrollTo(0,0);
+
+  if (view === 'dash') {
+    // ALTERAÇÃO 7: ao entrar no dash, sempre resetar para aba principal
+    document.querySelectorAll('.dash-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.dash-tab').forEach(b => b.classList.remove('active'));
+    const td = document.getElementById('tab-dash'); if(td) td.classList.add('active');
+    const tb = document.querySelector('.dash-tab'); if(tb) tb.classList.add('active');
+    renderDash();
+    renderChart();
+    renderTxns();
+    renderRef();
+    if (!chatReady) { initChat(); chatReady = true; }
+    startLiveBalance();
+    startNotifLoop();
+  } else {
+    stopLiveBalance();
+    stopNotifLoop();
+  }
+}
+
+/* ════════════════════════════════════════════════════════════
+   INIT
+════════════════════════════════════════════════════════════ */
+(function init() {
+  const s = DB.getSession();
+  if (s && (Date.now()-s.loginAt) < 86400000) {
+    CU = DB.getUser(s.id);
+    if (CU) { goTo('dash'); return; }
+  }
+  goTo('login');
+})();
+
+/* ════════════════════════════════════════════════════════════
+   ALTERAÇÃO 3: SALDO + RENDIMENTOS EM TEMPO REAL — CÁLCULO PRECISO
+   Taxa: 10% por semana composto (exato, não fixo por segundo)
+   Fórmula: rendimento_por_ms = principal * ((1.10)^(1/604800000) - 1)
+   Atualiza a cada 200ms para efeito visual suave
+════════════════════════════════════════════════════════════ */
+function startLiveBalance() {
+  stopLiveBalance();
+  const u = DB.getUser(CU.id);
+  liveBalance   = parseFloat(u.balance)          || 0;
+  liveEarnMonth = parseFloat(u.monthlyEarnings)  || 0;
+  liveEarnTotal = parseFloat(u.totalEarned)      || 0;
+
+  // ALTERAÇÃO 3: taxa por milissegundo baseada em 10% por semana composto
+  // 1 semana = 7 dias * 24h * 60min * 60s * 1000ms = 604.800.000 ms
+  const MS_SEMANA = 604800000;
+  const TAXA_POR_MS = Math.pow(1.10, 1 / MS_SEMANA) - 1;
+  const INTERVALO_MS = 200; // atualiza a cada 200ms para fluidez visual
+
+  // ALTERAÇÃO 3: o principal para cálculo = saldo atual (principal + bônus + rendimentos já acumulados)
+  // O rendimento incide sobre tudo que está na conta
+  let saldoBase = liveBalance; // ponto de partida exato ao entrar
+
+  liveBalanceTimer = setInterval(() => {
+    // ALTERAÇÃO 3: incremento proporcional ao intervalo de tempo (200ms)
+    // Usa o saldo base como referência para calcular o incremento do período
+    const incremento = saldoBase * TAXA_POR_MS * INTERVALO_MS;
+
+    liveBalance   = liveBalance + incremento;
+    liveEarnMonth = liveEarnMonth + incremento;
+    liveEarnTotal = liveEarnTotal + incremento;
+
+    /* Atualiza saldo na tela com precisão de 2 casas */
+    const el = document.getElementById('d-bal');
+    if (el) el.textContent = fmtBRL(liveBalance);
+
+    /* Atualiza badge "▲ +R$ X,XX este mês" */
+    const em = document.getElementById('d-mon');
+    if (em) em.textContent = `▲ +${fmtBRL(liveEarnMonth)} este mês`;
+
+    /* Atualiza card Rendimento Total */
+    const et = document.getElementById('d-earn');
+    if (et) et.textContent = fmtBRL(liveEarnTotal);
+
+    /* Persiste no localStorage a cada ~10s (50 ciclos de 200ms) */
+    const ciclos = Math.round(liveEarnTotal * 1000);
+    if (ciclos % 50 === 0) {
+      DB.updateUser(CU.id, {
+        balance:         parseFloat(liveBalance.toFixed(2)),
+        monthlyEarnings: parseFloat(liveEarnMonth.toFixed(2)),
+        totalEarned:     parseFloat(liveEarnTotal.toFixed(2)),
+      });
+      // ALTERAÇÃO 3: atualiza saldoBase com o saldo persistido (evita drift)
+      saldoBase = parseFloat(liveBalance.toFixed(2));
+      const sh = document.getElementById('s-h');
+      if (sh) sh.textContent = `Saldo disponível: ${fmtBRL(liveBalance)}`;
+    }
+  }, INTERVALO_MS);
+}
+
+function stopLiveBalance() {
+  if (liveBalanceTimer) { clearInterval(liveBalanceTimer); liveBalanceTimer = null; }
+  /* Persiste o valor atual antes de parar */
+  if (CU) DB.updateUser(CU.id, {
+    balance:         liveBalance,
+    monthlyEarnings: parseFloat(liveEarnMonth.toFixed(2)),
+    totalEarned:     parseFloat(liveEarnTotal.toFixed(2)),
+  });
+}
+
+/* ════════════════════════════════════════════════════════════
+   NOTIFICAÇÕES AO VIVO — a cada 30s
+════════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════
+   ALTERAÇÃO 5: Nomes brasileiros reais e naturais para notificações
+════════════════════════════════════════════════════════════ */
+const NICKS = [
+  'João Silva','Maria Oliveira','Pedro Santos','Ana Costa','Lucas Mendes',
+  'Beatriz Lima','Rafael Souza','Juliana Ferreira','Thiago Alves','Camila Rodrigues',
+  'Bruno Martins','Fernanda Pereira','Diego Carvalho','Larissa Nascimento','Vinicius Gomes',
+  'Gabriela Ribeiro','André Barbosa','Letícia Castro','Matheus Araujo','Isabela Dias',
+  'Felipe Torres','Carolina Melo','Rodrigo Nunes','Amanda Freitas','Gustavo Cardoso',
+  'Priscila Moraes','Henrique Pinto','Vanessa Lopes','Leonardo Correia','Renata Vieira'
+];
+
+function randBetween(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+
+/* Som de caixa registradora — estilo Hotmart/Yampi/Shopify ka-ching */
+function playKaching() {
+  try {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    const ctx = new AC();
+    const t = ctx.currentTime;
+
+    /* Camada 1: "Ka" — clique metálico seco */
+    const bufSize = Math.floor(ctx.sampleRate * 0.045);
+    const buf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < bufSize; i++) data[i] = (Math.random()*2-1) * (1 - i/bufSize);
+    const noise = ctx.createBufferSource();
+    noise.buffer = buf;
+    const nf = ctx.createBiquadFilter();
+    nf.type = 'bandpass'; nf.frequency.value = 3800; nf.Q.value = 0.9;
+    const ng = ctx.createGain();
+    ng.gain.setValueAtTime(0.20, t);
+    ng.gain.exponentialRampToValueAtTime(0.001, t+0.045);
+    noise.connect(nf); nf.connect(ng); ng.connect(ctx.destination);
+    noise.start(t); noise.stop(t+0.045);
+
+    /* Camada 2: "Ching" — sino metálico multicamada */
+    function bell(freq, start, vol, dur) {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.type = 'sine';
+      o.frequency.setValueAtTime(freq, start);
+      o.frequency.exponentialRampToValueAtTime(freq * 0.985, start + dur);
+      g.gain.setValueAtTime(0, start);
+      g.gain.linearRampToValueAtTime(vol, start + 0.007);
+      g.gain.exponentialRampToValueAtTime(0.001, start + dur);
+      o.start(start); o.stop(start + dur);
+    }
+    /* Acorde de sino — nota principal + harmônicos */
+    bell(1480, t+0.038, 0.30, 0.55);   /* Mi5 — nota principal */
+    bell(1976, t+0.038, 0.16, 0.44);   /* Si5 — oitava */
+    bell(1109, t+0.042, 0.11, 0.60);   /* Ré5 — quinta abaixo */
+    bell(2217, t+0.040, 0.07, 0.35);   /* brilho alto */
+    /* Eco suave */
+    bell(1760, t+0.130, 0.13, 0.38);
+    bell(2349, t+0.130, 0.06, 0.28);
+
+    setTimeout(() => { try { ctx.close(); } catch(e){} }, 900);
+  } catch(e){}
+}
+
+function showLiveNotif() {
+  // ALTERAÇÃO 5: nomes reais e mensagens naturais variadas
+  const nome  = NICKS[Math.floor(Math.random()*NICKS.length)];
+  const valor = randBetween(50, 1850);
+  // ALTERAÇÃO 5: mensagens variadas para maior realismo
+  const msgs = [
+    'acabou de sacar',
+    'recebeu seu rendimento',
+    'recebeu sua comissão',
+    'acabou de receber',
+    'fez um saque via PIX',
+  ];
+  const msg = msgs[Math.floor(Math.random()*msgs.length)];
+  const container = document.getElementById('live-notif-container');
+  if (!container) return;
+
+  const el = document.createElement('div');
+  el.className = 'live-notif';
+  el.innerHTML = `
+    <div class="ln-ico">💸</div>
+    <div class="ln-body">
+      <div class="ln-user">${nome}</div>
+      <div class="ln-text">${msg}</div>
+    </div>
+    <div class="ln-val">+${fmtBRL(valor)}</div>
+  `;
+  container.appendChild(el);
+
+  /* Anima entrada */
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => el.classList.add('show'));
+  });
+
+  playKaching();
+
+  /* Sai após 4s */
+  setTimeout(() => {
+    el.classList.remove('show');
+    el.classList.add('hide');
+    setTimeout(() => el.remove(), 400);
+  }, 4000);
+}
+
+function startNotifLoop() {
+  stopNotifLoop();
+  /* Primeira aparição em 5s, depois a cada 30s */
+  notifTimer = setTimeout(() => {
+    showLiveNotif();
+    notifTimer = setInterval(showLiveNotif, 30000);
+  }, 5000);
+}
+
+function stopNotifLoop() {
+  if (notifTimer) { clearTimeout(notifTimer); clearInterval(notifTimer); notifTimer = null; }
+}
+
+/* ════════════════════════════════════════════════════════════
+   UTILITÁRIOS
+════════════════════════════════════════════════════════════ */
+function fmtBRL(v) {
+  return 'R$ '+parseFloat(v||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+function uid()        { return 'u_'+Date.now()+Math.random().toString(36).slice(2,6); }
+function gerarChave(n=8){ const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; const b=new Uint8Array(n); crypto.getRandomValues(b); return Array.from(b).map(x=>c[x%c.length]).join(''); }
+function genRef(u)    { return u.slice(0,3).toUpperCase()+gerarChave(5); }
+
+function togglePass(id, btn) {
+  const inp=document.getElementById(id); const show=inp.type==='password';
+  inp.type=show?'text':'password';
+  btn.innerHTML=show
+    ?`<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`
+    :`<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+}
+
+/* ── TOASTS ── */
+function showAto(id, ii, im, type, msg) {
+  const t=document.getElementById(id);
+  document.getElementById(ii).textContent=type==='error'?'⚠️':'✅';
+  document.getElementById(im).textContent=msg;
+  t.className=`ato ${type} show`;
+  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),4500);
+}
+function showCto(msg) {
+  const t=document.getElementById('c-to');
+  document.getElementById('c-to-m').textContent=msg;
+  t.classList.add('show');
+  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),4500);
+}
+function gToast(type,msg) {
+  const t=document.getElementById('gto');
+  document.getElementById('gto-i').textContent=type==='success'?'✅':'⚠️';
+  document.getElementById('gto-m').textContent=msg;
+  t.className=`gt ${type} show`;
+  clearTimeout(t._tt); t._tt=setTimeout(()=>t.classList.remove('show'),4000);
+}
+
+function setFE(id,msg) {
+  document.getElementById(id).classList.toggle('err',!!msg);
+  const e=document.getElementById(id.replace('lf-','l-').replace('cf-','c-')+'-e');
+  if(e) e.textContent=msg||'';
+}
+
+/* ════════════════════════════════════════════════════════════
+   LOGIN
+════════════════════════════════════════════════════════════ */
+function applyEarnings(user) {
+  const us=DB.getUsers(); const i=us.findIndex(u=>u.id===user.id); if(i===-1) return;
+  const h=(Date.now()-(us[i].lastLogin||0))/3600000;
+  if(h>=0.5 && us[i].balance>0){
+    // ALTERAÇÃO 3: taxa correta de 10% por semana = (1.10)^(h/168) - 1
+    // 168 = horas em uma semana
+    const taxaPeriodo = Math.pow(1.10, h / 168) - 1;
+    const e=parseFloat((us[i].balance * taxaPeriodo).toFixed(2));
+    if(e>0.01){
+      us[i].balance=parseFloat((us[i].balance+e).toFixed(2));
+      us[i].monthlyEarnings=parseFloat(((us[i].monthlyEarnings||0)+e).toFixed(2));
+      us[i].totalEarned=parseFloat(((us[i].totalEarned||0)+e).toFixed(2));
+      // ALTERAÇÃO 3+4: descrição da txn com taxa correta
+      DB.addTxn(user.id,{id:'txn_'+Date.now(),type:'rendimento',amount:e,date:new Date().toISOString(),description:'Rendimento automático (10% por semana)'});
+    }
+  }
+  us[i].lastLogin=Date.now(); DB.saveUsers(us); CU=us[i];
+}
+
+function setLL(on) {
+  const b=document.getElementById('btn-login'); b.disabled=on;
+  document.getElementById('sp-l').style.display=on?'block':'none';
+  document.getElementById('btn-l-lbl').textContent=on?'Entrando...':'Entrar';
+}
+
+function handleLogin() {
+  const u=document.getElementById('l-u').value.trim();
+  const k=document.getElementById('l-k').value.trim();
+  let ok=true;
+  setFE('lf-u',''); setFE('lf-k','');
+  if(!u){setFE('lf-u','Informe seu usuário.');ok=false;}
+  if(!k){setFE('lf-k','Informe sua chave.');ok=false;}
+  if(!ok) return;
+  setLL(true);
+  setTimeout(()=>{
+    setLL(false);
+    const user=DB.findByName(u);
+    if(!user){setFE('lf-u','Usuário não encontrado.');showAto('l-to','l-to-i','l-to-m','error','Usuário não encontrado. Verifique ou cadastre-se.');return;}
+    if(user.securityKey!==k.toUpperCase()){setFE('lf-k','Chave incorreta.');showAto('l-to','l-to-i','l-to-m','error','Chave de segurança incorreta.');return;}
+    applyEarnings(user);
+    DB.setSession(CU);
+    showAto('l-to','l-to-i','l-to-m','success',`Bem-vindo, ${CU.username}! ✨`);
+    setTimeout(()=>goTo('dash'),1000);
+  },1200);
+}
+
+/* ════════════════════════════════════════════════════════════
+   CADASTRO
+════════════════════════════════════════════════════════════ */
+function checkReqs() {
+  const v=document.getElementById('c-u').value;
+  const s=(id,ok)=>document.getElementById(id).classList.toggle('ok',ok);
+  s('req-min',v.length>=3); s('req-chars',/^[a-zA-Z0-9_]*$/.test(v)); s('req-start',/^[a-zA-Z]/.test(v));
+  return v.length>=3&&/^[a-zA-Z0-9_]*$/.test(v)&&/^[a-zA-Z]/.test(v);
+}
+
+function setCL(on) {
+  const b=document.getElementById('btn-cad'); b.disabled=on;
+  document.getElementById('sp-c').style.display=on?'block':'none';
+  document.getElementById('btn-c-lbl').textContent=on?'Gerando sua chave...':'Criar Chave de Acesso';
+}
+
+function handleCadastro() {
+  const u=document.getElementById('c-u').value.trim();
+  const r=document.getElementById('c-r').value.trim().toUpperCase();
+  setFE('cf-u','');
+  if(!u){setFE('cf-u','Escolha um nome de usuário.');return;}
+  if(!checkReqs()){setFE('cf-u','O usuário não atende aos requisitos.');return;}
+  if(DB.findByName(u)){setFE('cf-u','Usuário já em uso. Escolha outro.');showCto('Usuário já cadastrado.');return;}
+  setCL(true);
+  setTimeout(()=>{
+    setCL(false);
+    const chave=gerarChave(8); const id=uid(); const refCode=genRef(u); const BONUS=50;
+    let referredBy=null;
+    if(r){
+      const ref=DB.getUsers().find(x=>x.referralCode===r);
+      if(ref){
+        referredBy=ref.id;
+        // ALTERAÇÃO 1: bônus de indicação = 50% do depósito inicial do indicado (R$ 25 min)
+        // Esse valor vai APENAS para referralEarnings, NÃO soma ao totalDeposited do indicador
+        const com=parseFloat((BONUS*.5).toFixed(2));
+        DB.updateUser(ref.id,{
+          balance:parseFloat((ref.balance+com).toFixed(2)),
+          referralEarnings:parseFloat(((ref.referralEarnings||0)+com).toFixed(2)),
+          // ALTERAÇÃO 1: totalDeposited NÃO é alterado — bônus não é depósito
+          referrals:[...(ref.referrals||[]),{username:u,date:new Date().toISOString()}]
+        });
+        DB.addTxn(ref.id,{id:'txn_'+Date.now()+'r',type:'indicacao',amount:com,date:new Date().toISOString(),description:`Bônus de indicação — ${u}`});
+      }
+    }
+    // ALTERAÇÃO 1: balance inicia com o bônus de boas-vindas, mas totalDeposited=0 (principal real)
+    // O bônus fica separado em referralBonus (campo novo) para não sujar o "Total Depositado"
+    const nu={id,username:u,securityKey:chave,balance:BONUS,monthlyEarnings:0,totalEarned:0,
+      totalDeposited:0,        // ALTERAÇÃO 1: principal real = R$ 0 (usuário não depositou nada ainda)
+      welcomeBonus:BONUS,      // ALTERAÇÃO 1: bônus de boas-vindas separado
+      referralCode:refCode,referralEarnings:0,referrals:[],referredBy,createdAt:new Date().toISOString(),lastLogin:Date.now()};
+    const us=DB.getUsers(); us.push(nu); DB.saveUsers(us);
+    DB.saveTxns(id,[{id:'txn_welcome',type:'deposito',amount:BONUS,date:new Date().toISOString(),description:'🎁 Bônus de boas-vindas CrypyoCash'}]);
+    document.getElementById('km-u').textContent=u;
+    document.getElementById('km-k').textContent=chave;
+    document.getElementById('kmo').classList.add('show');
+    document.getElementById('btn-ck').focus();
+  },1300);
+}
+
+function copiarChave() {
+  const k=document.getElementById('km-k').textContent;
+  const btn=document.getElementById('btn-ck');
+  navigator.clipboard.writeText(k).then(()=>{
+    btn.classList.add('cop');
+    document.getElementById('ck-i').textContent='✅';
+    document.getElementById('ck-l').textContent='Copiado!';
+    setTimeout(()=>{btn.classList.remove('cop');document.getElementById('ck-i').textContent='📋';document.getElementById('ck-l').textContent='Copiar Chave de Acesso';},2500);
+  });
+}
+
+function closeKeyModal() {
+  document.getElementById('kmo').classList.remove('show');
+  document.getElementById('c-u').value='';
+  document.getElementById('c-r').value='';
+  ['req-min','req-chars','req-start'].forEach(id=>document.getElementById(id).classList.remove('ok'));
+  goTo('login');
+}
+document.getElementById('kmo').addEventListener('click',function(e){if(e.target===this)closeKeyModal();});
+
+/* ════════════════════════════════════════════════════════════
+   DASHBOARD — RENDER
+════════════════════════════════════════════════════════════ */
+function renderDash() {
+  const u=DB.getUser(CU.id); if(!u){logout();return;} CU=u;
+  liveBalance   = parseFloat(u.balance)         || 0;
+  liveEarnMonth = parseFloat(u.monthlyEarnings) || 0;
+  liveEarnTotal = parseFloat(u.totalEarned)     || 0;
+  document.getElementById('hdr-av').textContent=u.username[0].toUpperCase();
+  document.getElementById('hdr-un').textContent=u.username;
+  document.getElementById('d-bal').textContent=fmtBRL(u.balance);
+  document.getElementById('d-mon').textContent=`▲ +${fmtBRL(u.monthlyEarnings||0)} este mês`;
+  // ALTERAÇÃO 4: Corrigido para 40% ao mês (era "8.4% APY ativo")
+  document.getElementById('d-bsb').textContent=`Conta criada em ${new Date(u.createdAt).toLocaleDateString('pt-BR')} • 10% por semana (40% ao mês)`;
+  document.getElementById('d-earn').textContent=fmtBRL(u.totalEarned||0);
+  // ALTERAÇÃO 1: totalDeposited mostra APENAS o principal real (não inclui bônus)
+  document.getElementById('d-dep').textContent=fmtBRL(u.totalDeposited||0);
+  // ALTERAÇÃO 1: campo de bônus soma bônus de boas-vindas + ganhos com indicações
+  const totalBonus = parseFloat((u.referralEarnings||0) + (u.welcomeBonus||0));
+  document.getElementById('d-ref').textContent=fmtBRL(totalBonus);
+  document.getElementById('s-h').textContent=`Saldo disponível: ${fmtBRL(u.balance)}`;
+}
+
+/* ════════════════════════════════════════════════════════════
+   ALTERAÇÃO 2: renderChart corrigido
+   - Começa em R$ 0,00 quando o usuário entrou (sem depósito)
+   - Cresce com 10% por semana (taxa diária = 10%/7)
+   - Ponto final = saldo atual real (principal + rendimentos + bônus)
+════════════════════════════════════════════════════════════ */
+function renderChart() {
+  const u=DB.getUser(CU.id);
+  const labels=[],data=[];
+
+  // ALTERAÇÃO 2: taxa diária baseada em 10% por semana (composto)
+  const TAXA_DIARIA = Math.pow(1.10, 1/7) - 1; // ≈ 1.364% ao dia
+
+  // ALTERAÇÃO 2: saldo inicial = totalDeposited + bônus (mas gráfico começa do momento do cadastro)
+  // Usamos a data de criação da conta para calcular quantos dias atrás foi
+  const criacao = new Date(u.createdAt);
+  const hoje = new Date();
+  const diasTotal = Math.max(0, Math.floor((hoje - criacao) / 86400000));
+
+  // Ponto de partida do gráfico: saldo no dia (hoje - 6 dias) ou 0 se conta nova
+  // O gráfico mostra os últimos 7 dias
+  const principal = parseFloat(u.totalDeposited || 0) + parseFloat(u.welcomeBonus || 0) + parseFloat(u.referralEarnings || 0);
+  const balanceFinal = parseFloat(u.balance);
+
+  // Calcula o saldo 6 dias atrás retroativamente a partir do saldo atual
+  // saldo_hoje = saldo_6d_atras * (1 + taxa)^6
+  const saldo6DiasAtras = diasTotal >= 6
+    ? parseFloat((balanceFinal / Math.pow(1 + TAXA_DIARIA, 6)).toFixed(2))
+    : 0;
+
+  let r = saldo6DiasAtras;
+  for(let d=6;d>=0;d--){
+    const dt=new Date(hoje); dt.setDate(dt.getDate()-d);
+    labels.push(dt.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'}));
+    if(d===0){
+      // Último ponto = saldo real ao vivo
+      data.push(parseFloat(balanceFinal.toFixed(2)));
+    } else {
+      data.push(parseFloat(r.toFixed(2)));
+      // Avança um dia pela taxa composta correta
+      r = r * (1 + TAXA_DIARIA);
+    }
+  }
+
+  const canvas=document.getElementById('balChart'); if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const g=ctx.createLinearGradient(0,0,0,170);
+  g.addColorStop(0,'rgba(155,48,255,.35)'); g.addColorStop(1,'rgba(155,48,255,.01)');
+  if(chartInst)chartInst.destroy();
+  chartInst=new Chart(ctx,{
+    type:'line',
+    data:{labels,datasets:[{data,borderColor:'#9B30FF',backgroundColor:g,borderWidth:2.5,pointBackgroundColor:'#9B30FF',pointBorderColor:'#0D0717',pointBorderWidth:2,pointRadius:4,tension:.42,fill:true}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1A1030',borderColor:'rgba(155,48,255,.3)',borderWidth:1,titleColor:'#C580FF',bodyColor:'#F0EAF8',padding:10,callbacks:{label:c=>' '+fmtBRL(c.parsed.y)}}},scales:{x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#9080A8',font:{family:'Outfit',size:11}}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#9080A8',font:{family:'Outfit',size:11},callback:v=>'R$ '+v.toFixed(0)}}}}
+  });
+}
+
+function fmtDate(iso){const d=new Date(iso);return d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});}
+function txnIco(t){return{deposito:'💳',saque:'💸',saque_bonus:'🎁',rendimento:'📈',indicacao:'🤝'}[t]||'💰';}
+function txnLbl(t){return t.description||{deposito:'Depósito',saque:'Saque',saque_bonus:'Saque de Bônus',rendimento:'Rendimento',indicacao:'Comissão de Indicação'}[t.type]||t.type;}
+
+function renderTxns(all=false) {
+  const ts=DB.getTxns(CU.id);
+  const el=document.getElementById('txn-l');
+  const show=all?ts:ts.slice(0,8);
+  if(!ts.length){el.innerHTML='<div class="te">Nenhuma transação ainda.</div>';return;}
+  el.innerHTML=show.map(t=>`
+    <div class="ti">
+      <div class="ti-l">
+        <div class="ti-ico ${t.type}">${txnIco(t.type)}</div>
+        <div><div class="ti-d">${txnLbl(t)}</div><div class="ti-dt">${fmtDate(t.date)}</div></div>
+      </div>
+      <div class="ti-a ${t.type==='saque'?'minus':'plus'}">${t.type==='saque'?'- ':'+ '}${fmtBRL(t.amount)}</div>
+    </div>`).join('');
+}
+
+function renderRef() {
+  const u=DB.getUser(CU.id);
+  const url=`https://crypyocash.com/?ref=${u.referralCode}`;
+  document.getElementById('r-link').textContent=url;
+  document.getElementById('r-cnt').textContent=(u.referrals||[]).length;
+  document.getElementById('r-earn').textContent=fmtBRL(u.referralEarnings||0);
+  const fl=document.getElementById('r-friends');
+  if(!u.referrals||!u.referrals.length){fl.innerHTML='<div class="ref-ep">Nenhum amigo indicado ainda. Compartilhe seu link!</div>';return;}
+  fl.innerHTML=u.referrals.map(r=>`<div class="fri"><div><div class="fri-n">@${r.username}</div><div class="fri-d">${new Date(r.date).toLocaleDateString('pt-BR')}</div></div><div class="fri-c">+R$ 25,00</div></div>`).join('');
+}
+
+function copyRef() {
+  const u=DB.getUser(CU.id);
+  navigator.clipboard.writeText(`https://crypyocash.com/?ref=${u.referralCode}`).then(()=>{
+    const b=document.getElementById('btn-cr'); b.classList.add('cop'); b.textContent='✅ Copiado!';
+    setTimeout(()=>{b.classList.remove('cop');b.textContent='Copiar';},2500);
+  });
+}
+function shareWpp() {
+  const u=DB.getUser(CU.id);
+  window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(`🤑 Estou ganhando dinheiro na CrypyoCash! Cadastra pelo meu link e ganhe R$ 50:\n\nhttps://crypyocash.com/?ref=${u.referralCode}`)}`, '_blank');
+}
+
+/* ════════════════════════════════════════════════════════════
+   MODAIS DASH
+════════════════════════════════════════════════════════════ */
+function openDM(id)  { document.getElementById(id).classList.add('show'); }
+function closeDM(id) { document.getElementById(id).classList.remove('show'); }
+document.querySelectorAll('.dmo').forEach(el=>el.addEventListener('click',function(e){if(e.target===this)this.classList.remove('show');}));
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape') document.querySelectorAll('.dmo.show').forEach(m=>m.classList.remove('show'));
+  if(e.key==='Enter'){
+    if(VIEW==='login') handleLogin();
+    else if(VIEW==='cadastro'&&!document.getElementById('kmo').classList.contains('show')) handleCadastro();
+  }
+});
+
+/* ════════════════════════════════════════════════════════════
+   CORREÇÃO: LÓGICA DE SAQUE — dois fluxos totalmente independentes
+   ┌─ Saque de Rendimentos → sempre liberado, qualquer momento
+   └─ Saque Total → requer 7 dias + 1 indicação
+════════════════════════════════════════════════════════════ */
+
+/**
+ * CORREÇÃO: Calcula os valores de cada tipo de saldo de forma correta.
+ *
+ * Estrutura do saldo de um usuário:
+ *   liveBalance = totalDeposited (principal) + welcomeBonus + referralEarnings (bônus indicação) + rendimentos (juros)
+ *
+ * Portanto:
+ *   rendimentos = liveBalance - totalDeposited - welcomeBonus - referralEarnings
+ *
+ * PORÉM: a fórmula anterior estava subtraindo o welcomeBonus dos rendimentos,
+ * o que fazia rendimentos = 0 para usuários que só tinham o bônus inicial.
+ *
+ * CORREÇÃO: rendimentos é qualquer valor acima do saldo inicial total.
+ * Para usuários sem depósito real: rendimentos = liveBalance - welcomeBonus - referralEarnings
+ * Para usuários com depósito real: rendimentos = liveBalance - totalDeposited - welcomeBonus - referralEarnings
+ */
+function calcSaqueStatus() {
+  const u            = DB.getUser(CU.id);
+  const totalDep     = parseFloat(u.totalDeposited  || 0);
+  const welcomeBonus = parseFloat(u.welcomeBonus    || 0);
+  const refBonus     = parseFloat(u.referralEarnings || 0);
+
+  // Usa liveBalance se já foi inicializado (>0), senão usa u.balance do DB
+  // Isso corrige o bug de timing onde liveBalance ainda é 0 quando o modal abre
+  const saldoAtual = (liveBalance > 0) ? liveBalance : parseFloat(u.balance || 0);
+
+  // saldoBase = o máximo entre totalDeposited e welcomeBonus (evita dupla contagem
+  // em contas antigas onde o bônus foi gravado em ambos os campos) + bônus de indicação
+  const saldoBase  = Math.max(totalDep, welcomeBonus) + refBonus;
+
+  // Rendimentos = tudo que cresceu acima do saldo base — nunca negativo
+  const rendimentos = Math.max(0, saldoAtual - saldoBase);
+
+  const bonusIndicacao = refBonus;
+  const principal      = totalDep;
+
+  const diasCriacao  = Math.floor((Date.now() - new Date(u.createdAt).getTime()) / 86400000);
+  const passou7dias  = diasCriacao >= 7;
+  const temIndicacao = (u.referrals || []).length >= 1;
+
+  return { u, principal, welcomeBonus, refBonus, bonusIndicacao, rendimentos, saldoBase, saldoAtual, diasCriacao, passou7dias, temIndicacao };
+}
+
+/**
+ * Preenche e exibe o modal de aviso com dois cards (rendimentos + total).
+ * Chamada pelo botão "Solicitar Saque" do dashboard.
+ */
+function verificarElegibilidadeSaque() {
+  const { rendimentos, saldoAtual, diasCriacao, passou7dias, temIndicacao } = calcSaqueStatus();
+
+  /* ── Card de rendimentos: sempre verde e ativo se houver qualquer centavo ── */
+  const rendEl = document.getElementById('aviso-rend-valor');
+  if (rendEl) rendEl.textContent = fmtBRL(rendimentos);
+
+  const btnRend = document.getElementById('btn-sacar-rendimentos');
+  if (btnRend) {
+    if (rendimentos > 0.009) {
+      // CORREÇÃO: libera com qualquer valor positivo — sem mínimo obrigatório aqui
+      btnRend.disabled = false;
+      btnRend.style.opacity = '1';
+      btnRend.style.cursor  = 'pointer';
+      btnRend.textContent   = `💸 Sacar ${fmtBRL(rendimentos)} de Rendimentos`;
+    } else {
+      // ainda sem rendimentos acumulados
+      btnRend.disabled = true;
+      btnRend.style.opacity = '0.45';
+      btnRend.style.cursor  = 'default';
+      btnRend.textContent   = `💸 Aguardando rendimentos acumularem...`;
+    }
+  }
+
+  /* ── Card de saque total: verde se liberado, amarelo se bloqueado ── */
+  const badge   = document.getElementById('saque-total-badge');
+  const msgEl   = document.getElementById('saque-total-msg');
+  const btnTotal = document.getElementById('btn-sacar-total');
+
+  // Requisito 7 dias
+  const ico7   = document.getElementById('req-7dias-ico');
+  const txt7   = document.getElementById('req-7dias-txt');
+  if (passou7dias) {
+    if (ico7) ico7.textContent = '✅';
+    if (txt7) { txt7.textContent = '7 dias concluídos'; txt7.style.color = '#4ADE80'; }
+  } else {
+    if (ico7) ico7.textContent = '⏳';
+    const diasRestantes = 7 - diasCriacao;
+    if (txt7) { txt7.textContent = `Faltam ${diasRestantes} dia(s) para completar 7 dias`; txt7.style.color = '#FCD34D'; }
+  }
+
+  // Requisito indicação
+  const icoInd = document.getElementById('req-ind-ico');
+  const txtInd = document.getElementById('req-ind-txt');
+  if (temIndicacao) {
+    if (icoInd) icoInd.textContent = '✅';
+    if (txtInd) { txtInd.textContent = 'Indicação realizada ✓'; txtInd.style.color = '#4ADE80'; }
+  } else {
+    if (icoInd) icoInd.textContent = '🤝';
+    if (txtInd) { txtInd.textContent = 'Indique 1 amigo (depósito mín. R$ 25)'; txtInd.style.color = '#FCD34D'; }
+  }
+
+  // Atualiza card de saque total
+  const totalCard = document.getElementById('saque-total-card');
+  if (passou7dias && temIndicacao) {
+    // Tudo liberado
+    if (badge)  { badge.className = 'saque-status-badge ok'; badge.textContent = '✅ Liberado'; }
+    if (msgEl)  msgEl.innerHTML = `Parabéns! Você pode sacar o principal + rendimentos (saldo total: <strong style="color:#4ADE80">${fmtBRL(saldoAtual)}</strong>).`;
+    if (totalCard) { totalCard.style.background = 'rgba(107,0,194,.08)'; totalCard.style.border = '1.5px solid rgba(155,48,255,.3)'; }
+    if (btnTotal) { btnTotal.disabled = false; btnTotal.style.opacity = '1'; btnTotal.style.cursor = 'pointer'; btnTotal.textContent = `🏦 Saque Total — ${fmtBRL(saldoAtual)}`; }
+  } else {
+    // Bloqueado
+    if (badge)  { badge.className = 'saque-status-badge warn'; badge.textContent = '🔒 Bloqueado'; }
+    const pendentes = [];
+    if (!passou7dias) pendentes.push(`aguardar ${7 - diasCriacao} dia(s)`);
+    if (!temIndicacao) pendentes.push('indicar 1 amigo');
+    if (msgEl) msgEl.innerHTML = `Para liberar: ${pendentes.join(' e ')}.`;
+    if (totalCard) { totalCard.style.background = 'rgba(245,158,11,.05)'; totalCard.style.border = '1.5px solid rgba(245,158,11,.2)'; }
+    if (btnTotal) { btnTotal.disabled = true; btnTotal.style.opacity = '0.4'; btnTotal.style.cursor = 'default'; btnTotal.textContent = '🔒 Aguarde os requisitos'; }
+  }
+}
+
+/* ── Abre o formulário de saque de RENDIMENTOS — sem restrições ── */
+function abrirSaqueRendimentos() {
+  const { rendimentos, saldoAtual } = calcSaqueStatus();
+  closeDM('dm-saque-aviso');
+
+  const maxEl   = document.getElementById('s-rend-max');
+  const hintEl  = document.getElementById('s-rend-h');
+  const inputEl = document.getElementById('s-rend-v');
+  const errEl   = document.getElementById('s-rend-e');
+
+  if (maxEl)   maxEl.textContent  = fmtBRL(rendimentos);
+  if (hintEl)  hintEl.textContent = `Rendimentos disponíveis: ${fmtBRL(rendimentos)} — sem restrições ✅`;
+  if (inputEl) { inputEl.value = rendimentos.toFixed(2); inputEl.max = rendimentos.toFixed(2); }
+  if (errEl)   errEl.style.display = 'none';
+
+  openDM('dm-s-rend');
+}
+
+/* ── Processa o saque de RENDIMENTOS — sem restrições de prazo/indicação ── */
+function processSaqueRendimentos() {
+  const v   = parseFloat(document.getElementById('s-rend-v').value);
+  const p   = document.getElementById('s-rend-p').value.trim();
+  const ee  = document.getElementById('s-rend-e'); ee.style.display = 'none';
+
+  // Recalcula na hora — usa saldoAtual que já tem fallback para u.balance
+  const { rendimentos, saldoAtual } = calcSaqueStatus();
+  const saldoDisponivel = saldoAtual > 0 ? saldoAtual : parseFloat(DB.getUser(CU.id).balance || 0);
+
+  if (!v || v <= 0)              { ee.textContent = 'Informe um valor válido.'; ee.style.display='block'; return; }
+  if (v > saldoDisponivel)       { ee.textContent = `Saldo insuficiente (disponível: ${fmtBRL(saldoDisponivel)}).`; ee.style.display='block'; return; }
+  if (v > rendimentos + 0.05)    { ee.textContent = `Valor excede os rendimentos (${fmtBRL(rendimentos)}). Para sacar principal, use "Saque Total".`; ee.style.display='block'; return; }
+  if (!p)                        { ee.textContent = 'Informe sua chave PIX.'; ee.style.display='block'; return; }
+
+  const btn = document.getElementById('btn-s-rend'); btn.disabled = true;
+  document.getElementById('sp-s-rend').style.display = 'block';
+  document.getElementById('btn-s-rend-l').textContent = 'Processando...';
+
+  setTimeout(() => {
+    btn.disabled = false;
+    document.getElementById('sp-s-rend').style.display = 'none';
+    document.getElementById('btn-s-rend-l').textContent = 'Confirmar Saque de Rendimentos';
+
+    // Atualiza liveBalance e persiste
+    liveBalance = parseFloat((saldoDisponivel - v).toFixed(2));
+    DB.updateUser(CU.id, { balance: liveBalance });
+    DB.addTxn(CU.id, { id:'txn_'+Date.now(), type:'saque', amount:v, date:new Date().toISOString(), description:`Saque de Rendimentos PIX — ${p}` });
+
+    closeDM('dm-s-rend');
+    document.getElementById('s-rend-v').value = '';
+    document.getElementById('s-rend-p').value = '';
+    CU = DB.getUser(CU.id); renderDash(); renderTxns(); renderChart();
+    gToast('success', `✅ Saque de rendimentos de ${fmtBRL(v)} solicitado!`);
+  }, 1800);
+}
+
+/* ── Abre o formulário de SAQUE TOTAL ── */
+function abrirSaqueTotal() {
+  const { passou7dias, temIndicacao } = calcSaqueStatus();
+  // Dupla verificação de segurança: não abre se bloqueado
+  if (!passou7dias || !temIndicacao) return;
+  closeDM('dm-saque-aviso');
+  document.getElementById('s-h').textContent = `Saldo total disponível: ${fmtBRL(liveBalance)}`;
+  document.getElementById('s-v').value = '';
+  document.getElementById('s-e').style.display = 'none';
+  openDM('dm-s');
+}
+
+/* ── Alias para compatibilidade com o botão original no dashboard ── */
+function abrirModalSaqueReal() { abrirSaqueTotal(); }
+
+/* ── Processa o SAQUE TOTAL (principal + rendimentos) ── */
+function processSaque() {
+  const v   = parseFloat(document.getElementById('s-v').value);
+  const p   = document.getElementById('s-p').value.trim();
+  const ee  = document.getElementById('s-e'); ee.style.display = 'none';
+  const { passou7dias, temIndicacao, diasCriacao } = calcSaqueStatus();
+
+  // Validações básicas
+  if (!v || v < 10)      { ee.textContent = 'Valor mínimo: R$ 10,00.'; ee.style.display='block'; return; }
+  if (v > liveBalance)   { ee.textContent = 'Saldo insuficiente.'; ee.style.display='block'; return; }
+  if (!p)                { ee.textContent = 'Informe sua chave PIX.'; ee.style.display='block'; return; }
+
+  // Barreira de segurança: se chegou aqui sem cumprir requisitos, bloqueia com mensagem clara
+  if (!passou7dias) {
+    ee.textContent = `Saque total bloqueado: faltam ${7 - diasCriacao} dia(s) para completar 7 dias.`;
+    ee.style.display = 'block'; return;
+  }
+  if (!temIndicacao) {
+    ee.textContent = 'Saque total bloqueado: indique 1 amigo que deposite ao menos R$ 25,00.';
+    ee.style.display = 'block'; return;
+  }
+
+  const btn = document.getElementById('btn-s'); btn.disabled = true;
+  document.getElementById('sp-s').style.display = 'block';
+  document.getElementById('btn-s-l').textContent = 'Processando...';
+
+  setTimeout(() => {
+    btn.disabled = false;
+    document.getElementById('sp-s').style.display = 'none';
+    document.getElementById('btn-s-l').textContent = 'Confirmar Saque Total';
+    liveBalance = parseFloat((liveBalance - v).toFixed(2));
+    DB.updateUser(CU.id, { balance: liveBalance });
+    DB.addTxn(CU.id, { id:'txn_'+Date.now(), type:'saque', amount:v, date:new Date().toISOString(), description:`Saque Total PIX — ${p}` });
+    closeDM('dm-s');
+    document.getElementById('s-v').value = '';
+    document.getElementById('s-p').value = '';
+    CU = DB.getUser(CU.id); renderDash(); renderTxns(); renderChart();
+    gToast('success', `✅ Saque de ${fmtBRL(v)} solicitado com sucesso!`);
+  }, 1800);
+}
+
+function processDeposito() {
+  const v=parseFloat(document.getElementById('d-v').value);
+  if(!v||v<10){gToast('error','Valor mínimo: R$ 10,00.');return;}
+  const btn=document.getElementById('btn-d'); btn.disabled=true;
+  document.getElementById('sp-d').style.display='block';
+  document.getElementById('btn-d-l').textContent='Processando...';
+  setTimeout(()=>{
+    btn.disabled=false; document.getElementById('sp-d').style.display='none'; document.getElementById('btn-d-l').textContent='Confirmar Depósito';
+    const u=DB.getUser(CU.id);
+    liveBalance=parseFloat((liveBalance+v).toFixed(2));
+    // ALTERAÇÃO 1: totalDeposited registra apenas o principal real (o que o usuário realmente depositou)
+    DB.updateUser(CU.id,{balance:liveBalance,totalDeposited:parseFloat(((u.totalDeposited||0)+v).toFixed(2))});
+    DB.addTxn(CU.id,{id:'txn_'+Date.now(),type:'deposito',amount:v,date:new Date().toISOString(),description:'Depósito'});
+    closeDM('dm-d');
+    document.getElementById('d-v').value='';
+    CU=DB.getUser(CU.id); renderDash(); renderTxns(); renderChart();
+    gToast('success',`✅ ${fmtBRL(v)} adicionado!`);
+  },1600);
+}
+
+/* ════════════════════════════════════════════════════════════
+   CHAT IA
+════════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════
+   ALTERAÇÃO 6: CHAT IA — Respostas mais humanas e naturais
+   - Removido menção de "por segundo" ou atualização forçada
+   - Taxa corrigida para 40% ao mês / 10% por semana
+   - Saldo separado em principal, rendimentos e bônus
+   - Linguagem mais natural e acolhedora
+════════════════════════════════════════════════════════════ */
+const chatAnss = {
+  // NOVO: "saque" — inclui regras de 7 dias e indicação de forma natural e amigável
+  'saque': () => {
+    const u = DB.getUser(CU?.id);
+    const principal   = parseFloat(u?.totalDeposited || 0);
+    const bonusTotal  = parseFloat((u?.welcomeBonus||0)) + parseFloat((u?.referralEarnings||0));
+    const rendimentos = Math.max(0, parseFloat(liveBalance.toFixed(2)) - principal - bonusTotal);
+    const diasCriacao = Math.floor((Date.now() - new Date(u?.createdAt).getTime()) / 86400000);
+    const passou7dias = diasCriacao >= 7;
+    const temIndicacao= (u?.referrals||[]).length >= 1;
+    const statusPrincipal = passou7dias && temIndicacao
+      ? '✅ Principal liberado para saque!'
+      : `⏳ Principal ainda bloqueado${!passou7dias ? ` (faltam ${7-diasCriacao} dia(s))` : ''}${!temIndicacao ? ' + indicação pendente' : ''}`;
+
+    return `Vou te explicar como funcionam os saques aqui! 💸\n\n` +
+      `📋 <strong>Regras importantes:</strong>\n\n` +
+      `• <strong>Rendimentos</strong> → Saque liberado a qualquer momento ✅\n` +
+      `• <strong>Principal</strong> → Exige:\n` +
+      `  – Mínimo 7 dias após seu depósito\n` +
+      `  – 1 indicação de amigo que depositou ao menos R$ 25\n` +
+      `  – Somente 1 saque do principal por semana\n\n` +
+      `📊 Seu status:\n` +
+      `• Rendimentos disponíveis: ${fmtBRL(rendimentos)}\n` +
+      `• ${statusPrincipal}\n\n` +
+      `Para sacar, clique em "Solicitar Saque" — o sistema vai te guiar! 😊`;
+  },
+  // ALTERAÇÃO 6: "saldo" — mostra separado, sem "por segundo"
+  'saldo': () => {
+    const u = DB.getUser(CU?.id);
+    const principal = fmtBRL(u?.totalDeposited || 0);
+    const rendimentos = fmtBRL(u?.totalEarned || 0);
+    const bonus = fmtBRL((u?.referralEarnings||0) + (u?.welcomeBonus||0));
+    return `Aqui está um resumo completo da sua conta, ${CU?.username}! 😊\n\n💰 Saldo total: ${fmtBRL(liveBalance)}\n\nDetalhando:\n• Principal depositado: ${principal}\n• Rendimentos acumulados: ${rendimentos}\n• Bônus (indicações + boas-vindas): ${bonus}\n\nSeu saldo cresce automaticamente com a taxa de 10% por semana, que equivale a 40% ao mês — um dos melhores retornos do mercado! 🚀`;
+  },
+  // ALTERAÇÃO 6: "indicação"
+  'indicação': () => {
+    const u = DB.getUser(CU?.id);
+    const total = (u?.referrals||[]).length;
+    const ganhos = fmtBRL(u?.referralEarnings || 0);
+    return `O programa de indicação é uma das melhores formas de acelerar seus ganhos aqui! 🎯\n\nComo funciona:\n• Você compartilha seu link exclusivo com amigos\n• Quando eles se cadastram e depositam, você ganha 50% do valor deles\n• Exemplo: amigo deposita R$ 100 → você ganha R$ 50 na hora!\n\nSeu histórico: ${total} amigo(s) indicado(s) | ${ganhos} recebidos em comissões 💛`;
+  },
+  'indicacao': () => chatAnss['indicação'](),
+  // ALTERAÇÃO 6: "rendimento" — sem mencionar segundos, taxa correta
+  'rendimento': () => {
+    const u = DB.getUser(CU?.id);
+    return `A CrypyoCash paga 10% por semana sobre o seu saldo total — isso equivale a 40% ao mês! 📈\n\nO rendimento é calculado de forma composta, ou seja, você ganha rendimento sobre rendimento, fazendo seu dinheiro crescer cada vez mais rápido.\n\nRendimento acumulado até agora: ${fmtBRL(u?.totalEarned || 0)}\n\nQuanto mais você mantém e quanto mais indica amigos, mais rápido seu patrimônio cresce! 💪`;
+  },
+  // ALTERAÇÃO 6: "deposito"
+  'deposito': () => `Para adicionar saldo, clique em "Adicionar Saldo" no painel principal 💳\n\nO valor mínimo é R$ 25,00. Assim que confirmado, o rendimento de 10% por semana já começa a incidir sobre o novo valor.\n\nQuanto mais você aporta, mais os juros compostos trabalham para você! 🚀`,
+  'depositar': () => chatAnss['deposito'](),
+  // ALTERAÇÃO 6: resposta padrão natural
+  'default': () => `Olá, ${CU?.username}! 👋 Sou o assistente da CrypyoCash e estou aqui para te ajudar.\n\nPosso responder sobre:\n💰 Saldo e rendimentos\n💸 Como fazer saques\n🎯 Programa de indicação\n📈 Como funcionam os 40% ao mês\n\nÉ só perguntar! 😊`,
+};
+function getBotR(msg){
+  const l=msg.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  for(const[k,fn] of Object.entries(chatAnss)){
+    if(k==='default') continue;
+    if(l.includes(k.normalize('NFD').replace(/[\u0300-\u036f]/g,''))) return fn();
+  }
+  return chatAnss.default();
+}
+function addMsg(txt,role){const el=document.getElementById('cmsg');const now=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});el.innerHTML+=`<div class="msg ${role}">${txt}<div class="mt">${now}</div></div>`;el.scrollTop=el.scrollHeight;}
+function initChat(){addMsg(`Olá, ${CU?.username}! 👋 Sou o assistente IA da CrypyoCash. Como posso te ajudar hoje?`,'bot');}
+function sendChat(){const i=document.getElementById('cinp');const m=i.value.trim();if(!m)return;i.value='';addMsg(m,'user');setTimeout(()=>addMsg(getBotR(m),'bot'),750);}
+function qr(m){addMsg(m,'user');setTimeout(()=>addMsg(getBotR(m),'bot'),700);}
+function toggleChat(){chatOpen=!chatOpen;document.getElementById('cwin').classList.toggle('open',chatOpen);if(chatOpen)document.getElementById('cinp').focus();}
+
+/* ════════════════════════════════════════════════════════════
+   ALTERAÇÃO 7: Controle de abas — Dashboard | Notícias
+════════════════════════════════════════════════════════════ */
+function switchTab(tabId, btn) {
+  // Desativa todas as abas e botões
+  document.querySelectorAll('.dash-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.dash-tab').forEach(b => b.classList.remove('active'));
+  // Ativa a aba e botão clicados
+  document.getElementById(tabId).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ALTERAÇÃO 7: Filtro de categorias de notícias */
+function filterNews(cat, btn) {
+  // Atualiza botões de filtro
+  document.querySelectorAll('.nf-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  // Mostra/oculta cards pela categoria
+  document.querySelectorAll('.news-card').forEach(card => {
+    if (cat === 'all' || card.dataset.cat === cat) {
+      card.style.display = 'flex';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   NOVO: ABA BÔNUS DE INDICAÇÃO — renderização e saque
+════════════════════════════════════════════════════════════ */
+
+/** Renderiza a aba de bônus com valores atualizados */
+function renderTabBonus() {
+  const u        = DB.getUser(CU.id);
+  const refBonus = parseFloat(u.referralEarnings || 0);
+
+  // Atualiza hero
+  const valEl = document.getElementById('bonus-tab-valor');
+  if (valEl) valEl.textContent = fmtBRL(refBonus);
+
+  // Botão de saque — libera se tiver qualquer valor
+  const btn = document.getElementById('btn-tab-sacar-bonus');
+  if (btn) {
+    btn.disabled = refBonus <= 0;
+    btn.style.opacity = refBonus > 0 ? '1' : '0.45';
+  }
+
+  // Stats
+  const cntEl = document.getElementById('bonus-tab-cnt');
+  if (cntEl) cntEl.textContent = (u.referrals || []).length;
+
+  const totEl = document.getElementById('bonus-tab-total');
+  if (totEl) totEl.textContent = fmtBRL(refBonus);
+
+  // Histórico de saques de bônus (filtra transações do tipo saque de bônus)
+  const txns   = DB.getTxns(CU.id);
+  const histEl = document.getElementById('bonus-hist-list');
+  if (!histEl) return;
+
+  const bonusTxns = txns.filter(t =>
+    t.type === 'saque_bonus' ||
+    (t.type === 'saque' && t.description && t.description.includes('Bônus'))
+  );
+
+  if (!bonusTxns.length) {
+    histEl.innerHTML = '<div class="bonus-hist-empty">Nenhum saque de bônus ainda.<br>Indique amigos e saque seus ganhos!</div>';
+  } else {
+    histEl.innerHTML = bonusTxns.map(t => `
+      <div class="ti">
+        <div class="ti-l">
+          <div class="ti-ico indicacao">🎁</div>
+          <div>
+            <div class="ti-d">${t.description || 'Saque de Bônus'}</div>
+            <div class="ti-dt">${fmtDate(t.date)}</div>
+          </div>
+        </div>
+        <div class="ti-a minus">- ${fmtBRL(t.amount)}</div>
+      </div>`).join('');
+  }
+}
+
+/** Abre o modal de saque de bônus preenchido */
+function abrirModalBonus() {
+  const u        = DB.getUser(CU.id);
+  const refBonus = parseFloat(u.referralEarnings || 0);
+
+  const maxEl   = document.getElementById('bonus-modal-max');
+  const hintEl  = document.getElementById('bonus-h');
+  const inputEl = document.getElementById('bonus-v');
+  if (maxEl)   maxEl.textContent  = fmtBRL(refBonus);
+  if (hintEl)  hintEl.textContent = `Bônus disponível: ${fmtBRL(refBonus)} — sem nenhuma restrição ✅`;
+  if (inputEl) { inputEl.value = refBonus.toFixed(2); inputEl.max = refBonus.toFixed(2); }
+  document.getElementById('bonus-e').style.display = 'none';
+
+  openDM('dm-bonus');
+}
+
+/** Processa o saque de bônus de indicação — totalmente livre */
+function processSaqueBonus() {
+  const v   = parseFloat(document.getElementById('bonus-v').value);
+  const p   = document.getElementById('bonus-p').value.trim();
+  const ee  = document.getElementById('bonus-e'); ee.style.display = 'none';
+  const u   = DB.getUser(CU.id);
+  const refBonus = parseFloat(u.referralEarnings || 0);
+
+  if (!v || v <= 0)       { ee.textContent = 'Informe um valor válido.'; ee.style.display='block'; return; }
+  if (v > refBonus + 0.01){ ee.textContent = `Valor excede o bônus disponível (${fmtBRL(refBonus)}).`; ee.style.display='block'; return; }
+  if (!p)                 { ee.textContent = 'Informe sua chave PIX.'; ee.style.display='block'; return; }
+
+  const btn = document.getElementById('btn-bonus-conf'); btn.disabled = true;
+  document.getElementById('sp-bonus').style.display = 'block';
+  document.getElementById('btn-bonus-l').textContent = 'Processando...';
+
+  setTimeout(() => {
+    btn.disabled = false;
+    document.getElementById('sp-bonus').style.display = 'none';
+    document.getElementById('btn-bonus-l').textContent = 'Confirmar Saque de Bônus';
+
+    // Desconta do bônus de indicação e do saldo vivo
+    const novoBonus = parseFloat((refBonus - v).toFixed(2));
+    liveBalance = parseFloat((liveBalance - v).toFixed(2));
+    DB.updateUser(CU.id, {
+      balance:          liveBalance,
+      referralEarnings: novoBonus,
+    });
+    DB.addTxn(CU.id, {
+      id:          'txn_'+Date.now(),
+      type:        'saque_bonus',
+      amount:      v,
+      date:        new Date().toISOString(),
+      description: `Saque de Bônus de Indicação PIX — ${p}`,
+    });
+
+    closeDM('dm-bonus');
+    document.getElementById('bonus-v').value = '';
+    document.getElementById('bonus-p').value = '';
+    CU = DB.getUser(CU.id);
+    renderDash(); renderTxns(); renderChart(); renderTabBonus();
+    gToast('success', `✅ Bônus de ${fmtBRL(v)} sacado com sucesso!`);
+  }, 1800);
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   LOGOUT
+════════════════════════════════════════════════════════════ */
+function logout(){
+  stopLiveBalance();
+  stopNotifLoop();
+  DB.clearSession();
+  CU=null; chatReady=false; chatOpen=false;
+  document.getElementById('cwin').classList.remove('open');
+  document.getElementById('cmsg').innerHTML='';
+  document.getElementById('live-notif-container').innerHTML='';
+  if(chartInst){chartInst.destroy();chartInst=null;}
+  document.getElementById('l-u').value='';
+  document.getElementById('l-k').value='';
+  goTo('login');
+}
+</script>
+</body>
+</html>
