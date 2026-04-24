@@ -121,6 +121,12 @@ html, body { width:100%; min-height:100vh; font-family:'Outfit',sans-serif; over
 .stip-i { font-size:14px; flex-shrink:0; margin-top:1px; }
 .stip-t { font-size:11.5px; color:var(--gr); line-height:1.5; }
 
+/* Aviso chave irrecuperável — login */
+.key-irrecup { display:flex; align-items:flex-start; gap:10px; background:rgba(239,68,68,.07); border:1.5px solid rgba(239,68,68,.35); border-radius:12px; padding:13px 16px; margin-bottom:20px; }
+.key-irrecup-ico { font-size:20px; flex-shrink:0; line-height:1.3; }
+.key-irrecup-txt { font-size:12px; color:#7F1D1D; font-weight:500; line-height:1.65; }
+.key-irrecup-txt strong { color:#B91C1C; font-weight:800; display:block; margin-bottom:3px; letter-spacing:.01em; }
+
 .srow { display:flex; align-items:center; gap:10px; animation:fU .8s .36s cubic-bezier(.22,1,.36,1) both; }
 .srow span { font-size:13.5px; color:var(--gr); }
 .btn-sw { padding:10px 24px; background:linear-gradient(135deg,#5500A0,#9B30FF); color:#fff; border:none; border-radius:50px; font-size:13.5px; font-weight:700; font-family:'Outfit',sans-serif; cursor:pointer; letter-spacing:.02em; transition:transform .15s,box-shadow .15s,filter .15s; box-shadow:0 3px 14px rgba(107,0,194,.32); }
@@ -1032,7 +1038,13 @@ html, body { width:100%; min-height:100vh; font-family:'Outfit',sans-serif; over
         </div>
         <span class="af-em" id="l-k-e"></span>
       </div>
-      <div class="frow"><span class="flink">Esqueceu sua chave?</span></div>
+      <div class="key-irrecup">
+        <span class="key-irrecup-ico">🔐</span>
+        <div class="key-irrecup-txt">
+          <strong>⚠️ CHAVE IRRECUPERÁVEL</strong>
+          Sua chave de segurança é <strong style="display:inline;font-size:inherit">única e não pode ser recuperada em nenhuma hipótese</strong>. Se você a perder, <strong style="display:inline;font-size:inherit">perderá o acesso à conta e ao seu saldo permanentemente</strong>. A NexusYield não armazena nem consegue restaurar chaves.
+        </div>
+      </div>
       <button class="btn-a" id="btn-login" onclick="handleLogin()">
         <span class="spin" id="sp-l"></span><span id="btn-l-lbl">Entrar</span>
       </button>
@@ -1948,6 +1960,7 @@ function goTo(view) {
       if (u) {
         await DB.fetchTxns(s.id);
         CU = u;
+        applyEarnings(CU); // calcula rendimentos acumulados desde o último login
         goTo('dash');
         return;
       }
