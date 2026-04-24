@@ -1057,6 +1057,19 @@ html, body { width:100%; min-height:100vh; font-family:'Outfit',sans-serif; over
   cursor:pointer;transition:border-color .2s,color .2s;
 }
 .btn-pix-cancel:hover{border-color:rgba(239,68,68,.4);color:#FC8181;}
+.btn-pix-confirmar-sim{
+  width:100%;padding:13px;
+  background:linear-gradient(135deg,#16A34A,#22C55E);
+  border:none;border-radius:13px;
+  color:#fff;font-size:14px;font-weight:700;
+  font-family:'Outfit',sans-serif;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  box-shadow:0 5px 22px rgba(34,197,94,.38);
+  transition:filter .15s,transform .15s,opacity .2s;
+  margin-top:14px;margin-bottom:10px;
+}
+.btn-pix-confirmar-sim:hover{filter:brightness(1.07);transform:translateY(-1px);}
+.btn-pix-confirmar-sim:disabled{opacity:.6;cursor:not-allowed;transform:none;}
 .pix-status-waiting{
   display:flex;align-items:center;justify-content:center;gap:8px;
   font-size:12px;color:var(--dm);margin-top:14px;margin-bottom:14px;
@@ -1863,10 +1876,9 @@ html, body { width:100%; min-height:100vh; font-family:'Outfit',sans-serif; over
         <span id="pix-copy-ico">📋</span>
         <span id="pix-copy-lbl">Copiar código Pix</span>
       </button>
-      <div class="pix-status-waiting">
-        <div class="pix-spin"></div>
-        <span>Aguardando confirmação do pagamento...</span>
-      </div>
+      <button class="btn-pix-confirmar-sim" id="btn-pix-confirmar-sim" onclick="confirmarPagamentoSimulado()">
+        ✅ Confirmar Pagamento Simulado
+      </button>
       <button class="btn-pix-cancel" onclick="fecharModalPix()">Cancelar / Fechar</button>
     </div>
   </div>
@@ -3009,9 +3021,40 @@ function processSaque() {
 }
 
 /* ════════════════════════════════════════════════════════════
-   ✅ ALTERAÇÃO PIX — C3: processDeposito() real via Asaas
-   Chama Edge Function "create-pix-charge" no Supabase
+   DEPÓSITO PIX — simulação local (sem API externa)
 ════════════════════════════════════════════════════════════ */
+function gerarCodigoPix(v) {
+  const uid = () => Math.random().toString(36).slice(2,10).toUpperCase();
+  const uuid = `${uid().slice(0,8)}-${uid().slice(0,4)}-4${uid().slice(0,3)}-${uid().slice(0,4)}-${uid()}${uid().slice(0,4)}`;
+  const amtStr = v.toFixed(2);
+  const crc = Math.random().toString(16).slice(2,6).toUpperCase();
+  return `00020126580014BR.GOV.BCB.PIX0136${uuid}520400005303986` +
+         `5406${amtStr}5802BR5915NEXUSYIELD PAY6009SAO PAULO` +
+         `62290525NXY${Date.now().toString(36).toUpperCase()}6304${crc}`;
+}
+
+function _fakeSvgQr() {
+  const N=21, C=8, T=N*C;
+  const grid = Array.from({length:N}, () => Array(N).fill(0));
+  const pat = [[1,1,1,1,1,1,1],[1,0,0,0,0,0,1],[1,0,1,1,1,0,1],[1,0,1,1,1,0,1],[1,0,1,1,1,0,1],[1,0,0,0,0,0,1],[1,1,1,1,1,1,1]];
+  for (let r=0;r<7;r++) for (let c=0;c<7;c++) {
+    grid[r][c] = pat[r][c];
+    grid[r][N-7+c] = pat[r][c];
+    grid[N-7+r][c] = pat[r][c];
+  }
+  for (let i=8;i<N-8;i++) { grid[6][i]=i%2===0?1:0; grid[i][6]=i%2===0?1:0; }
+  let s = 0xA5B3;
+  for (let r=0;r<N;r++) for (let c=0;c<N;c++) {
+    if (grid[r][c]===0 && !(r<8&&c<8) && !(r<8&&c>N-9) && !(r>N-9&&c<8) && r!==6 && c!==6) {
+      s = ((s*1664525)+1013904223) & 0x7FFFFFFF;
+      grid[r][c] = (s>>15)&1;
+    }
+  }
+  let svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${T}" height="${T}"><rect width="${T}" height="${T}" fill="#fff" rx="6"/>`;
+  for (let r=0;r<N;r++) for (let c=0;c<N;c++) if (grid[r][c]) svg += `<rect x="${c*C}" y="${r*C}" width="${C}" height="${C}" fill="#111"/>`;
+  return svg + '</svg>';
+}
+
 async function processDeposito() {
   const v = parseFloat(document.getElementById('d-v').value);
   if (!v || v < 10) { gToast('error', 'Valor mínimo: R$ 10,00.'); return; }
@@ -3021,47 +3064,20 @@ async function processDeposito() {
   document.getElementById('sp-d').style.display = 'block';
   document.getElementById('btn-d-l').textContent = 'Gerando Pix...';
 
-  try {
-    const res = await fetch(
-      `${SUPABASE_URL}/functions/v1/create-pix-charge`,   /* ✅ nome correto */
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type':  'application/json',
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        },
-        body: JSON.stringify({ userId: CU.id, amount: v }),
-      }
-    );
+  await new Promise(r => setTimeout(r, 800));
 
-    if (!res.ok) {
-      const txt = await res.text();
-      console.error('[NexusYield] create-pix-charge HTTP', res.status, txt);
-      throw new Error(`Erro ${res.status} ao criar cobrança Pix.`);
-    }
+  btn.disabled = false;
+  document.getElementById('sp-d').style.display = 'none';
+  document.getElementById('btn-d-l').textContent = 'Gerar Pix';
 
-    const data = await res.json();
-    if (!data.ok) throw new Error(data.error || 'Erro ao criar cobrança');
+  closeDM('dm-d');
+  document.getElementById('d-v').value = '';
 
-    closeDM('dm-d');
-    document.getElementById('d-v').value = '';
-
-    abrirModalPix({
-      amount:       data.amount,
-      pixQrCode:    data.pixQrCode,
-      pixQrCodeUrl: data.pixQrCodeUrl,
-      expiresAt:    data.expiresAt,
-      asaasId:      data.asaasId,
-    });
-
-  } catch (e) {
-    console.error('[NexusYield] processDeposito:', e);
-    gToast('error', e.message || 'Falha ao gerar Pix. Verifique sua conexão.');
-  } finally {
-    btn.disabled = false;
-    document.getElementById('sp-d').style.display = 'none';
-    document.getElementById('btn-d-l').textContent = 'Gerar Pix';
-  }
+  abrirModalPix({
+    amount:    v,
+    pixQrCode: gerarCodigoPix(v),
+    expiresAt: new Date(Date.now() + 30 * 60000).toISOString(),
+  });
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -3330,12 +3346,15 @@ if (document.readyState !== 'loading') _applySomUI();
 
 let _pixTimerInterval   = null;
 let _pixPollingInterval = null;
+let _pixValorSimulado   = 0;
 
 /**
- * Abre o modal de depósito Pix com QR Code + Copia e Cola + timer.
- * @param {{ amount, pixQrCode, pixQrCodeUrl, expiresAt, asaasId }} opts
+ * Abre o modal de depósito Pix com QR Code decorativo + Copia e Cola + timer.
+ * @param {{ amount, pixQrCode, expiresAt }} opts
  */
-function abrirModalPix({ amount, pixQrCode, pixQrCodeUrl, expiresAt, asaasId }) {
+function abrirModalPix({ amount, pixQrCode, expiresAt }) {
+  _pixValorSimulado = amount;
+
   // Valor
   const ve = document.getElementById('pix-modal-valor');
   if (ve) ve.textContent = fmtBRL(amount);
@@ -3344,22 +3363,22 @@ function abrirModalPix({ amount, pixQrCode, pixQrCodeUrl, expiresAt, asaasId }) 
   const ce = document.getElementById('pix-copy-code');
   if (ce) ce.textContent = pixQrCode || 'Código indisponível';
 
-  // QR Code (Asaas retorna base64 puro, sem prefixo)
+  // QR Code decorativo gerado localmente
   const imgEl = document.getElementById('pix-qr-img');
   const phEl  = document.getElementById('pix-qr-placeholder');
-  if (pixQrCodeUrl && imgEl && phEl) {
-    const isBase64 = !pixQrCodeUrl.startsWith('http');
-    imgEl.src = isBase64 ? `data:image/png;base64,${pixQrCodeUrl}` : pixQrCodeUrl;
-    imgEl.style.display = 'block';
-    phEl.style.display  = 'none';
-  } else if (phEl) {
+  if (phEl) {
     phEl.style.display = 'flex';
-    phEl.innerHTML = '<span style="font-size:13px;color:#9CA3AF;text-align:center">QR indisponível<br>Use o código abaixo</span>';
+    phEl.style.padding = '0';
+    phEl.style.background = 'transparent';
+    phEl.innerHTML = _fakeSvgQr();
     if (imgEl) imgEl.style.display = 'none';
   }
 
+  // Habilita botão confirmar
+  const cb = document.getElementById('btn-pix-confirmar-sim');
+  if (cb) cb.disabled = false;
+
   _iniciarTimerPix(expiresAt);
-  _iniciarPollingPix(amount);
 
   const ov = document.getElementById('pix-modal-overlay');
   if (ov) ov.classList.add('show');
@@ -3371,6 +3390,40 @@ function fecharModalPix() {
   if (ov) ov.classList.remove('show');
   _pararTimerPix();
   _pararPollingPix();
+}
+
+/** Confirma o pagamento simulado: credita saldo imediatamente e fecha o modal */
+function confirmarPagamentoSimulado() {
+  const v = _pixValorSimulado;
+  if (!v) return;
+
+  const btn = document.getElementById('btn-pix-confirmar-sim');
+  if (btn) btn.disabled = true;
+
+  fecharModalPix();
+  _pixValorSimulado = 0;
+
+  const u = DB.getUser(CU.id);
+  const novoBalance       = parseFloat((liveBalance + v).toFixed(2));
+  const novoDeposited     = parseFloat(((u.totalDeposited || 0) + v).toFixed(2));
+  liveBalance = novoBalance;
+
+  DB.updateUser(CU.id, {
+    balance:        novoBalance,
+    totalDeposited: novoDeposited,
+    lastDepositAt:  new Date().toISOString(),
+  });
+  DB.addTxn(CU.id, {
+    type:        'deposito',
+    amount:      v,
+    date:        new Date().toISOString(),
+    description: 'Depósito via Pix',
+  });
+
+  CU = DB.getUser(CU.id);
+  renderDash(); renderTxns(); renderChart();
+  playKaching();
+  gToast('success', `✅ Depósito de ${fmtBRL(v)} confirmado! Saldo atualizado.`);
 }
 
 /** Copia o código Pix para o clipboard */
