@@ -988,6 +988,116 @@ html, body { width:100%; min-height:100vh; font-family:'Outfit',sans-serif; over
   .km { padding:28px 18px; }
   .ccode { font-size:22px; }
 }
+
+/* ════════════════════════════════════════════════════════════
+   ✅ ALTERAÇÃO PIX — C1: CSS Modal QR Code + Copia e Cola
+════════════════════════════════════════════════════════════ */
+.pix-modal-overlay {
+  position:fixed;inset:0;background:rgba(13,7,23,.85);
+  backdrop-filter:blur(8px);z-index:400;
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.pix-modal-overlay.show{opacity:1;pointer-events:auto;}
+.pix-modal {
+  background:#1A1030;border:1px solid rgba(155,48,255,.28);border-radius:28px;
+  box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 0 1px rgba(155,48,255,.1);
+  padding:36px 32px 32px;width:100%;max-width:420px;text-align:center;
+  transform:translateY(20px) scale(.97);
+  transition:transform .35s cubic-bezier(.22,1,.36,1);
+}
+.pix-modal-overlay.show .pix-modal{transform:translateY(0) scale(1);}
+.pix-modal-ico{font-size:48px;margin-bottom:10px;display:block;}
+.pix-modal-title{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px;}
+.pix-modal-sub{font-size:13px;color:var(--dm);margin-bottom:24px;line-height:1.5;}
+.pix-modal-sub strong{color:#C580FF;}
+.pix-timer{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.28);
+  border-radius:50px;padding:5px 14px;font-size:12.5px;font-weight:600;
+  color:#FCD34D;margin-bottom:20px;
+}
+.pix-timer-dot{width:7px;height:7px;background:#F59E0B;border-radius:50%;animation:pd 1.4s ease-in-out infinite;}
+.pix-qr-wrap{
+  background:#fff;border-radius:16px;padding:16px;
+  margin:0 auto 18px;width:fit-content;box-shadow:0 4px 24px rgba(0,0,0,.4);
+}
+.pix-qr-wrap img{display:block;width:180px;height:180px;border-radius:8px;}
+.pix-qr-placeholder{
+  width:180px;height:180px;background:#f3f4f6;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;color:#9CA3AF;flex-direction:column;gap:8px;
+}
+.pix-copy-label{
+  font-size:10.5px;font-weight:700;letter-spacing:.1em;
+  color:#9B30FF;text-transform:uppercase;margin-bottom:8px;
+}
+.pix-copy-box{
+  background:rgba(255,255,255,.06);border:1.5px solid rgba(155,48,255,.25);
+  border-radius:12px;padding:11px 14px;font-size:11px;color:#C580FF;
+  font-family:monospace;word-break:break-all;text-align:left;
+  max-height:72px;overflow-y:auto;margin-bottom:14px;user-select:all;
+}
+.pix-copy-box::-webkit-scrollbar{width:3px;}
+.pix-copy-box::-webkit-scrollbar-thumb{background:rgba(155,48,255,.35);border-radius:3px;}
+.btn-pix-copy{
+  width:100%;padding:13px;background:linear-gradient(135deg,#5500A0,#9B30FF);
+  color:#fff;border:none;border-radius:13px;font-size:14.5px;font-weight:700;
+  font-family:'Outfit',sans-serif;cursor:pointer;display:flex;align-items:center;
+  justify-content:center;gap:8px;margin-bottom:10px;position:relative;
+  overflow:hidden;transition:filter .15s,transform .15s;
+  box-shadow:0 5px 22px rgba(107,0,194,.38);
+}
+.btn-pix-copy:hover{filter:brightness(1.08);transform:translateY(-1px);}
+.btn-pix-copy.copied{background:linear-gradient(135deg,#16A34A,#22C55E)!important;box-shadow:0 5px 22px rgba(34,197,94,.38)!important;}
+.btn-pix-cancel{
+  width:100%;padding:11px;background:transparent;color:var(--dm);
+  border:1.5px solid rgba(255,255,255,.1);border-radius:13px;
+  font-size:13.5px;font-weight:600;font-family:'Outfit',sans-serif;
+  cursor:pointer;transition:border-color .2s,color .2s;
+}
+.btn-pix-cancel:hover{border-color:rgba(239,68,68,.4);color:#FC8181;}
+.pix-status-waiting{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  font-size:12px;color:var(--dm);margin-top:14px;margin-bottom:14px;
+}
+.pix-spin{
+  width:14px;height:14px;border:2px solid rgba(155,48,255,.3);
+  border-top-color:#9B30FF;border-radius:50%;
+  animation:sp .75s linear infinite;flex-shrink:0;
+}
+/* Saque — modal Pix de saída */
+.saque-pix-modal-overlay{
+  position:fixed;inset:0;background:rgba(13,7,23,.85);
+  backdrop-filter:blur(8px);z-index:400;
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.saque-pix-modal-overlay.show{opacity:1;pointer-events:auto;}
+.saque-pix-modal{
+  background:#1A1030;border:1px solid rgba(239,68,68,.25);border-radius:28px;
+  box-shadow:0 20px 60px rgba(0,0,0,.7);
+  padding:36px 32px 32px;width:100%;max-width:420px;text-align:center;
+  transform:translateY(20px) scale(.97);
+  transition:transform .35s cubic-bezier(.22,1,.36,1);
+}
+.saque-pix-modal-overlay.show .saque-pix-modal{transform:translateY(0) scale(1);}
+.saque-pix-info{
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+  border-radius:14px;padding:16px;margin-bottom:16px;text-align:left;
+}
+.saque-pix-info-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.saque-pix-info-row:last-child{margin-bottom:0;}
+.saque-pix-info-label{font-size:12px;color:var(--dm);}
+.saque-pix-info-val{font-size:14px;font-weight:700;color:#fff;}
+.btn-saque-pix-ok{
+  width:100%;padding:13px;
+  background:linear-gradient(135deg,#7F1D1D,#EF4444);
+  color:#fff;border:none;border-radius:13px;font-size:14.5px;font-weight:700;
+  font-family:'Outfit',sans-serif;cursor:pointer;margin-bottom:10px;
+  box-shadow:0 5px 22px rgba(239,68,68,.35);transition:filter .15s,transform .15s;
+}
+.btn-saque-pix-ok:hover{filter:brightness(1.08);transform:translateY(-1px);}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -1721,9 +1831,74 @@ html, body { width:100%; min-height:100vh; font-family:'Outfit',sans-serif; over
       <button class="dm-x" onclick="closeDM('dm-d')">×</button>
       <div class="dm-t">💳 Adicionar Saldo</div>
       <!-- ALTERAÇÃO 4: Corrigido para 40% ao mês -->
-      <div class="dm-s">Simule um aporte para ver seu saldo crescer com 10% por semana (40% ao mês).</div>
+      <div class="dm-s">Deposite via Pix e veja seu saldo crescer com 10% por semana (40% ao mês).</div>
       <div class="mf"><label>Valor do Depósito (R$)</label><input id="d-v" type="number" placeholder="Ex: 100.00" min="10" step="0.01"></div>
-      <button class="btn-mm" id="btn-d" onclick="processDeposito()"><span class="spin" id="sp-d"></span><span id="btn-d-l">Confirmar Depósito</span></button>
+      <button class="btn-mm" id="btn-d" onclick="processDeposito()"><span class="spin" id="sp-d"></span><span id="btn-d-l">Gerar Pix</span></button>
+    </div>
+  </div>
+
+  <!-- ✅ ALTERAÇÃO PIX — C2a: Modal QR Code depósito Pix -->
+  <div class="pix-modal-overlay" id="pix-modal-overlay">
+    <div class="pix-modal">
+      <span class="pix-modal-ico">🏦</span>
+      <div class="pix-modal-title">Pague via Pix</div>
+      <div class="pix-modal-sub">
+        Valor: <strong id="pix-modal-valor">R$ 0,00</strong><br>
+        Escaneie o QR Code ou copie o código abaixo
+      </div>
+      <div class="pix-timer">
+        <div class="pix-timer-dot"></div>
+        <span>Expira em <strong id="pix-timer-count">30:00</strong></span>
+      </div>
+      <div class="pix-qr-wrap">
+        <img id="pix-qr-img" src="" alt="QR Code Pix" style="display:none" />
+        <div id="pix-qr-placeholder" class="pix-qr-placeholder">
+          <div class="pix-spin" style="width:28px;height:28px;border-width:3px"></div>
+          <span>Gerando QR...</span>
+        </div>
+      </div>
+      <div class="pix-copy-label">Pix Copia e Cola</div>
+      <div class="pix-copy-box" id="pix-copy-code">Aguardando...</div>
+      <button class="btn-pix-copy" id="btn-pix-copy" onclick="copiarCodigoPix()">
+        <span id="pix-copy-ico">📋</span>
+        <span id="pix-copy-lbl">Copiar código Pix</span>
+      </button>
+      <div class="pix-status-waiting">
+        <div class="pix-spin"></div>
+        <span>Aguardando confirmação do pagamento...</span>
+      </div>
+      <button class="btn-pix-cancel" onclick="fecharModalPix()">Cancelar / Fechar</button>
+    </div>
+  </div>
+
+  <!-- ✅ ALTERAÇÃO PIX — C2b: Modal confirmação de saque (resumo antes de confirmar) -->
+  <div class="saque-pix-modal-overlay" id="saque-pix-modal-overlay">
+    <div class="saque-pix-modal">
+      <span class="pix-modal-ico">💸</span>
+      <div class="pix-modal-title">Confirmar Saque</div>
+      <div class="pix-modal-sub">Revise os dados antes de confirmar o envio via Pix</div>
+      <div class="saque-pix-info">
+        <div class="saque-pix-info-row">
+          <span class="saque-pix-info-label">Tipo</span>
+          <span class="saque-pix-info-val" id="saque-conf-tipo">—</span>
+        </div>
+        <div class="saque-pix-info-row">
+          <span class="saque-pix-info-label">Valor</span>
+          <span class="saque-pix-info-val" id="saque-conf-valor">R$ 0,00</span>
+        </div>
+        <div class="saque-pix-info-row">
+          <span class="saque-pix-info-label">Chave Pix destino</span>
+          <span class="saque-pix-info-val" id="saque-conf-chave" style="font-size:12px;word-break:break-all;">—</span>
+        </div>
+        <div class="saque-pix-info-row">
+          <span class="saque-pix-info-label">Prazo</span>
+          <span class="saque-pix-info-val" style="color:#4ADE80;font-size:12px;">Até 24h úteis</span>
+        </div>
+      </div>
+      <button class="btn-saque-pix-ok" id="btn-saque-conf-ok" onclick="_confirmarSaqueComPix()">
+        ✅ Confirmar e Solicitar Saque
+      </button>
+      <button class="btn-pix-cancel" onclick="fecharModalSaquePix()">Cancelar</button>
     </div>
   </div>
 
@@ -2833,60 +3008,60 @@ function processSaque() {
   }, 1800);
 }
 
-function processDeposito() {
+/* ════════════════════════════════════════════════════════════
+   ✅ ALTERAÇÃO PIX — C3: processDeposito() real via Asaas
+   Chama Edge Function "create-pix-charge" no Supabase
+════════════════════════════════════════════════════════════ */
+async function processDeposito() {
   const v = parseFloat(document.getElementById('d-v').value);
-  if (!v || v < 10) {
-    gToast('error', 'Valor mínimo: R$ 10,00.');
-    return;
-  }
+  if (!v || v < 10) { gToast('error', 'Valor mínimo: R$ 10,00.'); return; }
 
   const btn = document.getElementById('btn-d');
   btn.disabled = true;
   document.getElementById('sp-d').style.display = 'block';
-  document.getElementById('btn-d-l').textContent = 'Processando...';
+  document.getElementById('btn-d-l').textContent = 'Gerando Pix...';
 
-  setTimeout(async () => {
-    try {
-      const u = DB.getUser(CU.id);
-      const now = new Date().toISOString();
-      const newBalance = parseFloat((liveBalance + v).toFixed(2));
-      const newTotalDeposited = parseFloat(((u.totalDeposited || 0) + v).toFixed(2));
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/functions/v1/create-pix-charge`,   /* ✅ nome correto */
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type':  'application/json',
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        },
+        body: JSON.stringify({ userId: CU.id, amount: v }),
+      }
+    );
 
-      // Atualiza cache e Supabase
-      liveBalance = newBalance;
-      DB.updateUser(CU.id, {
-        balance: newBalance,
-        total_deposited: newTotalDeposited,
-        last_deposit_at: now
-      });
-
-      // Registra transação
-      DB.addTxn(CU.id, {
-        type: 'deposito',
-        amount: v,
-        date: now,
-        description: 'Depósito via PIX'
-      });
-
-      // Atualiza tela
-      CU = DB.getUser(CU.id);
-      renderDash();
-      renderTxns();
-      renderChart();
-
-      closeDM('dm-d');
-      document.getElementById('d-v').value = '';
-
-      gToast('success', `✅ R$ ${v.toFixed(2)} adicionado com sucesso!`);
-    } catch (e) {
-      console.error(e);
-      gToast('error', 'Erro ao processar depósito. Tente novamente.');
-    } finally {
-      btn.disabled = false;
-      document.getElementById('sp-d').style.display = 'none';
-      document.getElementById('btn-d-l').textContent = 'Confirmar Depósito';
+    if (!res.ok) {
+      const txt = await res.text();
+      console.error('[NexusYield] create-pix-charge HTTP', res.status, txt);
+      throw new Error(`Erro ${res.status} ao criar cobrança Pix.`);
     }
-  }, 1400);
+
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || 'Erro ao criar cobrança');
+
+    closeDM('dm-d');
+    document.getElementById('d-v').value = '';
+
+    abrirModalPix({
+      amount:       data.amount,
+      pixQrCode:    data.pixQrCode,
+      pixQrCodeUrl: data.pixQrCodeUrl,
+      expiresAt:    data.expiresAt,
+      asaasId:      data.asaasId,
+    });
+
+  } catch (e) {
+    console.error('[NexusYield] processDeposito:', e);
+    gToast('error', e.message || 'Falha ao gerar Pix. Verifique sua conexão.');
+  } finally {
+    btn.disabled = false;
+    document.getElementById('sp-d').style.display = 'none';
+    document.getElementById('btn-d-l').textContent = 'Gerar Pix';
+  }
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -3147,6 +3322,252 @@ function toggleSom() {
 document.addEventListener('DOMContentLoaded', _applySomUI);
 // Fallback caso o script rode depois do DOMContentLoaded
 if (document.readyState !== 'loading') _applySomUI();
+/* ════════════════════════════════════════════════════════════
+   ✅ ALTERAÇÃO PIX — C4: Funções auxiliares modal Pix depósito
+   abrirModalPix · fecharModalPix · copiarCodigoPix
+   _iniciarTimerPix · _iniciarPollingPix
+════════════════════════════════════════════════════════════ */
+
+let _pixTimerInterval   = null;
+let _pixPollingInterval = null;
+
+/**
+ * Abre o modal de depósito Pix com QR Code + Copia e Cola + timer.
+ * @param {{ amount, pixQrCode, pixQrCodeUrl, expiresAt, asaasId }} opts
+ */
+function abrirModalPix({ amount, pixQrCode, pixQrCodeUrl, expiresAt, asaasId }) {
+  // Valor
+  const ve = document.getElementById('pix-modal-valor');
+  if (ve) ve.textContent = fmtBRL(amount);
+
+  // Código Copia e Cola
+  const ce = document.getElementById('pix-copy-code');
+  if (ce) ce.textContent = pixQrCode || 'Código indisponível';
+
+  // QR Code (Asaas retorna base64 puro, sem prefixo)
+  const imgEl = document.getElementById('pix-qr-img');
+  const phEl  = document.getElementById('pix-qr-placeholder');
+  if (pixQrCodeUrl && imgEl && phEl) {
+    const isBase64 = !pixQrCodeUrl.startsWith('http');
+    imgEl.src = isBase64 ? `data:image/png;base64,${pixQrCodeUrl}` : pixQrCodeUrl;
+    imgEl.style.display = 'block';
+    phEl.style.display  = 'none';
+  } else if (phEl) {
+    phEl.style.display = 'flex';
+    phEl.innerHTML = '<span style="font-size:13px;color:#9CA3AF;text-align:center">QR indisponível<br>Use o código abaixo</span>';
+    if (imgEl) imgEl.style.display = 'none';
+  }
+
+  _iniciarTimerPix(expiresAt);
+  _iniciarPollingPix(amount);
+
+  const ov = document.getElementById('pix-modal-overlay');
+  if (ov) ov.classList.add('show');
+}
+
+/** Fecha o modal de depósito Pix e cancela timers */
+function fecharModalPix() {
+  const ov = document.getElementById('pix-modal-overlay');
+  if (ov) ov.classList.remove('show');
+  _pararTimerPix();
+  _pararPollingPix();
+}
+
+/** Copia o código Pix para o clipboard */
+function copiarCodigoPix() {
+  const code  = document.getElementById('pix-copy-code')?.textContent || '';
+  const btn   = document.getElementById('btn-pix-copy');
+  const icoEl = document.getElementById('pix-copy-ico');
+  const lblEl = document.getElementById('pix-copy-lbl');
+
+  navigator.clipboard.writeText(code).then(() => {
+    if (btn)   btn.classList.add('copied');
+    if (icoEl) icoEl.textContent = '✅';
+    if (lblEl) lblEl.textContent = 'Copiado!';
+    setTimeout(() => {
+      if (btn)   btn.classList.remove('copied');
+      if (icoEl) icoEl.textContent = '📋';
+      if (lblEl) lblEl.textContent = 'Copiar código Pix';
+    }, 2500);
+  }).catch(() => gToast('error', 'Não foi possível copiar. Copie manualmente.'));
+}
+
+/** Contador regressivo até vencimento da cobrança */
+function _iniciarTimerPix(expiresAt) {
+  _pararTimerPix();
+  const expiresMs = new Date(expiresAt).getTime();
+  function tick() {
+    const diff = Math.max(0, expiresMs - Date.now());
+    const mins = Math.floor(diff / 60000);
+    const secs = Math.floor((diff % 60000) / 1000);
+    const el   = document.getElementById('pix-timer-count');
+    if (el) el.textContent = `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+    if (diff <= 0) {
+      _pararTimerPix(); _pararPollingPix();
+      const ov = document.getElementById('pix-modal-overlay');
+      if (ov && ov.classList.contains('show')) {
+        fecharModalPix();
+        gToast('error', '⏰ Código Pix expirado. Gere um novo depósito.');
+      }
+    }
+  }
+  tick();
+  _pixTimerInterval = setInterval(tick, 1000);
+}
+function _pararTimerPix() {
+  if (_pixTimerInterval) { clearInterval(_pixTimerInterval); _pixTimerInterval = null; }
+}
+
+/**
+ * Polling: verifica a cada 5 s se o webhook da Asaas já creditou o usuário.
+ * Quando o balance aumentar, fecha o modal e atualiza a UI.
+ */
+function _iniciarPollingPix(amountEsperado) {
+  _pararPollingPix();
+  const saldoInicio = liveBalance;
+  let tentativas = 0;
+
+  _pixPollingInterval = setInterval(async () => {
+    tentativas++;
+    if (tentativas > 360) { _pararPollingPix(); return; } /* 360 × 5s = 30 min */
+
+    try {
+      const { data: u } = await _sb
+        .from('users')
+        .select('balance, total_deposited')
+        .eq('id', CU.id)
+        .maybeSingle();
+
+      if (u && parseFloat(u.balance) > saldoInicio) {
+        _pararPollingPix();
+        fecharModalPix();
+
+        const novoBalance = parseFloat(u.balance);
+        const diff        = parseFloat((novoBalance - saldoInicio).toFixed(2));
+        liveBalance       = novoBalance;
+
+        await DB.fetchUser(CU.id);
+        await DB.fetchTxns(CU.id);
+        CU = DB.getUser(CU.id);
+        renderDash(); renderTxns(); renderChart();
+
+        playKaching();
+        gToast('success', `✅ Pix de ${fmtBRL(diff)} confirmado! Saldo atualizado.`);
+      }
+    } catch(e) { console.error('[NexusYield] polling Pix:', e); }
+  }, 5000);
+}
+function _pararPollingPix() {
+  if (_pixPollingInterval) { clearInterval(_pixPollingInterval); _pixPollingInterval = null; }
+}
+
+/* Fechar modal depósito ao clicar no overlay */
+document.addEventListener('DOMContentLoaded', function() {
+  const ov = document.getElementById('pix-modal-overlay');
+  if (ov) ov.addEventListener('click', e => { if (e.target === ov) fecharModalPix(); });
+  const ov2 = document.getElementById('saque-pix-modal-overlay');
+  if (ov2) ov2.addEventListener('click', e => { if (e.target === ov2) fecharModalSaquePix(); });
+});
+
+/* ════════════════════════════════════════════════════════════
+   ✅ ALTERAÇÃO PIX — C4b: Modal de confirmação de SAQUE via Pix
+   Intercepta processSaque / processSaqueRendimentos / processSaqueBonus
+   e exibe um modal de revisão antes de executar o saque.
+════════════════════════════════════════════════════════════ */
+
+/* Estado interno do modal de saque */
+let _saqueConf = null; /* { tipo, valor, chave, callback } */
+
+/**
+ * Abre o modal de confirmação de saque.
+ * @param {'Rendimentos'|'Total'|'Bônus'} tipo
+ * @param {number} valor
+ * @param {string} chave  — chave Pix do usuário
+ * @param {Function} callback — função que executa o saque de verdade
+ */
+function abrirConfirmacaoSaque(tipo, valor, chave, callback) {
+  _saqueConf = { callback };
+
+  const tipoEl  = document.getElementById('saque-conf-tipo');
+  const valEl   = document.getElementById('saque-conf-valor');
+  const chavEl  = document.getElementById('saque-conf-chave');
+
+  if (tipoEl)  tipoEl.textContent  = `Saque de ${tipo}`;
+  if (valEl)   valEl.textContent   = fmtBRL(valor);
+  if (chavEl)  chavEl.textContent  = chave || '—';
+
+  const ov = document.getElementById('saque-pix-modal-overlay');
+  if (ov) ov.classList.add('show');
+}
+
+/** Fecha o modal de confirmação de saque */
+function fecharModalSaquePix() {
+  const ov = document.getElementById('saque-pix-modal-overlay');
+  if (ov) ov.classList.remove('show');
+  _saqueConf = null;
+}
+
+/** Chamado pelo botão "Confirmar e Solicitar Saque" no modal */
+function _confirmarSaqueComPix() {
+  if (!_saqueConf) return;
+  const cb = _saqueConf.callback;
+  fecharModalSaquePix();
+  if (typeof cb === 'function') cb();
+}
+
+/* ── Wrappers dos botões de saque — abrem modal de confirmação primeiro ── */
+
+const _origProcessSaqueRendimentos = processSaqueRendimentos;
+processSaqueRendimentos = function() {
+  const v = parseFloat(document.getElementById('s-rend-v').value);
+  const p = document.getElementById('s-rend-p').value.trim();
+  const ee = document.getElementById('s-rend-e'); ee.style.display = 'none';
+
+  const { rendimentos, saldoAtual } = calcSaqueStatus();
+  const saldoDisp = saldoAtual > 0 ? saldoAtual : parseFloat(DB.getUser(CU.id).balance || 0);
+
+  if (!v || v <= 0)           { ee.textContent='Informe um valor válido.'; ee.style.display='block'; return; }
+  if (v > saldoDisp)          { ee.textContent=`Saldo insuficiente (${fmtBRL(saldoDisp)}).`; ee.style.display='block'; return; }
+  if (v > rendimentos + 0.05) { ee.textContent=`Excede rendimentos (${fmtBRL(rendimentos)}).`; ee.style.display='block'; return; }
+  if (!p)                     { ee.textContent='Informe sua chave PIX.'; ee.style.display='block'; return; }
+
+  abrirConfirmacaoSaque('Rendimentos', v, p, () => _origProcessSaqueRendimentos());
+};
+
+const _origProcessSaque = processSaque;
+processSaque = function() {
+  const v = parseFloat(document.getElementById('s-v').value);
+  const p = document.getElementById('s-p').value.trim();
+  const ee = document.getElementById('s-e'); ee.style.display='none';
+  const { saqueOk, passou7dias, temIndicacao, limiteOk, diasUltimoDep, diasUltimoSaque } = calcSaqueStatus();
+
+  if (!v || v < 10)    { ee.textContent='Valor mínimo: R$ 10,00.'; ee.style.display='block'; return; }
+  if (v > liveBalance) { ee.textContent='Saldo insuficiente.'; ee.style.display='block'; return; }
+  if (!p)              { ee.textContent='Informe sua chave PIX.'; ee.style.display='block'; return; }
+  if (!passou7dias)    { ee.textContent=`Bloqueado: faltam ${7-diasUltimoDep} dia(s) desde o último depósito.`; ee.style.display='block'; return; }
+  if (!temIndicacao)   { ee.textContent='Bloqueado: indique 1 amigo que deposite ao menos R$ 25,00.'; ee.style.display='block'; return; }
+  if (!limiteOk)       { ee.textContent=`Limite semanal atingido. Próximo em ${7-diasUltimoSaque} dia(s).`; ee.style.display='block'; return; }
+
+  abrirConfirmacaoSaque('Total', v, p, () => _origProcessSaque());
+};
+
+const _origProcessSaqueBonus = processSaqueBonus;
+processSaqueBonus = function() {
+  const v = parseFloat(document.getElementById('bonus-v').value);
+  const p = document.getElementById('bonus-p').value.trim();
+  const ee = document.getElementById('bonus-e'); ee.style.display='none';
+  const u  = DB.getUser(CU.id);
+  const refBonus = parseFloat(u.referralEarnings || 0);
+
+  if (!v || v <= 0)        { ee.textContent='Informe um valor válido.'; ee.style.display='block'; return; }
+  if (v > refBonus + 0.01) { ee.textContent=`Excede bônus disponível (${fmtBRL(refBonus)}).`; ee.style.display='block'; return; }
+  if (!p)                  { ee.textContent='Informe sua chave PIX.'; ee.style.display='block'; return; }
+
+  abrirConfirmacaoSaque('Bônus de Indicação', v, p, () => _origProcessSaqueBonus());
+};
+
+/* ════════════════════════════════════════════════════════════ */
+
 function logout(){
   stopLiveBalance();
   stopNotifLoop();
