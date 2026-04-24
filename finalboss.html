@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CrypyoCash</title>
+<title>NexusYield</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -196,6 +196,41 @@ html, body { width:100%; min-height:100vh; font-family:'Outfit',sans-serif; over
 .uname { font-size:13px; font-weight:600; color:var(--dt); white-space:nowrap; }
 
 /* Botão sair — compacto */
+/* Toggle de som */
+.snd-wrap {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 11px 6px 9px;
+  background: rgba(155,48,255,.08);
+  border: 1px solid rgba(155,48,255,.22);
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background .2s, border-color .2s;
+  user-select: none;
+  white-space: nowrap;
+}
+.snd-wrap:hover { background: rgba(155,48,255,.16); border-color: rgba(155,48,255,.4); }
+.snd-ico { font-size: 13px; line-height: 1; transition: opacity .2s; }
+.snd-track {
+  width: 32px; height: 18px;
+  background: rgba(255,255,255,.12);
+  border-radius: 50px;
+  position: relative;
+  transition: background .25s;
+  flex-shrink: 0;
+}
+.snd-track.on { background: linear-gradient(135deg,#5500A0,#9B30FF); box-shadow: 0 0 8px rgba(155,48,255,.45); }
+.snd-thumb {
+  position: absolute; top: 2px; left: 2px;
+  width: 14px; height: 14px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform .22s cubic-bezier(.22,1,.36,1), opacity .2s;
+  box-shadow: 0 1px 4px rgba(0,0,0,.35);
+}
+.snd-track.on .snd-thumb { transform: translateX(14px); }
+.snd-lbl { font-size: 11.5px; font-weight: 600; color: var(--dm); transition: color .2s; }
+.snd-wrap:hover .snd-lbl { color: var(--dt); }
+
 .btn-sair {
   display:flex; align-items:center; gap:5px;
   padding:7px 14px;
@@ -552,6 +587,145 @@ html, body { width:100%; min-height:100vh; font-family:'Outfit',sans-serif; over
 #dm-bonus .dm-t { color: #FCD34D; }
 
 /* ════════════════════════════════════════════════════════════
+   ESTILOS — CARDS DO MODAL DE SAQUE (3 tipos)
+════════════════════════════════════════════════════════════ */
+.saque-card {
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-bottom: 11px;
+  transition: transform .15s, box-shadow .15s;
+}
+.saque-card:hover { transform: translateY(-1px); }
+
+.saque-card-verde {
+  background: rgba(34,197,94,.07);
+  border: 1.5px solid rgba(34,197,94,.3);
+}
+.saque-card-roxo {
+  background: rgba(107,0,194,.08);
+  border: 1.5px solid rgba(155,48,255,.28);
+}
+.saque-card-bloqueado {
+  background: rgba(245,158,11,.05);
+  border: 1.5px solid rgba(245,158,11,.2);
+}
+
+.saque-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.saque-card-ico { font-size: 20px; flex-shrink: 0; }
+.saque-card-title { font-size: 14px; font-weight: 700; color: #fff; }
+.saque-card-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 9px;
+  border-radius: 50px;
+  font-size: 11px;
+  font-weight: 700;
+  margin-top: 3px;
+  width: fit-content;
+}
+.saque-card-badge.livre {
+  background: rgba(34,197,94,.15);
+  color: #4ADE80;
+  border: 1px solid rgba(34,197,94,.3);
+}
+.saque-card-badge.liberado {
+  background: rgba(107,0,194,.2);
+  color: #C580FF;
+  border: 1px solid rgba(155,48,255,.35);
+}
+.saque-card-badge.bloqueado {
+  background: rgba(245,158,11,.12);
+  color: #FCD34D;
+  border: 1px solid rgba(245,158,11,.3);
+}
+.saque-card-desc {
+  font-size: 12.5px;
+  color: var(--dm);
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+.saque-valor-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255,255,255,.04);
+  border-radius: 9px;
+  padding: 9px 13px;
+  margin-bottom: 10px;
+}
+.saque-valor-label { font-size: 11.5px; color: var(--dm); font-weight: 600; }
+.saque-valor-num { font-size: 16px; font-weight: 800; }
+.saque-valor-num.verde { color: #4ADE80; }
+.saque-valor-num.dourado { color: #FCD34D; }
+.saque-valor-num.roxo   { color: #C580FF; }
+
+.saque-req-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.saque-req-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--dm);
+}
+.saque-req-item.ok { color: #4ADE80; }
+.saque-req-item.pend { color: #FCD34D; }
+
+.btn-saque-verde {
+  width: 100%; padding: 11px;
+  background: linear-gradient(135deg,#16A34A,#22C55E);
+  border: none; border-radius: 11px;
+  color: #fff; font-size: 13.5px; font-weight: 700;
+  font-family: 'Outfit',sans-serif; cursor: pointer;
+  box-shadow: 0 4px 14px rgba(34,197,94,.3);
+  transition: filter .15s, transform .15s, opacity .2s;
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+}
+.btn-saque-verde:hover:not(:disabled) { filter: brightness(1.08); transform: translateY(-1px); }
+.btn-saque-verde:disabled { opacity: .42; cursor: default; filter: none; transform: none; }
+
+.btn-saque-dourado {
+  width: 100%; padding: 11px;
+  background: linear-gradient(135deg,#92400E,#F59E0B);
+  border: none; border-radius: 11px;
+  color: #fff; font-size: 13.5px; font-weight: 700;
+  font-family: 'Outfit',sans-serif; cursor: pointer;
+  box-shadow: 0 4px 14px rgba(245,158,11,.3);
+  transition: filter .15s, transform .15s, opacity .2s;
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+}
+.btn-saque-dourado:hover:not(:disabled) { filter: brightness(1.08); transform: translateY(-1px); }
+.btn-saque-dourado:disabled { opacity: .42; cursor: default; filter: none; transform: none; }
+
+.btn-saque-roxo {
+  width: 100%; padding: 11px;
+  background: linear-gradient(135deg,#5500A0,#9B30FF);
+  border: none; border-radius: 11px;
+  color: #fff; font-size: 13.5px; font-weight: 700;
+  font-family: 'Outfit',sans-serif; cursor: pointer;
+  box-shadow: 0 4px 14px rgba(107,0,194,.35);
+  transition: filter .15s, transform .15s, opacity .2s;
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+}
+.btn-saque-roxo:hover:not(:disabled) { filter: brightness(1.08); transform: translateY(-1px); }
+.btn-saque-roxo:disabled { opacity: .42; cursor: default; filter: none; transform: none; }
+
+/* badge status do saque total — mantido por compatibilidade */
+.saque-status-badge { display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:50px;font-size:11px;font-weight:700;margin-top:3px; }
+.saque-status-badge.ok { background:rgba(107,0,194,.2);color:#C580FF;border:1px solid rgba(155,48,255,.35); }
+.saque-status-badge.warn { background:rgba(245,158,11,.12);color:#FCD34D;border:1px solid rgba(245,158,11,.3); }
+
+/* ════════════════════════════════════════════════════════════
    NOVO: ESTILOS — ABA SOBRE A PLATAFORMA
 ════════════════════════════════════════════════════════════ */
 .sobre-hero {
@@ -809,6 +983,7 @@ html, body { width:100%; min-height:100vh; font-family:'Outfit',sans-serif; over
   .ccode { font-size:22px; }
 }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -818,11 +993,11 @@ html, body { width:100%; min-height:100vh; font-family:'Outfit',sans-serif; over
 <div class="view active" id="view-login">
   <div class="bgw ta" aria-hidden="true">
     <div class="bgr"><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span></div>
-    <div class="bgr"><span class="bgt">CrypyoCash</span><span class="bgs">◆</span><span class="bgt">Saque Rápido</span><span class="bgs">◆</span><span class="bgt">CrypyoCash</span><span class="bgs">◆</span><span class="bgt">Saque Rápido</span><span class="bgs">◆</span></div>
+    <div class="bgr"><span class="bgt">NexusYield</span><span class="bgs">◆</span><span class="bgt">Saque Rápido</span><span class="bgs">◆</span><span class="bgt">NexusYield</span><span class="bgs">◆</span><span class="bgt">Saque Rápido</span><span class="bgs">◆</span></div>
     <div class="bgr"><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span></div>
-    <div class="bgr"><span class="bgt">Plataforma Segura</span><span class="bgs">◆</span><span class="bgt">CrypyoCash</span><span class="bgs">◆</span><span class="bgt">Plataforma Segura</span><span class="bgs">◆</span><span class="bgt">CrypyoCash</span><span class="bgs">◆</span></div>
+    <div class="bgr"><span class="bgt">Plataforma Segura</span><span class="bgs">◆</span><span class="bgt">NexusYield</span><span class="bgs">◆</span><span class="bgt">Plataforma Segura</span><span class="bgs">◆</span><span class="bgt">NexusYield</span><span class="bgs">◆</span></div>
     <div class="bgr"><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span></div>
-    <div class="bgr"><span class="bgt">Pagamentos Rápidos</span><span class="bgs">◆</span><span class="bgt">CrypyoCash</span><span class="bgs">◆</span><span class="bgt">Pagamentos Rápidos</span><span class="bgs">◆</span><span class="bgt">CrypyoCash</span><span class="bgs">◆</span></div>
+    <div class="bgr"><span class="bgt">Pagamentos Rápidos</span><span class="bgs">◆</span><span class="bgt">NexusYield</span><span class="bgs">◆</span><span class="bgt">Pagamentos Rápidos</span><span class="bgs">◆</span><span class="bgt">NexusYield</span><span class="bgs">◆</span></div>
   </div>
   <div class="auth-page">
     <div class="logo-wrap" onclick="goTo('login')">
@@ -832,11 +1007,11 @@ html, body { width:100%; min-height:100vh; font-family:'Outfit',sans-serif; over
         <path d="M62 34C62 49.46 49.46 62 34 62C18.54 62 6 49.46 6 34" stroke="url(#lg2)" stroke-width="5" stroke-linecap="round" fill="none"/>
         <circle cx="34" cy="12" r="5" fill="url(#lg1)"/>
       </svg>
-      <div class="logo-tw"><span class="logo-c">crypyo</span><span class="logo-k">cash</span></div>
+      <div class="logo-tw"><span class="logo-c">Nexus</span><span class="logo-k">Yield</span></div>
     </div>
     <div class="tbadge"><div class="bdot" aria-hidden="true"></div><span class="blabel">+98 pessoas receberam pagamento essa semana</span></div>
     <section class="acard" aria-label="Login">
-      <h1 class="acard-t">Entrar na <span class="hl">CrypyoCash</span></h1>
+      <h1 class="acard-t">Entrar na <span class="hl">NexusYield</span></h1>
       <p class="acard-s">Acesse sua conta com segurança e rapidez</p>
       <div class="af" id="lf-u">
         <label for="l-u">Usuário</label>
@@ -862,12 +1037,12 @@ html, body { width:100%; min-height:100vh; font-family:'Outfit',sans-serif; over
         <span class="spin" id="sp-l"></span><span id="btn-l-lbl">Entrar</span>
       </button>
       <div class="ato" id="l-to"><span id="l-to-i"></span><span id="l-to-m"></span></div>
-      <div class="stip"><span class="stip-i">🔒</span><p class="stip-t">Nunca compartilhe sua chave. A CrypyoCash jamais a solicita por mensagem ou telefone.</p></div>
+      <div class="stip"><span class="stip-i">🔒</span><p class="stip-t">Nunca compartilhe sua chave. A NexusYield jamais a solicita por mensagem ou telefone.</p></div>
       <div class="adiv"><div class="adiv-l"></div><span class="adiv-t">ou</span><div class="adiv-l"></div></div>
     </section>
     <div class="srow"><span>Não tem conta?</span><button class="btn-sw" onclick="goTo('cadastro')">Cadastrar-se</button></div>
   </div>
-  <div class="afooter">© 2026 <a onclick="goTo('login')">CrypyoCash</a> — Todos os direitos reservados</div>
+  <div class="afooter">© 2026 <a onclick="goTo('login')">NexusYield</a> — Todos os direitos reservados</div>
 </div>
 
 <!-- ══════════════════════════════════════════════════════════
@@ -876,11 +1051,11 @@ html, body { width:100%; min-height:100vh; font-family:'Outfit',sans-serif; over
 <div class="view" id="view-cadastro">
   <div class="bgw ta" aria-hidden="true">
     <div class="bgr"><span class="bgt">Crie sua conta agora</span><span class="bgs">✦</span><span class="bgt">Crie sua conta agora</span><span class="bgs">✦</span><span class="bgt">Crie sua conta agora</span><span class="bgs">✦</span><span class="bgt">Crie sua conta agora</span><span class="bgs">✦</span></div>
-    <div class="bgr"><span class="bgt">CrypyoCash</span><span class="bgs">◆</span><span class="bgt">Acesso Seguro</span><span class="bgs">◆</span><span class="bgt">CrypyoCash</span><span class="bgs">◆</span><span class="bgt">Acesso Seguro</span><span class="bgs">◆</span></div>
+    <div class="bgr"><span class="bgt">NexusYield</span><span class="bgs">◆</span><span class="bgt">Acesso Seguro</span><span class="bgs">◆</span><span class="bgt">NexusYield</span><span class="bgs">◆</span><span class="bgt">Acesso Seguro</span><span class="bgs">◆</span></div>
     <div class="bgr"><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span></div>
     <div class="bgr"><span class="bgt">Plataforma Segura</span><span class="bgs">◆</span><span class="bgt">Cadastro Gratuito</span><span class="bgs">◆</span><span class="bgt">Plataforma Segura</span><span class="bgs">◆</span><span class="bgt">Cadastro Gratuito</span><span class="bgs">◆</span></div>
     <div class="bgr"><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span></div>
-    <div class="bgr"><span class="bgt">Bônus de Boas-vindas</span><span class="bgs">◆</span><span class="bgt">CrypyoCash</span><span class="bgs">◆</span><span class="bgt">Bônus de Boas-vindas</span><span class="bgs">◆</span><span class="bgt">CrypyoCash</span><span class="bgs">◆</span></div>
+    <div class="bgr"><span class="bgt">Bônus de Boas-vindas</span><span class="bgs">◆</span><span class="bgt">NexusYield</span><span class="bgs">◆</span><span class="bgt">Bônus de Boas-vindas</span><span class="bgs">◆</span><span class="bgt">NexusYield</span><span class="bgs">◆</span></div>
   </div>
   <div class="auth-page">
     <div class="logo-wrap" onclick="goTo('login')">
@@ -890,11 +1065,11 @@ html, body { width:100%; min-height:100vh; font-family:'Outfit',sans-serif; over
         <path d="M62 34C62 49.46 49.46 62 34 62C18.54 62 6 49.46 6 34" stroke="url(#cg2)" stroke-width="5" stroke-linecap="round" fill="none"/>
         <circle cx="34" cy="12" r="5" fill="url(#cg1)"/>
       </svg>
-      <div class="logo-tw"><span class="logo-c">crypyo</span><span class="logo-k">cash</span></div>
+      <div class="logo-tw"><span class="logo-c">Nexus</span><span class="logo-k">Yield</span></div>
     </div>
     <div class="tbadge"><div class="bdot" aria-hidden="true"></div><span class="blabel">Cadastro gratuito — comece em segundos</span></div>
     <section class="acard" aria-label="Cadastro">
-      <h1 class="acard-t">Criar conta na <span class="hl">CrypyoCash</span></h1>
+      <h1 class="acard-t">Criar conta na <span class="hl">NexusYield</span></h1>
       <p class="acard-s">Escolha um usuário e receba sua chave gerada automaticamente</p>
       <div class="bonus-box">
         <div class="bonus-tag">🎁 Bônus de boas-vindas</div>
@@ -933,7 +1108,7 @@ html, body { width:100%; min-height:100vh; font-family:'Outfit',sans-serif; over
     </section>
     <div class="srow"><span>Já tem uma conta?</span><button class="btn-swo" onclick="goTo('login')">Entrar</button></div>
   </div>
-  <div class="afooter">© 2026 <a onclick="goTo('login')">CrypyoCash</a> — Todos os direitos reservados</div>
+  <div class="afooter">© 2026 <a onclick="goTo('login')">NexusYield</a> — Todos os direitos reservados</div>
 </div>
 
 <!-- Modal Chave -->
@@ -941,7 +1116,7 @@ html, body { width:100%; min-height:100vh; font-family:'Outfit',sans-serif; over
   <div class="km">
     <div class="km-ico">🔐</div>
     <h2 class="km-t">Chave de Acesso gerada!</h2>
-    <p class="km-s">Bem-vindo à CrypyoCash, <strong id="km-u"></strong>!<br>Guarde sua chave com muito cuidado.</p>
+    <p class="km-s">Bem-vindo à NexusYield, <strong id="km-u"></strong>!<br>Guarde sua chave com muito cuidado.</p>
     <div class="cbox"><p class="cbox-l">Sua Chave de Acesso</p><p class="ccode" id="km-k">——</p><p class="chint">Toque para selecionar • Guarde em local seguro</p></div>
     <div class="kwarn"><span class="kwi">⚠️</span><p class="kwt"><strong>Guarde agora!</strong> Esta é a única forma de acessar sua conta. Não será possível recuperar depois.</p></div>
     <button class="btn-ck" id="btn-ck" onclick="copiarChave()"><span id="ck-i">📋</span><span id="ck-l">Copiar Chave de Acesso</span></button>
@@ -955,11 +1130,11 @@ html, body { width:100%; min-height:100vh; font-family:'Outfit',sans-serif; over
 <div class="view" id="view-dash">
   <div class="bgw td" aria-hidden="true">
     <div class="bgr"><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span></div>
-    <div class="bgr"><span class="bgt">CrypyoCash</span><span class="bgs">◆</span><span class="bgt">Saque Rápido</span><span class="bgs">◆</span><span class="bgt">CrypyoCash</span><span class="bgs">◆</span><span class="bgt">Saque Rápido</span><span class="bgs">◆</span></div>
+    <div class="bgr"><span class="bgt">NexusYield</span><span class="bgs">◆</span><span class="bgt">Saque Rápido</span><span class="bgs">◆</span><span class="bgt">NexusYield</span><span class="bgs">◆</span><span class="bgt">Saque Rápido</span><span class="bgs">◆</span></div>
     <div class="bgr"><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span></div>
-    <div class="bgr"><span class="bgt">Plataforma Segura</span><span class="bgs">◆</span><span class="bgt">CrypyoCash</span><span class="bgs">◆</span><span class="bgt">Plataforma Segura</span><span class="bgs">◆</span><span class="bgt">CrypyoCash</span><span class="bgs">◆</span></div>
+    <div class="bgr"><span class="bgt">Plataforma Segura</span><span class="bgs">◆</span><span class="bgt">NexusYield</span><span class="bgs">◆</span><span class="bgt">Plataforma Segura</span><span class="bgs">◆</span><span class="bgt">NexusYield</span><span class="bgs">◆</span></div>
     <div class="bgr"><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span><span class="bgt">+98 pessoas pagas essa semana</span><span class="bgs">✦</span></div>
-    <div class="bgr"><span class="bgt">Pagamentos Rápidos</span><span class="bgs">◆</span><span class="bgt">CrypyoCash</span><span class="bgs">◆</span><span class="bgt">Pagamentos Rápidos</span><span class="bgs">◆</span><span class="bgt">CrypyoCash</span><span class="bgs">◆</span></div>
+    <div class="bgr"><span class="bgt">Pagamentos Rápidos</span><span class="bgs">◆</span><span class="bgt">NexusYield</span><span class="bgs">◆</span><span class="bgt">Pagamentos Rápidos</span><span class="bgs">◆</span><span class="bgt">NexusYield</span><span class="bgs">◆</span></div>
   </div>
 
   <!-- NOTIFICAÇÕES AO VIVO -->
@@ -976,7 +1151,7 @@ html, body { width:100%; min-height:100vh; font-family:'Outfit',sans-serif; over
             <path d="M62 34C62 49.46 49.46 62 34 62C18.54 62 6 49.46 6 34" stroke="url(#dg2)" stroke-width="5" stroke-linecap="round" fill="none"/>
             <circle cx="34" cy="12" r="5" fill="url(#dg1)"/>
           </svg>
-          <span class="lc">crypyo</span><span class="lp">cash</span>
+          <span class="lc">Nexus</span><span class="lp">Yield</span>
         </div>
         <!-- Badge usuário -->
         <div class="ubadge">
@@ -987,6 +1162,14 @@ html, body { width:100%; min-height:100vh; font-family:'Outfit',sans-serif; over
       <div class="dh-right">
         <!-- Badge live — some no mobile -->
         <div class="bl"><div class="bld"></div><span class="blt">Online</span></div>
+        <!-- Toggle de som -->
+        <div class="snd-wrap" id="snd-toggle" onclick="toggleSom()" title="Ativar/desativar som das notificações">
+          <span class="snd-ico" id="snd-ico">🔔</span>
+          <div class="snd-track" id="snd-track">
+            <div class="snd-thumb"></div>
+          </div>
+          <span class="snd-lbl" id="snd-lbl">Som</span>
+        </div>
         <!-- Sair ao lado do nome -->
         <button class="btn-sair" onclick="logout()">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
@@ -1258,11 +1441,11 @@ html, body { width:100%; min-height:100vh; font-family:'Outfit',sans-serif; over
           <!-- Hero -->
           <div class="sobre-hero">
             <div class="sobre-hero-ico">🧠⚡</div>
-            <div class="sobre-hero-t">Por que a CrypyoCash existe?</div>
+            <div class="sobre-hero-t">Por que a NexusYield existe?</div>
             <p class="sobre-hero-s">
               Vivemos em uma era onde a inteligência artificial está transformando o mundo — mas esse avanço tem um custo real.
               Treinar e rodar modelos de IA exige servidores poderosos que consomem energia, água e processamento em escala gigantesca.
-              A CrypyoCash conecta pessoas que querem fazer seu dinheiro crescer com a infraestrutura que sustenta o futuro da IA.
+              A NexusYield conecta pessoas que querem fazer seu dinheiro crescer com a infraestrutura que sustenta o futuro da IA.
             </p>
           </div>
 
@@ -1292,7 +1475,7 @@ html, body { width:100%; min-height:100vh; font-family:'Outfit',sans-serif; over
               <span class="sobre-card-ico">🔗</span>
               <div class="sobre-card-t">Sua participação importa de verdade</div>
               <div class="sobre-card-txt">
-                Ao investir na CrypyoCash, você faz parte de uma rede que ajuda a financiar
+                Ao investir na NexusYield, você faz parte de uma rede que ajuda a financiar
                 a infraestrutura de processamento de IA de forma colaborativa.
                 <strong>Cada indicação fortalece a rede</strong> e aumenta a capacidade coletiva do sistema.
               </div>
@@ -1359,7 +1542,7 @@ html, body { width:100%; min-height:100vh; font-family:'Outfit',sans-serif; over
 
   <!-- CHAT -->
   <div class="cw" id="cwin">
-    <div class="ch"><div class="ch-ico">🤖</div><div><div class="ch-ti">Suporte IA CrypyoCash</div><div class="ch-si">● Online 24h</div></div><button class="ch-cl" onclick="toggleChat()">×</button></div>
+    <div class="ch"><div class="ch-ico">🤖</div><div><div class="ch-ti">Suporte IA NexusYield</div><div class="ch-si">● Online 24h</div></div><button class="ch-cl" onclick="toggleChat()">×</button></div>
     <div class="cm" id="cmsg"></div>
     <div class="qr">
       <button class="qrb" onclick="qr('Como solicitar saque?')">💸 Como sacar?</button>
@@ -1374,110 +1557,93 @@ html, body { width:100%; min-height:100vh; font-family:'Outfit',sans-serif; over
   </div>
 
   <!-- ══════════════════════════════════════════════════════
-       CORREÇÃO: MODAL DE REGRAS DE SAQUE — dois caminhos separados:
-       [Sacar Rendimentos] sempre ativo | [Saque Total] bloqueável por regras
+       MODAL DE SAQUE — 3 tipos de saque com regras claras
   ══════════════════════════════════════════════════════ -->
   <div class="dmo" id="dm-saque-aviso">
-    <div class="dm" style="max-width:490px;">
+    <div class="dm" style="max-width:500px;">
       <button class="dm-x" onclick="closeDM('dm-saque-aviso')">×</button>
-      <div class="dm-t">📋 Como funciona o saque?</div>
-      <p class="dm-s">Escolha o tipo de saque conforme as regras da plataforma:</p>
+      <div class="dm-t">📋 Solicitar Saque</div>
+      <p class="dm-s" style="margin-bottom:16px;">Escolha o tipo de saque conforme as regras da plataforma:</p>
 
-      <!-- ── OPÇÃO 1: SAQUE DE RENDIMENTOS — sempre disponível ── -->
-      <div id="saque-rend-card" style="
-        background:rgba(34,197,94,.07);
-        border:1.5px solid rgba(34,197,94,.3);
-        border-radius:14px;
-        padding:16px 18px;
-        margin-bottom:12px;
-      ">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-          <span style="font-size:20px;">💸</span>
+      <!-- ── CARD 1: SAQUE DE RENDIMENTOS — sempre disponível ── -->
+      <div class="saque-card saque-card-verde" id="saque-rend-card">
+        <div class="saque-card-header">
+          <span class="saque-card-ico">💸</span>
           <div>
-            <div style="font-size:14px;font-weight:700;color:#fff;">Saque de Rendimentos</div>
-            <div style="font-size:11.5px;color:#4ADE80;font-weight:600;">✅ Disponível a qualquer momento</div>
+            <div class="saque-card-title">Saque de Rendimentos</div>
+            <div class="saque-card-badge livre">✅ Livre — sem restrições</div>
           </div>
         </div>
-        <div style="font-size:12.5px;color:var(--dm);margin-bottom:12px;line-height:1.5;">
-          Saque apenas os rendimentos acumulados no seu saldo — sem restrições de prazo ou indicação.
+        <div class="saque-card-desc">Saque apenas os juros acumulados no seu saldo. Disponível a qualquer momento, sem prazo ou indicação exigida.</div>
+        <div class="saque-valor-row">
+          <span class="saque-valor-label">Rendimentos disponíveis</span>
+          <span id="aviso-rend-valor" class="saque-valor-num verde">R$ 0,00</span>
         </div>
-        <!-- Valor de rendimentos disponíveis -->
-        <div style="
-          background:rgba(34,197,94,.1);
-          border-radius:10px;
-          padding:10px 14px;
-          display:flex;
-          justify-content:space-between;
-          align-items:center;
-          margin-bottom:12px;
-        ">
-          <span style="font-size:12px;color:var(--dm);font-weight:600;">Rendimentos disponíveis</span>
-          <span id="aviso-rend-valor" style="font-size:16px;font-weight:800;color:#4ADE80;">R$ 0,00</span>
-        </div>
-        <button id="btn-sacar-rendimentos"
-          onclick="abrirSaqueRendimentos()"
-          style="
-            width:100%;padding:11px;
-            background:linear-gradient(135deg,#16A34A,#22C55E);
-            border:none;border-radius:11px;
-            color:#fff;font-size:14px;font-weight:700;
-            font-family:'Outfit',sans-serif;cursor:pointer;
-            transition:filter .15s,transform .15s;
-            box-shadow:0 4px 14px rgba(34,197,94,.3);
-          "
-          onmouseover="this.style.filter='brightness(1.08)'"
-          onmouseout="this.style.filter=''"
-        >💸 Sacar Rendimentos Agora</button>
+        <button id="btn-sacar-rendimentos" class="btn-saque-verde" onclick="abrirSaqueRendimentos()">
+          💸 Sacar Rendimentos Agora
+        </button>
       </div>
 
-      <!-- ── OPÇÃO 2: SAQUE TOTAL — sujeito a regras ── -->
-      <div id="saque-total-card" style="
-        border-radius:14px;
-        padding:16px 18px;
-        margin-bottom:4px;
-      ">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-          <span style="font-size:20px;">🏦</span>
-          <div style="flex:1;">
-            <div style="font-size:14px;font-weight:700;color:#fff;">Saque Total (Principal + Rendimentos)</div>
-            <!-- Badge de status dinâmico -->
-            <div id="saque-total-badge" class="saque-status-badge ok" style="margin-top:4px;">✅ Liberado</div>
+      <!-- ── CARD 2: SAQUE DE BÔNUS — sempre disponível ── -->
+      <div class="saque-card saque-card-verde" id="saque-bonus-card">
+        <div class="saque-card-header">
+          <span class="saque-card-ico">🎁</span>
+          <div>
+            <div class="saque-card-title">Saque de Bônus de Indicação</div>
+            <div class="saque-card-badge livre">✅ Livre — sem restrições</div>
           </div>
         </div>
+        <div class="saque-card-desc">Saque seus bônus de indicação a qualquer momento. Cada amigo que você indica e deposita mínimo R$ 25 gera 50% de bônus para você.</div>
+        <div class="saque-valor-row">
+          <span class="saque-valor-label">Bônus disponível</span>
+          <span id="aviso-bonus-valor" class="saque-valor-num dourado">R$ 0,00</span>
+        </div>
+        <button id="btn-sacar-bonus-aviso" class="btn-saque-dourado" onclick="abrirSaqueBonusDoAviso()">
+          🎁 Sacar Bônus Agora
+        </button>
+      </div>
+
+      <!-- ── CARD 3: SAQUE TOTAL — sujeito a requisitos ── -->
+      <div class="saque-card" id="saque-total-card">
+        <div class="saque-card-header">
+          <span class="saque-card-ico">🏦</span>
+          <div style="flex:1;">
+            <div class="saque-card-title">Saque Total (Principal + Rendimentos)</div>
+            <div id="saque-total-badge" class="saque-card-badge liberado" style="margin-top:3px;">✅ Liberado</div>
+          </div>
+        </div>
+        <div class="saque-card-desc">Retire o seu capital investido junto com todos os rendimentos acumulados. Sujeito a requisitos de segurança abaixo.</div>
 
         <!-- Requisitos -->
-        <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:10px;">
-          <div id="req-7dias" style="display:flex;align-items:center;gap:8px;font-size:12px;">
-            <span id="req-7dias-ico" style="font-size:14px;">⏳</span>
-            <span id="req-7dias-txt" style="color:var(--dm);">7 dias desde o depósito</span>
+        <div class="saque-req-list" style="margin-bottom:9px;">
+          <div id="req-7dias" class="saque-req-item">
+            <span id="req-7dias-ico">⏳</span>
+            <span id="req-7dias-txt">7 dias desde o último depósito</span>
           </div>
-          <div id="req-indicacao" style="display:flex;align-items:center;gap:8px;font-size:12px;">
-            <span id="req-ind-ico" style="font-size:14px;">🤝</span>
-            <span id="req-ind-txt" style="color:var(--dm);">Indicar 1 amigo (depósito mín. R$ 25)</span>
+          <div id="req-indicacao" class="saque-req-item">
+            <span id="req-ind-ico">🤝</span>
+            <span id="req-ind-txt">1 indicação qualificada (depósito ≥ R$ 25)</span>
+          </div>
+          <div id="req-semana" class="saque-req-item">
+            <span id="req-sem-ico">📅</span>
+            <span id="req-sem-txt">Limite: 1 saque total por semana</span>
           </div>
         </div>
 
-        <!-- Mensagem de status extra -->
+        <!-- Valor + mensagem de status -->
+        <div class="saque-valor-row">
+          <span class="saque-valor-label">Saldo total disponível</span>
+          <span id="aviso-total-valor" class="saque-valor-num roxo">R$ 0,00</span>
+        </div>
         <div id="saque-total-msg" style="font-size:12px;color:var(--dm);margin-bottom:10px;line-height:1.5;"></div>
 
-        <button id="btn-sacar-total"
-          onclick="abrirSaqueTotal()"
-          style="
-            width:100%;padding:11px;
-            background:linear-gradient(135deg,#5500A0,#9B30FF);
-            border:none;border-radius:11px;
-            color:#fff;font-size:14px;font-weight:700;
-            font-family:'Outfit',sans-serif;cursor:pointer;
-            transition:filter .15s,transform .15s,opacity .2s;
-            box-shadow:0 4px 16px rgba(107,0,194,.38);
-          "
-          onmouseover="if(!this.disabled)this.style.filter='brightness(1.07)'"
-          onmouseout="this.style.filter=''"
-        >🏦 Confirmar Saque Total</button>
+        <button id="btn-sacar-total" class="btn-saque-roxo" onclick="abrirSaqueTotal()">
+          🏦 Solicitar Saque Total
+        </button>
       </div>
 
-      <!-- Botão Cancelar -->
-      <button class="btn-cancelar" style="width:100%;margin-top:10px;" onclick="closeDM('dm-saque-aviso')">Cancelar</button>
+      <!-- Cancelar -->
+      <button class="btn-cancelar" style="width:100%;margin-top:6px;" onclick="closeDM('dm-saque-aviso')">Cancelar</button>
     </div>
   </div>
 
@@ -1560,6 +1726,83 @@ html, body { width:100%; min-height:100vh; font-family:'Outfit',sans-serif; over
 'use strict';
 
 /* ════════════════════════════════════════════════════════════
+   SUPABASE — cliente e funções auxiliares de mapeamento
+════════════════════════════════════════════════════════════ */
+const SUPABASE_URL     = 'https://htofnuhjuoechohahntf.supabase.co';
+const SUPABASE_ANON_KEY= 'sb_publishable_9YlCI1NhmZJ1lOt6ekV0Cg_k-Hj7u07';
+const _sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+/* Caches em memória — populados na inicialização/login */
+// _usersCache e _txnsCache declarados junto ao DB abaixo
+
+/* DB → JS (snake_case → camelCase) */
+function _fromDb(row) {
+  if (!row) return null;
+  return {
+    id:               row.id,
+    username:         row.username,
+    securityKey:      row.security_key,
+    balance:          row.balance          ?? 0,
+    monthlyEarnings:  row.monthly_earnings ?? 0,
+    totalEarned:      row.total_earned     ?? 0,
+    totalDeposited:   row.total_deposited  ?? 0,
+    welcomeBonus:     row.welcome_bonus    ?? 0,
+    referralCode:     row.referral_code,
+    referralEarnings: row.referral_earnings ?? 0,
+    referrals:        row.referrals        ?? [],
+    referredBy:       row.referred_by      ?? null,
+    createdAt:        row.created_at,
+    lastLogin:        row.last_login        ?? null,
+    lastDepositAt:    row.last_deposit_at   ?? null,
+    lastSaqueTotalAt: row.last_saque_total_at ?? null,
+  };
+}
+/* JS → DB (camelCase → snake_case) — objeto completo */
+function _toDb(u) {
+  return {
+    id:                   u.id,
+    username:             u.username,
+    security_key:         u.securityKey,
+    balance:              u.balance          ?? 0,
+    monthly_earnings:     u.monthlyEarnings  ?? 0,
+    total_earned:         u.totalEarned      ?? 0,
+    total_deposited:      u.totalDeposited   ?? 0,
+    welcome_bonus:        u.welcomeBonus     ?? 0,
+    referral_code:        u.referralCode,
+    referral_earnings:    u.referralEarnings ?? 0,
+    referrals:            u.referrals        ?? [],
+    referred_by:          u.referredBy       ?? null,
+    created_at:           u.createdAt,
+    last_login:           u.lastLogin        ?? null,
+    last_deposit_at:      u.lastDepositAt    ?? null,
+    last_saque_total_at:  u.lastSaqueTotalAt ?? null,
+  };
+}
+/* JS props parciais → DB snake_case */
+function _propsToDb(props) {
+  const MAP = {
+    securityKey:'security_key', monthlyEarnings:'monthly_earnings',
+    totalEarned:'total_earned', totalDeposited:'total_deposited',
+    welcomeBonus:'welcome_bonus', referralCode:'referral_code',
+    referralEarnings:'referral_earnings', referredBy:'referred_by',
+    createdAt:'created_at', lastLogin:'last_login',
+    lastDepositAt:'last_deposit_at', lastSaqueTotalAt:'last_saque_total_at',
+  };
+  const out = {};
+  for (const [k, v] of Object.entries(props)) out[MAP[k] ?? k] = v;
+  return out;
+}
+/* Transação JS → DB */
+function _txnToDb(uid, t) {
+  return { id:t.id, user_id:uid, type:t.type, amount:t.amount,
+           date:t.date, description:t.description ?? '' };
+}
+function _txnFromDb(row) {
+  return { id:row.id, type:row.type, amount:row.amount,
+           date:row.date, description:row.description };
+}
+
+/* ════════════════════════════════════════════════════════════
    ESTADO GLOBAL
 ════════════════════════════════════════════════════════════ */
 let CU          = null;   // usuário atual
@@ -1578,26 +1821,93 @@ let liveBalanceTimer = null; // setInterval do centavo
 let notifTimer = null;
 
 /* ════════════════════════════════════════════════════════════
-   BANCO DE DADOS
+   DB — usa _sb e funções de mapeamento camelCase ↔ snake_case
 ════════════════════════════════════════════════════════════ */
+/* Cache simples em memória */
+let _usersCache = {};
+let _txnsCache = {};
+
 const DB = {
-  getUsers:   ()       => JSON.parse(localStorage.getItem('cc_users') || '[]'),
-  saveUsers:  (u)      => localStorage.setItem('cc_users', JSON.stringify(u)),
-  getUser:    (id)     => DB.getUsers().find(u => u.id === id),
-  findByName: (n)      => DB.getUsers().find(u => u.username.toLowerCase() === n.toLowerCase()),
-  getTxns:    (uid)    => JSON.parse(localStorage.getItem(`cc_txns_${uid}`) || '[]'),
-  saveTxns:   (uid,t)  => localStorage.setItem(`cc_txns_${uid}`, JSON.stringify(t)),
-  addTxn:     (uid,t)  => { const ts=DB.getTxns(uid); ts.unshift(t); DB.saveTxns(uid,ts); },
-  getSession: ()       => JSON.parse(localStorage.getItem('cc_session') || 'null'),
-  setSession: (u)      => localStorage.setItem('cc_session', JSON.stringify({id:u.id,username:u.username,loginAt:Date.now()})),
-  clearSession:()      => localStorage.removeItem('cc_session'),
-  updateUser: (id,p)   => {
-    const us=DB.getUsers(); const i=us.findIndex(u=>u.id===id);
-    if(i!==-1){Object.assign(us[i],p);DB.saveUsers(us);return us[i];}
-    return null;
+  /* Sessão */
+  getSession: () => JSON.parse(localStorage.getItem('cc_session') || 'null'),
+  setSession: (u) => localStorage.setItem('cc_session', JSON.stringify({id: u.id, username: u.username, loginAt: Date.now()})),
+  clearSession: () => localStorage.removeItem('cc_session'),
+
+  /* Buscas */
+  async fetchUser(id) {
+    const { data } = await _sb.from('users').select('*').eq('id', id).maybeSingle();
+    if (data) _usersCache[id] = _fromDb(data);
+    return _usersCache[id] || null;
+  },
+
+  async fetchUserByName(name) {
+    const { data } = await _sb.from('users').select('*').ilike('username', name).maybeSingle();
+    if (data) _usersCache[data.id] = _fromDb(data);
+    return data ? _usersCache[data.id] : null;
+  },
+
+  async fetchUserByCode(code) {
+    const { data } = await _sb.from('users').select('*').eq('referral_code', code).maybeSingle();
+    if (data) _usersCache[data.id] = _fromDb(data);
+    return data ? _usersCache[data.id] : null;
+  },
+
+  async fetchTxns(uid) {
+    const { data } = await _sb.from('transactions').select('*').eq('user_id', uid).order('date', { ascending: false });
+    _txnsCache[uid] = (data || []).map(_txnFromDb);
+    return _txnsCache[uid];
+  },
+
+  /* Atualizações — síncronas no cache, fire-and-forget no Supabase */
+  updateUser(id, updates) {
+    if (_usersCache[id]) Object.assign(_usersCache[id], updates);
+    _sb.from('users').update(_propsToDb(updates)).eq('id', id)
+      .then(({ error }) => { if (error) console.error('[NY] updateUser:', error); });
+    return _usersCache[id];
+  },
+
+  addTxn(uid, txn) {
+    if (!_txnsCache[uid]) _txnsCache[uid] = [];
+    // Cache local usa um id temporário; Supabase gera o UUID real automaticamente
+    const localId = txn.id || ('local_' + Date.now() + '_' + Math.random().toString(36).slice(2));
+    _txnsCache[uid].unshift({ ...txn, id: localId });
+    // Insert sem campo id — Supabase gera uuid via DEFAULT gen_random_uuid()
+    const row = {
+      user_id:     uid,
+      type:        txn.type,
+      amount:      txn.amount,
+      description: txn.description || '',
+      date:        txn.date || new Date().toISOString(),
+    };
+    _sb.from('transactions').insert(row)
+      .then(({ error }) => { if (error) console.error('[NY] addTxn:', error); });
+  },
+
+  /* Criação de usuário — converte para snake_case antes de inserir */
+  async createUser(u) {
+    const { error } = await _sb.from('users').insert(_toDb(u));
+    if (error) throw error;
+    _usersCache[u.id] = u;   // cache já tem formato JS
+    _txnsCache[u.id]  = [];
+  },
+
+  /* Helpers síncronos */
+  getUser:    (id)  => _usersCache[id] || null,
+  getTxns:    (uid) => _txnsCache[uid] || [],
+  getUsers:   ()    => Object.values(_usersCache),
+  findByName: (n)   => Object.values(_usersCache).find(u => u.username.toLowerCase() === n.toLowerCase()) || null,
+  saveUsers:  ()    => {},   // no-op — persistência via updateUser
+  saveTxns:   (uid, txns) => {
+    _txnsCache[uid] = txns;
+    // Insert sem id — Supabase gera UUID automaticamente via DEFAULT gen_random_uuid()
+    const rows = txns.map(t => ({
+      user_id: uid, type: t.type, amount: t.amount,
+      description: t.description || '', date: t.date || new Date().toISOString(),
+    }));
+    if (rows.length) _sb.from('transactions').insert(rows)
+      .then(({ error }) => { if (error) console.error('[NY] saveTxns:', error); });
   },
 };
-
 /* ════════════════════════════════════════════════════════════
    ROTEADOR
 ════════════════════════════════════════════════════════════ */
@@ -1620,6 +1930,7 @@ function goTo(view) {
     if (!chatReady) { initChat(); chatReady = true; }
     startLiveBalance();
     startNotifLoop();
+    _applySomUI();
   } else {
     stopLiveBalance();
     stopNotifLoop();
@@ -1627,13 +1938,20 @@ function goTo(view) {
 }
 
 /* ════════════════════════════════════════════════════════════
-   INIT
+   INIT — restaura sessão carregando usuário do Supabase
 ════════════════════════════════════════════════════════════ */
-(function init() {
+(async function init() {
   const s = DB.getSession();
-  if (s && (Date.now()-s.loginAt) < 86400000) {
-    CU = DB.getUser(s.id);
-    if (CU) { goTo('dash'); return; }
+  if (s && (Date.now() - s.loginAt) < 86400000) {
+    try {
+      const u = await DB.fetchUser(s.id);
+      if (u) {
+        await DB.fetchTxns(s.id);
+        CU = u;
+        goTo('dash');
+        return;
+      }
+    } catch(e) { console.error('[NexusYield] Session restore error:', e); }
   }
   goTo('login');
 })();
@@ -1727,6 +2045,7 @@ function randBetween(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
 
 /* Som de caixa registradora — estilo Hotmart/Yampi/Shopify ka-ching */
 function playKaching() {
+  if (!somAtivo) return; // som desativado pelo toggle
   try {
     const AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) return;
@@ -1836,7 +2155,7 @@ function stopNotifLoop() {
 function fmtBRL(v) {
   return 'R$ '+parseFloat(v||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
 }
-function uid()        { return 'u_'+Date.now()+Math.random().toString(36).slice(2,6); }
+function uid()        { return crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:(r&0x3|0x8)).toString(16);}); }
 function gerarChave(n=8){ const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; const b=new Uint8Array(n); crypto.getRandomValues(b); return Array.from(b).map(x=>c[x%c.length]).join(''); }
 function genRef(u)    { return u.slice(0,3).toUpperCase()+gerarChave(5); }
 
@@ -1880,22 +2199,32 @@ function setFE(id,msg) {
    LOGIN
 ════════════════════════════════════════════════════════════ */
 function applyEarnings(user) {
-  const us=DB.getUsers(); const i=us.findIndex(u=>u.id===user.id); if(i===-1) return;
-  const h=(Date.now()-(us[i].lastLogin||0))/3600000;
-  if(h>=0.5 && us[i].balance>0){
-    // ALTERAÇÃO 3: taxa correta de 10% por semana = (1.10)^(h/168) - 1
-    // 168 = horas em uma semana
+  const cached = DB.getUser(user.id);
+  if (!cached) return;
+  // lastLogin vem do Supabase como ISO string (timestamptz) — converter para ms
+  const lastLoginMs = cached.lastLogin ? new Date(cached.lastLogin).getTime() : 0;
+  const h = (Date.now() - lastLoginMs) / 3600000;
+  if (h >= 0.5 && cached.balance > 0) {
+    // taxa correta: 10% por semana composto (168h)
     const taxaPeriodo = Math.pow(1.10, h / 168) - 1;
-    const e=parseFloat((us[i].balance * taxaPeriodo).toFixed(2));
-    if(e>0.01){
-      us[i].balance=parseFloat((us[i].balance+e).toFixed(2));
-      us[i].monthlyEarnings=parseFloat(((us[i].monthlyEarnings||0)+e).toFixed(2));
-      us[i].totalEarned=parseFloat(((us[i].totalEarned||0)+e).toFixed(2));
-      // ALTERAÇÃO 3+4: descrição da txn com taxa correta
-      DB.addTxn(user.id,{id:'txn_'+Date.now(),type:'rendimento',amount:e,date:new Date().toISOString(),description:'Rendimento automático (10% por semana)'});
+    const e = parseFloat((cached.balance * taxaPeriodo).toFixed(2));
+    if (e > 0.01) {
+      DB.updateUser(user.id, {
+        balance:         parseFloat((cached.balance + e).toFixed(2)),
+        monthlyEarnings: parseFloat(((cached.monthlyEarnings || 0) + e).toFixed(2)),
+        totalEarned:     parseFloat(((cached.totalEarned     || 0) + e).toFixed(2)),
+      });
+      DB.addTxn(user.id, {
+        type:        'rendimento',
+        amount:      e,
+        date:        new Date().toISOString(),
+        description: 'Rendimento automático (10% por semana)',
+      });
     }
   }
-  us[i].lastLogin=Date.now(); DB.saveUsers(us); CU=us[i];
+  // Salva lastLogin como ISO string — compatível com timestamptz do Supabase
+  DB.updateUser(user.id, { lastLogin: new Date().toISOString() });
+  CU = DB.getUser(user.id);
 }
 
 function setLL(on) {
@@ -1904,7 +2233,7 @@ function setLL(on) {
   document.getElementById('btn-l-lbl').textContent=on?'Entrando...':'Entrar';
 }
 
-function handleLogin() {
+async function handleLogin() {
   const u=document.getElementById('l-u').value.trim();
   const k=document.getElementById('l-k').value.trim();
   let ok=true;
@@ -1913,16 +2242,31 @@ function handleLogin() {
   if(!k){setFE('lf-k','Informe sua chave.');ok=false;}
   if(!ok) return;
   setLL(true);
-  setTimeout(()=>{
+  try {
+    const user = await DB.fetchUserByName(u);
+    if(!user){
+      setLL(false);
+      setFE('lf-u','Usuário não encontrado.');
+      showAto('l-to','l-to-i','l-to-m','error','Usuário não encontrado. Verifique ou cadastre-se.');
+      return;
+    }
+    if(user.securityKey !== k.toUpperCase()){
+      setLL(false);
+      setFE('lf-k','Chave incorreta.');
+      showAto('l-to','l-to-i','l-to-m','error','Chave de segurança incorreta.');
+      return;
+    }
+    await DB.fetchTxns(user.id);
     setLL(false);
-    const user=DB.findByName(u);
-    if(!user){setFE('lf-u','Usuário não encontrado.');showAto('l-to','l-to-i','l-to-m','error','Usuário não encontrado. Verifique ou cadastre-se.');return;}
-    if(user.securityKey!==k.toUpperCase()){setFE('lf-k','Chave incorreta.');showAto('l-to','l-to-i','l-to-m','error','Chave de segurança incorreta.');return;}
     applyEarnings(user);
     DB.setSession(CU);
     showAto('l-to','l-to-i','l-to-m','success',`Bem-vindo, ${CU.username}! ✨`);
     setTimeout(()=>goTo('dash'),1000);
-  },1200);
+  } catch(e) {
+    setLL(false);
+    showAto('l-to','l-to-i','l-to-m','error','Erro de conexão. Verifique sua internet.');
+    console.error('[NexusYield] Login error:', e);
+  }
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -1941,47 +2285,66 @@ function setCL(on) {
   document.getElementById('btn-c-lbl').textContent=on?'Gerando sua chave...':'Criar Chave de Acesso';
 }
 
-function handleCadastro() {
+async function handleCadastro() {
   const u=document.getElementById('c-u').value.trim();
   const r=document.getElementById('c-r').value.trim().toUpperCase();
   setFE('cf-u','');
   if(!u){setFE('cf-u','Escolha um nome de usuário.');return;}
   if(!checkReqs()){setFE('cf-u','O usuário não atende aos requisitos.');return;}
-  if(DB.findByName(u)){setFE('cf-u','Usuário já em uso. Escolha outro.');showCto('Usuário já cadastrado.');return;}
   setCL(true);
-  setTimeout(()=>{
-    setCL(false);
+  try {
+    const existing = await DB.fetchUserByName(u);
+    if(existing){setFE('cf-u','Usuário já em uso. Escolha outro.');showCto('Usuário já cadastrado.');setCL(false);return;}
+
     const chave=gerarChave(8); const id=uid(); const refCode=genRef(u); const BONUS=50;
     let referredBy=null;
+
     if(r){
-      const ref=DB.getUsers().find(x=>x.referralCode===r);
+      const ref = await DB.fetchUserByCode(r);
       if(ref){
         referredBy=ref.id;
-        // ALTERAÇÃO 1: bônus de indicação = 50% do depósito inicial do indicado (R$ 25 min)
-        // Esse valor vai APENAS para referralEarnings, NÃO soma ao totalDeposited do indicador
         const com=parseFloat((BONUS*.5).toFixed(2));
         DB.updateUser(ref.id,{
-          balance:parseFloat((ref.balance+com).toFixed(2)),
-          referralEarnings:parseFloat(((ref.referralEarnings||0)+com).toFixed(2)),
-          // ALTERAÇÃO 1: totalDeposited NÃO é alterado — bônus não é depósito
-          referrals:[...(ref.referrals||[]),{username:u,date:new Date().toISOString()}]
+          balance:          parseFloat((ref.balance+com).toFixed(2)),
+          referralEarnings: parseFloat(((ref.referralEarnings||0)+com).toFixed(2)),
+          referrals:        [...(ref.referrals||[]),{username:u,date:new Date().toISOString()}]
         });
-        DB.addTxn(ref.id,{id:'txn_'+Date.now()+'r',type:'indicacao',amount:com,date:new Date().toISOString(),description:`Bônus de indicação — ${u}`});
+        DB.addTxn(ref.id,{id:'txn_'+Date.now()+'r',type:'indicacao',amount:com,
+          date:new Date().toISOString(),description:`Bônus de indicação — ${u}`});
       }
     }
-    // ALTERAÇÃO 1: balance inicia com o bônus de boas-vindas, mas totalDeposited=0 (principal real)
-    // O bônus fica separado em referralBonus (campo novo) para não sujar o "Total Depositado"
-    const nu={id,username:u,securityKey:chave,balance:BONUS,monthlyEarnings:0,totalEarned:0,
-      totalDeposited:0,        // ALTERAÇÃO 1: principal real = R$ 0 (usuário não depositou nada ainda)
-      welcomeBonus:BONUS,      // ALTERAÇÃO 1: bônus de boas-vindas separado
-      referralCode:refCode,referralEarnings:0,referrals:[],referredBy,createdAt:new Date().toISOString(),lastLogin:Date.now()};
-    const us=DB.getUsers(); us.push(nu); DB.saveUsers(us);
-    DB.saveTxns(id,[{id:'txn_welcome',type:'deposito',amount:BONUS,date:new Date().toISOString(),description:'🎁 Bônus de boas-vindas CrypyoCash'}]);
+
+    const nu={
+      id,
+      username:         u,
+      securityKey:      chave,
+      balance:          BONUS,
+      monthlyEarnings:  0,
+      totalEarned:      0,
+      totalDeposited:   0,
+      welcomeBonus:     BONUS,
+      referralCode:     refCode,
+      referralEarnings: 0,
+      referrals:        [],
+      referredBy:       referredBy,
+      createdAt:        new Date().toISOString(),
+      lastLogin:        new Date().toISOString(),
+    };
+
+    await DB.createUser(nu);
+    await DB.addTxn(id,{type:'deposito',amount:BONUS,
+      date:new Date().toISOString(),description:'🎁 Bônus de boas-vindas NexusYield'});
+
+    setCL(false);
     document.getElementById('km-u').textContent=u;
     document.getElementById('km-k').textContent=chave;
     document.getElementById('kmo').classList.add('show');
     document.getElementById('btn-ck').focus();
-  },1300);
+  } catch(e) {
+    setCL(false);
+    showCto('Erro de conexão. Tente novamente.');
+    console.error('[NexusYield] Cadastro error:', e);
+  }
 }
 
 function copiarChave() {
@@ -2104,7 +2467,7 @@ function renderTxns(all=false) {
 
 function renderRef() {
   const u=DB.getUser(CU.id);
-  const url=`https://crypyocash.com/?ref=${u.referralCode}`;
+  const url=`https://nexusyield.com/?ref=${u.referralCode}`;
   document.getElementById('r-link').textContent=url;
   document.getElementById('r-cnt').textContent=(u.referrals||[]).length;
   document.getElementById('r-earn').textContent=fmtBRL(u.referralEarnings||0);
@@ -2115,14 +2478,14 @@ function renderRef() {
 
 function copyRef() {
   const u=DB.getUser(CU.id);
-  navigator.clipboard.writeText(`https://crypyocash.com/?ref=${u.referralCode}`).then(()=>{
+  navigator.clipboard.writeText(`https://nexusyield.com/?ref=${u.referralCode}`).then(()=>{
     const b=document.getElementById('btn-cr'); b.classList.add('cop'); b.textContent='✅ Copiado!';
     setTimeout(()=>{b.classList.remove('cop');b.textContent='Copiar';},2500);
   });
 }
 function shareWpp() {
   const u=DB.getUser(CU.id);
-  window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(`🤑 Estou ganhando dinheiro na CrypyoCash! Cadastra pelo meu link e ganhe R$ 50:\n\nhttps://crypyocash.com/?ref=${u.referralCode}`)}`, '_blank');
+  window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(`🤑 Estou ganhando dinheiro na NexusYield! Cadastra pelo meu link e ganhe R$ 50:\n\nhttps://nexusyield.com/?ref=${u.referralCode}`)}`, '_blank');
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -2145,122 +2508,184 @@ document.addEventListener('keydown',e=>{
    └─ Saque Total → requer 7 dias + 1 indicação
 ════════════════════════════════════════════════════════════ */
 
+/* ════════════════════════════════════════════════════════════
+   LÓGICA DE SAQUE — 3 tipos independentes
+   ┌─ Rendimentos   → sempre liberado, sem restrição
+   ├─ Bônus         → sempre liberado, sem restrição
+   └─ Saque Total   → 7 dias desde último depósito
+                      + 1 indicação qualificada (dep. ≥ R$25)
+                      + máx. 1 saque total por semana (7 dias)
+════════════════════════════════════════════════════════════ */
+
 /**
- * CORREÇÃO: Calcula os valores de cada tipo de saldo de forma correta.
+ * Calcula status de elegibilidade para cada tipo de saque.
  *
- * Estrutura do saldo de um usuário:
- *   liveBalance = totalDeposited (principal) + welcomeBonus + referralEarnings (bônus indicação) + rendimentos (juros)
- *
- * Portanto:
- *   rendimentos = liveBalance - totalDeposited - welcomeBonus - referralEarnings
- *
- * PORÉM: a fórmula anterior estava subtraindo o welcomeBonus dos rendimentos,
- * o que fazia rendimentos = 0 para usuários que só tinham o bônus inicial.
- *
- * CORREÇÃO: rendimentos é qualquer valor acima do saldo inicial total.
- * Para usuários sem depósito real: rendimentos = liveBalance - welcomeBonus - referralEarnings
- * Para usuários com depósito real: rendimentos = liveBalance - totalDeposited - welcomeBonus - referralEarnings
+ * Estrutura do saldo:
+ *   liveBalance = totalDeposited + welcomeBonus + referralEarnings + rendimentos
+ *   rendimentos = liveBalance − totalDeposited − welcomeBonus − referralEarnings
  */
 function calcSaqueStatus() {
   const u            = DB.getUser(CU.id);
-  const totalDep     = parseFloat(u.totalDeposited  || 0);
-  const welcomeBonus = parseFloat(u.welcomeBonus    || 0);
+  const totalDep     = parseFloat(u.totalDeposited   || 0);
+  const welcomeBonus = parseFloat(u.welcomeBonus     || 0);
   const refBonus     = parseFloat(u.referralEarnings || 0);
 
-  // Usa liveBalance se já foi inicializado (>0), senão usa u.balance do DB
-  // Isso corrige o bug de timing onde liveBalance ainda é 0 quando o modal abre
+  // Usa liveBalance se já inicializado, senão usa DB
   const saldoAtual = (liveBalance > 0) ? liveBalance : parseFloat(u.balance || 0);
 
-  // saldoBase = o máximo entre totalDeposited e welcomeBonus (evita dupla contagem
-  // em contas antigas onde o bônus foi gravado em ambos os campos) + bônus de indicação
-  const saldoBase  = Math.max(totalDep, welcomeBonus) + refBonus;
-
+  // Saldo base (principal investido + todos os bônus recebidos)
+  const saldoBase   = totalDep + welcomeBonus + refBonus;
   // Rendimentos = tudo que cresceu acima do saldo base — nunca negativo
   const rendimentos = Math.max(0, saldoAtual - saldoBase);
-
   const bonusIndicacao = refBonus;
   const principal      = totalDep;
 
-  const diasCriacao  = Math.floor((Date.now() - new Date(u.createdAt).getTime()) / 86400000);
-  const passou7dias  = diasCriacao >= 7;
-  const temIndicacao = (u.referrals || []).length >= 1;
+  /* ── Regra 7 dias: conta a partir do ÚLTIMO depósito real ── */
+  const ultimoDepRef  = u.lastDepositAt || u.createdAt; // fallback para contas antigas
+  const diasUltimoDep = Math.floor((Date.now() - new Date(ultimoDepRef).getTime()) / 86400000);
+  const passou7dias   = diasUltimoDep >= 7;
 
-  return { u, principal, welcomeBonus, refBonus, bonusIndicacao, rendimentos, saldoBase, saldoAtual, diasCriacao, passou7dias, temIndicacao };
+  /* ── Indicação qualificada: ao menos 1 amigo que gerou bônus ≥ R$25 ── */
+  // Cada comissão = 50% do valor do indicado (mín R$25 ⇒ comissão mín R$12,50)
+  // Tratamos como qualificado qualquer indicação registrada (já gerou R$25 de comissão)
+  const indicacoesQualif = (u.referrals || []).length;
+  const temIndicacao     = indicacoesQualif >= 1;
+
+  /* ── Limite semanal: 1 saque total a cada 7 dias ── */
+  const ultimoSaqueTotal = u.lastSaqueTotalAt ? new Date(u.lastSaqueTotalAt).getTime() : 0;
+  const diasUltimoSaque  = ultimoSaqueTotal
+    ? Math.floor((Date.now() - ultimoSaqueTotal) / 86400000)
+    : 999;
+  const dentroDaSemana   = diasUltimoSaque < 7;
+  const limiteOk         = !dentroDaSemana; // true = pode sacar
+
+  // Liberado para saque total: todos os 3 requisitos
+  const saqueOk = passou7dias && temIndicacao && limiteOk;
+
+  return {
+    u, principal, welcomeBonus, refBonus, bonusIndicacao,
+    rendimentos, saldoBase, saldoAtual,
+    diasUltimoDep, passou7dias,
+    indicacoesQualif, temIndicacao,
+    diasUltimoSaque, dentroDaSemana, limiteOk,
+    saqueOk,
+    // compat com código antigo
+    diasCriacao: Math.floor((Date.now() - new Date(u.createdAt).getTime()) / 86400000),
+  };
 }
 
 /**
- * Preenche e exibe o modal de aviso com dois cards (rendimentos + total).
- * Chamada pelo botão "Solicitar Saque" do dashboard.
+ * Preenche e exibe o modal de aviso com 3 cards:
+ *  1. Rendimentos  — sempre verde/liberado
+ *  2. Bônus        — sempre verde/liberado
+ *  3. Saque Total  — roxo, sujeito a 3 requisitos
  */
 function verificarElegibilidadeSaque() {
-  const { rendimentos, saldoAtual, diasCriacao, passou7dias, temIndicacao } = calcSaqueStatus();
+  const {
+    rendimentos, bonusIndicacao, saldoAtual,
+    diasUltimoDep, passou7dias,
+    indicacoesQualif, temIndicacao,
+    diasUltimoSaque, dentroDaSemana, limiteOk,
+    saqueOk,
+  } = calcSaqueStatus();
 
-  /* ── Card de rendimentos: sempre verde e ativo se houver qualquer centavo ── */
+  /* ── CARD 1 — Rendimentos ── */
   const rendEl = document.getElementById('aviso-rend-valor');
   if (rendEl) rendEl.textContent = fmtBRL(rendimentos);
 
   const btnRend = document.getElementById('btn-sacar-rendimentos');
   if (btnRend) {
-    if (rendimentos > 0.009) {
-      // CORREÇÃO: libera com qualquer valor positivo — sem mínimo obrigatório aqui
-      btnRend.disabled = false;
-      btnRend.style.opacity = '1';
-      btnRend.style.cursor  = 'pointer';
-      btnRend.textContent   = `💸 Sacar ${fmtBRL(rendimentos)} de Rendimentos`;
-    } else {
-      // ainda sem rendimentos acumulados
-      btnRend.disabled = true;
-      btnRend.style.opacity = '0.45';
-      btnRend.style.cursor  = 'default';
-      btnRend.textContent   = `💸 Aguardando rendimentos acumularem...`;
-    }
+    const ok = rendimentos > 0.009;
+    btnRend.disabled       = !ok;
+    btnRend.style.opacity  = ok ? '1' : '0.42';
+    btnRend.style.cursor   = ok ? 'pointer' : 'default';
+    btnRend.innerHTML      = ok
+      ? `💸 Sacar ${fmtBRL(rendimentos)} Agora`
+      : `💸 Sem rendimentos ainda...`;
   }
 
-  /* ── Card de saque total: verde se liberado, amarelo se bloqueado ── */
-  const badge   = document.getElementById('saque-total-badge');
-  const msgEl   = document.getElementById('saque-total-msg');
-  const btnTotal = document.getElementById('btn-sacar-total');
+  /* ── CARD 2 — Bônus de Indicação ── */
+  const bonEl = document.getElementById('aviso-bonus-valor');
+  if (bonEl) bonEl.textContent = fmtBRL(bonusIndicacao);
 
-  // Requisito 7 dias
-  const ico7   = document.getElementById('req-7dias-ico');
-  const txt7   = document.getElementById('req-7dias-txt');
+  const btnBon = document.getElementById('btn-sacar-bonus-aviso');
+  if (btnBon) {
+    const ok = bonusIndicacao > 0.009;
+    btnBon.disabled      = !ok;
+    btnBon.style.opacity = ok ? '1' : '0.42';
+    btnBon.style.cursor  = ok ? 'pointer' : 'default';
+    btnBon.innerHTML     = ok
+      ? `🎁 Sacar ${fmtBRL(bonusIndicacao)} de Bônus`
+      : `🎁 Sem bônus disponível ainda`;
+  }
+
+  /* ── CARD 3 — Saque Total: atualiza card visual ── */
+  const totalCard = document.getElementById('saque-total-card');
+  const badge     = document.getElementById('saque-total-badge');
+  const msgEl     = document.getElementById('saque-total-msg');
+  const btnTotal  = document.getElementById('btn-sacar-total');
+  const totalValEl= document.getElementById('aviso-total-valor');
+  if (totalValEl) totalValEl.textContent = fmtBRL(saldoAtual);
+
+  // Req 1 — 7 dias
+  const ico7 = document.getElementById('req-7dias-ico');
+  const txt7 = document.getElementById('req-7dias-txt');
+  const req7el= document.getElementById('req-7dias');
   if (passou7dias) {
     if (ico7) ico7.textContent = '✅';
-    if (txt7) { txt7.textContent = '7 dias concluídos'; txt7.style.color = '#4ADE80'; }
+    if (txt7) txt7.textContent = `7 dias cumpridos (${diasUltimoDep}d desde último depósito)`;
+    if (req7el) { req7el.classList.remove('pend'); req7el.classList.add('ok'); }
   } else {
     if (ico7) ico7.textContent = '⏳';
-    const diasRestantes = 7 - diasCriacao;
-    if (txt7) { txt7.textContent = `Faltam ${diasRestantes} dia(s) para completar 7 dias`; txt7.style.color = '#FCD34D'; }
+    const faltam = 7 - diasUltimoDep;
+    if (txt7) txt7.textContent = `Faltam ${faltam} dia(s) desde o último depósito`;
+    if (req7el) { req7el.classList.remove('ok'); req7el.classList.add('pend'); }
   }
 
-  // Requisito indicação
+  // Req 2 — Indicação qualificada
   const icoInd = document.getElementById('req-ind-ico');
   const txtInd = document.getElementById('req-ind-txt');
+  const reqIndEl = document.getElementById('req-indicacao');
   if (temIndicacao) {
     if (icoInd) icoInd.textContent = '✅';
-    if (txtInd) { txtInd.textContent = 'Indicação realizada ✓'; txtInd.style.color = '#4ADE80'; }
+    if (txtInd) txtInd.textContent = `${indicacoesQualif} indicação(ões) qualificada(s) ✓`;
+    if (reqIndEl) { reqIndEl.classList.remove('pend'); reqIndEl.classList.add('ok'); }
   } else {
     if (icoInd) icoInd.textContent = '🤝';
-    if (txtInd) { txtInd.textContent = 'Indique 1 amigo (depósito mín. R$ 25)'; txtInd.style.color = '#FCD34D'; }
+    if (txtInd) txtInd.textContent = 'Indicar 1 amigo que deposite ≥ R$ 25';
+    if (reqIndEl) { reqIndEl.classList.remove('ok'); reqIndEl.classList.add('pend'); }
   }
 
-  // Atualiza card de saque total
-  const totalCard = document.getElementById('saque-total-card');
-  if (passou7dias && temIndicacao) {
-    // Tudo liberado
-    if (badge)  { badge.className = 'saque-status-badge ok'; badge.textContent = '✅ Liberado'; }
-    if (msgEl)  msgEl.innerHTML = `Parabéns! Você pode sacar o principal + rendimentos (saldo total: <strong style="color:#4ADE80">${fmtBRL(saldoAtual)}</strong>).`;
-    if (totalCard) { totalCard.style.background = 'rgba(107,0,194,.08)'; totalCard.style.border = '1.5px solid rgba(155,48,255,.3)'; }
-    if (btnTotal) { btnTotal.disabled = false; btnTotal.style.opacity = '1'; btnTotal.style.cursor = 'pointer'; btnTotal.textContent = `🏦 Saque Total — ${fmtBRL(saldoAtual)}`; }
+  // Req 3 — Limite semanal
+  const icoSem = document.getElementById('req-sem-ico');
+  const txtSem = document.getElementById('req-sem-txt');
+  const reqSemEl = document.getElementById('req-semana');
+  if (limiteOk) {
+    if (icoSem) icoSem.textContent = '✅';
+    if (txtSem) txtSem.textContent = 'Disponível para saque esta semana';
+    if (reqSemEl) { reqSemEl.classList.remove('pend'); reqSemEl.classList.add('ok'); }
   } else {
-    // Bloqueado
-    if (badge)  { badge.className = 'saque-status-badge warn'; badge.textContent = '🔒 Bloqueado'; }
+    const diasRestSemana = 7 - diasUltimoSaque;
+    if (icoSem) icoSem.textContent = '📅';
+    if (txtSem) txtSem.textContent = `Limite semanal: próximo saque em ${diasRestSemana} dia(s)`;
+    if (reqSemEl) { reqSemEl.classList.remove('ok'); reqSemEl.classList.add('pend'); }
+  }
+
+  // Visual do card e botão de saque total
+  if (saqueOk) {
+    if (totalCard) { totalCard.className = 'saque-card saque-card-roxo'; }
+    if (badge) { badge.className = 'saque-card-badge liberado'; badge.textContent = '✅ Liberado'; }
+    if (msgEl) msgEl.innerHTML = `Todos os requisitos cumpridos! Saldo disponível: <strong style="color:#C580FF">${fmtBRL(saldoAtual)}</strong>.`;
+    if (btnTotal) { btnTotal.disabled = false; btnTotal.style.opacity = '1'; btnTotal.style.cursor = 'pointer'; btnTotal.innerHTML = `🏦 Solicitar Saque Total — ${fmtBRL(saldoAtual)}`; }
+  } else {
+    if (totalCard) { totalCard.className = 'saque-card saque-card-bloqueado'; }
+    if (badge) { badge.className = 'saque-card-badge bloqueado'; badge.textContent = '🔒 Bloqueado'; }
     const pendentes = [];
-    if (!passou7dias) pendentes.push(`aguardar ${7 - diasCriacao} dia(s)`);
+    if (!passou7dias) pendentes.push(`aguardar ${7 - diasUltimoDep} dia(s)`);
     if (!temIndicacao) pendentes.push('indicar 1 amigo');
-    if (msgEl) msgEl.innerHTML = `Para liberar: ${pendentes.join(' e ')}.`;
-    if (totalCard) { totalCard.style.background = 'rgba(245,158,11,.05)'; totalCard.style.border = '1.5px solid rgba(245,158,11,.2)'; }
-    if (btnTotal) { btnTotal.disabled = true; btnTotal.style.opacity = '0.4'; btnTotal.style.cursor = 'default'; btnTotal.textContent = '🔒 Aguarde os requisitos'; }
+    if (!limiteOk)    pendentes.push(`aguardar ${7 - diasUltimoSaque} dia(s) (limite semanal)`);
+    if (msgEl) msgEl.innerHTML = `Para liberar: <strong>${pendentes.join(' e ')}</strong>.`;
+    if (btnTotal) { btnTotal.disabled = true; btnTotal.style.opacity = '0.42'; btnTotal.style.cursor = 'default'; btnTotal.innerHTML = '🔒 Aguarde os requisitos'; }
   }
 }
 
@@ -2319,11 +2744,27 @@ function processSaqueRendimentos() {
   }, 1800);
 }
 
+/* ── Abre formulário de SAQUE DE BÔNUS a partir do modal aviso ── */
+function abrirSaqueBonusDoAviso() {
+  closeDM('dm-saque-aviso');
+  // Reutiliza o fluxo existente de bônus
+  const u = DB.getUser(CU.id);
+  const refBonus = parseFloat(u.referralEarnings || 0);
+  const maxEl   = document.getElementById('bonus-modal-max');
+  const hintEl  = document.getElementById('bonus-h');
+  const inputEl = document.getElementById('bonus-v');
+  if (maxEl)   maxEl.textContent  = fmtBRL(refBonus);
+  if (hintEl)  hintEl.textContent = `Bônus disponível: ${fmtBRL(refBonus)} — sem nenhuma restrição ✅`;
+  if (inputEl) { inputEl.value = refBonus.toFixed(2); inputEl.max = refBonus.toFixed(2); }
+  document.getElementById('bonus-e').style.display = 'none';
+  openDM('dm-bonus');
+}
+
 /* ── Abre o formulário de SAQUE TOTAL ── */
 function abrirSaqueTotal() {
-  const { passou7dias, temIndicacao } = calcSaqueStatus();
-  // Dupla verificação de segurança: não abre se bloqueado
-  if (!passou7dias || !temIndicacao) return;
+  const { saqueOk, passou7dias, temIndicacao, limiteOk, diasUltimoDep, diasUltimoSaque } = calcSaqueStatus();
+  // Dupla verificação de segurança
+  if (!saqueOk) return;
   closeDM('dm-saque-aviso');
   document.getElementById('s-h').textContent = `Saldo total disponível: ${fmtBRL(liveBalance)}`;
   document.getElementById('s-v').value = '';
@@ -2339,20 +2780,24 @@ function processSaque() {
   const v   = parseFloat(document.getElementById('s-v').value);
   const p   = document.getElementById('s-p').value.trim();
   const ee  = document.getElementById('s-e'); ee.style.display = 'none';
-  const { passou7dias, temIndicacao, diasCriacao } = calcSaqueStatus();
+  const { saqueOk, passou7dias, temIndicacao, limiteOk, diasUltimoDep, diasUltimoSaque } = calcSaqueStatus();
 
   // Validações básicas
   if (!v || v < 10)      { ee.textContent = 'Valor mínimo: R$ 10,00.'; ee.style.display='block'; return; }
   if (v > liveBalance)   { ee.textContent = 'Saldo insuficiente.'; ee.style.display='block'; return; }
   if (!p)                { ee.textContent = 'Informe sua chave PIX.'; ee.style.display='block'; return; }
 
-  // Barreira de segurança: se chegou aqui sem cumprir requisitos, bloqueia com mensagem clara
+  // Barreira de segurança — todos os requisitos obrigatórios
   if (!passou7dias) {
-    ee.textContent = `Saque total bloqueado: faltam ${7 - diasCriacao} dia(s) para completar 7 dias.`;
+    ee.textContent = `Bloqueado: faltam ${7 - diasUltimoDep} dia(s) desde o último depósito.`;
     ee.style.display = 'block'; return;
   }
   if (!temIndicacao) {
-    ee.textContent = 'Saque total bloqueado: indique 1 amigo que deposite ao menos R$ 25,00.';
+    ee.textContent = 'Bloqueado: indique 1 amigo que deposite ao menos R$ 25,00.';
+    ee.style.display = 'block'; return;
+  }
+  if (!limiteOk) {
+    ee.textContent = `Bloqueado: limite semanal atingido. Próximo saque em ${7 - diasUltimoSaque} dia(s).`;
     ee.style.display = 'block'; return;
   }
 
@@ -2365,7 +2810,7 @@ function processSaque() {
     document.getElementById('sp-s').style.display = 'none';
     document.getElementById('btn-s-l').textContent = 'Confirmar Saque Total';
     liveBalance = parseFloat((liveBalance - v).toFixed(2));
-    DB.updateUser(CU.id, { balance: liveBalance });
+    DB.updateUser(CU.id, { balance: liveBalance, lastSaqueTotalAt: new Date().toISOString() });
     DB.addTxn(CU.id, { id:'txn_'+Date.now(), type:'saque', amount:v, date:new Date().toISOString(), description:`Saque Total PIX — ${p}` });
     closeDM('dm-s');
     document.getElementById('s-v').value = '';
@@ -2376,23 +2821,59 @@ function processSaque() {
 }
 
 function processDeposito() {
-  const v=parseFloat(document.getElementById('d-v').value);
-  if(!v||v<10){gToast('error','Valor mínimo: R$ 10,00.');return;}
-  const btn=document.getElementById('btn-d'); btn.disabled=true;
-  document.getElementById('sp-d').style.display='block';
-  document.getElementById('btn-d-l').textContent='Processando...';
-  setTimeout(()=>{
-    btn.disabled=false; document.getElementById('sp-d').style.display='none'; document.getElementById('btn-d-l').textContent='Confirmar Depósito';
-    const u=DB.getUser(CU.id);
-    liveBalance=parseFloat((liveBalance+v).toFixed(2));
-    // ALTERAÇÃO 1: totalDeposited registra apenas o principal real (o que o usuário realmente depositou)
-    DB.updateUser(CU.id,{balance:liveBalance,totalDeposited:parseFloat(((u.totalDeposited||0)+v).toFixed(2))});
-    DB.addTxn(CU.id,{id:'txn_'+Date.now(),type:'deposito',amount:v,date:new Date().toISOString(),description:'Depósito'});
-    closeDM('dm-d');
-    document.getElementById('d-v').value='';
-    CU=DB.getUser(CU.id); renderDash(); renderTxns(); renderChart();
-    gToast('success',`✅ ${fmtBRL(v)} adicionado!`);
-  },1600);
+  const v = parseFloat(document.getElementById('d-v').value);
+  if (!v || v < 10) {
+    gToast('error', 'Valor mínimo: R$ 10,00.');
+    return;
+  }
+
+  const btn = document.getElementById('btn-d');
+  btn.disabled = true;
+  document.getElementById('sp-d').style.display = 'block';
+  document.getElementById('btn-d-l').textContent = 'Processando...';
+
+  setTimeout(async () => {
+    try {
+      const u = DB.getUser(CU.id);
+      const now = new Date().toISOString();
+      const newBalance = parseFloat((liveBalance + v).toFixed(2));
+      const newTotalDeposited = parseFloat(((u.totalDeposited || 0) + v).toFixed(2));
+
+      // Atualiza cache e Supabase
+      liveBalance = newBalance;
+      DB.updateUser(CU.id, {
+        balance: newBalance,
+        total_deposited: newTotalDeposited,
+        last_deposit_at: now
+      });
+
+      // Registra transação
+      DB.addTxn(CU.id, {
+        type: 'deposito',
+        amount: v,
+        date: now,
+        description: 'Depósito via PIX'
+      });
+
+      // Atualiza tela
+      CU = DB.getUser(CU.id);
+      renderDash();
+      renderTxns();
+      renderChart();
+
+      closeDM('dm-d');
+      document.getElementById('d-v').value = '';
+
+      gToast('success', `✅ R$ ${v.toFixed(2)} adicionado com sucesso!`);
+    } catch (e) {
+      console.error(e);
+      gToast('error', 'Erro ao processar depósito. Tente novamente.');
+    } finally {
+      btn.disabled = false;
+      document.getElementById('sp-d').style.display = 'none';
+      document.getElementById('btn-d-l').textContent = 'Confirmar Depósito';
+    }
+  }, 1400);
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -2406,29 +2887,35 @@ function processDeposito() {
    - Linguagem mais natural e acolhedora
 ════════════════════════════════════════════════════════════ */
 const chatAnss = {
-  // NOVO: "saque" — inclui regras de 7 dias e indicação de forma natural e amigável
+  // CHAT IA: "saque" — 3 tipos com regras atualizadas
   'saque': () => {
     const u = DB.getUser(CU?.id);
     const principal   = parseFloat(u?.totalDeposited || 0);
     const bonusTotal  = parseFloat((u?.welcomeBonus||0)) + parseFloat((u?.referralEarnings||0));
+    const refBonus    = parseFloat(u?.referralEarnings || 0);
     const rendimentos = Math.max(0, parseFloat(liveBalance.toFixed(2)) - principal - bonusTotal);
-    const diasCriacao = Math.floor((Date.now() - new Date(u?.createdAt).getTime()) / 86400000);
-    const passou7dias = diasCriacao >= 7;
-    const temIndicacao= (u?.referrals||[]).length >= 1;
-    const statusPrincipal = passou7dias && temIndicacao
-      ? '✅ Principal liberado para saque!'
-      : `⏳ Principal ainda bloqueado${!passou7dias ? ` (faltam ${7-diasCriacao} dia(s))` : ''}${!temIndicacao ? ' + indicação pendente' : ''}`;
+    const ultimoDepRef  = u?.lastDepositAt || u?.createdAt;
+    const diasUltDep    = Math.floor((Date.now() - new Date(ultimoDepRef).getTime()) / 86400000);
+    const passou7dias   = diasUltDep >= 7;
+    const temIndicacao  = (u?.referrals||[]).length >= 1;
+    const ultimoSaque   = u?.lastSaqueTotalAt ? Math.floor((Date.now()-new Date(u.lastSaqueTotalAt).getTime())/86400000) : 999;
+    const limiteOk      = ultimoSaque >= 7;
+    const saqueOk       = passou7dias && temIndicacao && limiteOk;
+    const statusPrincipal = saqueOk
+      ? '✅ Saque Total liberado!'
+      : `🔒 Bloqueado${!passou7dias ? ` — faltam ${7-diasUltDep}d` : ''}${!temIndicacao ? ' — indicação pendente' : ''}${!limiteOk ? ` — limite semanal (${7-ultimoSaque}d)` : ''}`;
 
     return `Vou te explicar como funcionam os saques aqui! 💸\n\n` +
-      `📋 <strong>Regras importantes:</strong>\n\n` +
-      `• <strong>Rendimentos</strong> → Saque liberado a qualquer momento ✅\n` +
-      `• <strong>Principal</strong> → Exige:\n` +
-      `  – Mínimo 7 dias após seu depósito\n` +
-      `  – 1 indicação de amigo que depositou ao menos R$ 25\n` +
-      `  – Somente 1 saque do principal por semana\n\n` +
-      `📊 Seu status:\n` +
-      `• Rendimentos disponíveis: ${fmtBRL(rendimentos)}\n` +
-      `• ${statusPrincipal}\n\n` +
+      `📋 <strong>3 tipos de saque disponíveis:</strong>\n\n` +
+      `• <strong>💸 Rendimentos</strong> → Livre, sem nenhuma restrição ✅\n` +
+      `  Disponível agora: ${fmtBRL(rendimentos)}\n\n` +
+      `• <strong>🎁 Bônus de Indicação</strong> → Livre, sem nenhuma restrição ✅\n` +
+      `  Disponível agora: ${fmtBRL(refBonus)}\n\n` +
+      `• <strong>🏦 Saque Total</strong> (principal + rendimentos) → Exige:\n` +
+      `  – 7 dias desde o último depósito\n` +
+      `  – 1 indicação qualificada (dep. ≥ R$ 25)\n` +
+      `  – Máx. 1 saque total por semana\n\n` +
+      `📊 Seu status: ${statusPrincipal}\n\n` +
       `Para sacar, clique em "Solicitar Saque" — o sistema vai te guiar! 😊`;
   },
   // ALTERAÇÃO 6: "saldo" — mostra separado, sem "por segundo"
@@ -2450,13 +2937,13 @@ const chatAnss = {
   // ALTERAÇÃO 6: "rendimento" — sem mencionar segundos, taxa correta
   'rendimento': () => {
     const u = DB.getUser(CU?.id);
-    return `A CrypyoCash paga 10% por semana sobre o seu saldo total — isso equivale a 40% ao mês! 📈\n\nO rendimento é calculado de forma composta, ou seja, você ganha rendimento sobre rendimento, fazendo seu dinheiro crescer cada vez mais rápido.\n\nRendimento acumulado até agora: ${fmtBRL(u?.totalEarned || 0)}\n\nQuanto mais você mantém e quanto mais indica amigos, mais rápido seu patrimônio cresce! 💪`;
+    return `A NexusYield paga 10% por semana sobre o seu saldo total — isso equivale a 40% ao mês! 📈\n\nO rendimento é calculado de forma composta, ou seja, você ganha rendimento sobre rendimento, fazendo seu dinheiro crescer cada vez mais rápido.\n\nRendimento acumulado até agora: ${fmtBRL(u?.totalEarned || 0)}\n\nQuanto mais você mantém e quanto mais indica amigos, mais rápido seu patrimônio cresce! 💪`;
   },
   // ALTERAÇÃO 6: "deposito"
   'deposito': () => `Para adicionar saldo, clique em "Adicionar Saldo" no painel principal 💳\n\nO valor mínimo é R$ 25,00. Assim que confirmado, o rendimento de 10% por semana já começa a incidir sobre o novo valor.\n\nQuanto mais você aporta, mais os juros compostos trabalham para você! 🚀`,
   'depositar': () => chatAnss['deposito'](),
   // ALTERAÇÃO 6: resposta padrão natural
-  'default': () => `Olá, ${CU?.username}! 👋 Sou o assistente da CrypyoCash e estou aqui para te ajudar.\n\nPosso responder sobre:\n💰 Saldo e rendimentos\n💸 Como fazer saques\n🎯 Programa de indicação\n📈 Como funcionam os 40% ao mês\n\nÉ só perguntar! 😊`,
+  'default': () => `Olá, ${CU?.username}! 👋 Sou o assistente da NexusYield e estou aqui para te ajudar.\n\nPosso responder sobre:\n💰 Saldo e rendimentos\n💸 Como fazer saques\n🎯 Programa de indicação\n📈 Como funcionam os 40% ao mês\n\nÉ só perguntar! 😊`,
 };
 function getBotR(msg){
   const l=msg.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
@@ -2467,7 +2954,7 @@ function getBotR(msg){
   return chatAnss.default();
 }
 function addMsg(txt,role){const el=document.getElementById('cmsg');const now=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});el.innerHTML+=`<div class="msg ${role}">${txt}<div class="mt">${now}</div></div>`;el.scrollTop=el.scrollHeight;}
-function initChat(){addMsg(`Olá, ${CU?.username}! 👋 Sou o assistente IA da CrypyoCash. Como posso te ajudar hoje?`,'bot');}
+function initChat(){addMsg(`Olá, ${CU?.username}! 👋 Sou o assistente IA da NexusYield. Como posso te ajudar hoje?`,'bot');}
 function sendChat(){const i=document.getElementById('cinp');const m=i.value.trim();if(!m)return;i.value='';addMsg(m,'user');setTimeout(()=>addMsg(getBotR(m),'bot'),750);}
 function qr(m){addMsg(m,'user');setTimeout(()=>addMsg(getBotR(m),'bot'),700);}
 function toggleChat(){chatOpen=!chatOpen;document.getElementById('cwin').classList.toggle('open',chatOpen);if(chatOpen)document.getElementById('cinp').focus();}
@@ -2617,8 +3104,36 @@ function processSaqueBonus() {
 
 
 /* ════════════════════════════════════════════════════════════
-   LOGOUT
+   TOGGLE DE SOM — preferência salva no localStorage
 ════════════════════════════════════════════════════════════ */
+let somAtivo = localStorage.getItem('cc_som') !== 'off'; // padrão: ligado
+
+function _applySomUI() {
+  const track = document.getElementById('snd-track');
+  const ico   = document.getElementById('snd-ico');
+  const lbl   = document.getElementById('snd-lbl');
+  if (!track) return;
+  if (somAtivo) {
+    track.classList.add('on');
+    if (ico) ico.textContent = '🔔';
+    if (lbl) lbl.textContent = 'Som';
+  } else {
+    track.classList.remove('on');
+    if (ico) ico.textContent = '🔕';
+    if (lbl) lbl.textContent = 'Mudo';
+  }
+}
+
+function toggleSom() {
+  somAtivo = !somAtivo;
+  localStorage.setItem('cc_som', somAtivo ? 'on' : 'off');
+  _applySomUI();
+}
+
+// Aplica estado visual assim que o DOM carregar
+document.addEventListener('DOMContentLoaded', _applySomUI);
+// Fallback caso o script rode depois do DOMContentLoaded
+if (document.readyState !== 'loading') _applySomUI();
 function logout(){
   stopLiveBalance();
   stopNotifLoop();
