@@ -3291,7 +3291,10 @@ function _fakeSvgQr() {
 
 async function processDeposito() {
   const v = parseFloat(document.getElementById('d-v').value);
-  if (!v || v < 10) { gToast('error', 'Valor mínimo: R$ 10,00.'); return; }
+  if (!v || v < 10) {
+    gToast('error', 'Valor mínimo: R$ 10,00.');
+    return;
+  }
 
   const btn = document.getElementById('btn-d');
   btn.disabled = true;
@@ -3300,28 +3303,25 @@ async function processDeposito() {
 
   try {
     const { data, error } = await _sb.functions.invoke('create-pix-charge', {
-      body: { amount: v },
+      body: { amount: v }
     });
 
-    if (error || !data?.ok) {
-      const msg = data?.error || error?.message || 'Falha ao gerar Pix';
-      gToast('error', msg);
-      return;
-    }
+    if (error) throw error;
+    if (!data.ok) throw new Error(data.error || 'Erro na Asaas');
 
     closeDM('dm-d');
     document.getElementById('d-v').value = '';
 
     abrirModalPix({
-      amount:       data.amount,
-      payload:      data.payload,
+      amount: data.amount,
+      payload: data.payload,
       encodedImage: data.encodedImage,
-      expiresAt:    data.expiresAt,
+      expiresAt: data.expiresAt
     });
 
   } catch (e) {
-    console.error('[NexusYield] processDeposito:', e);
-    gToast('error', 'Erro de conexão ao gerar Pix.');
+    console.error('[NexusYield] Erro ao gerar Pix:', e);
+    gToast('error', e.message || 'Erro ao gerar cobrança Pix');
   } finally {
     btn.disabled = false;
     document.getElementById('sp-d').style.display = 'none';
