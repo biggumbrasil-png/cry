@@ -864,6 +864,98 @@ html, body { width:100%; min-height:100vh; font-family:'Outfit',sans-serif; over
   box-shadow: 0 3px 12px rgba(107,0,194,.35);
 }
 .dash-tab:not(.active):hover { background: rgba(155,48,255,.1); color: var(--dt); }
+.dash-tab-ia { position:relative; }
+.dash-tab-ia::after { content:'🔥'; position:absolute; top:-6px; right:-4px; font-size:10px; animation:iafire 1.4s ease-in-out infinite alternate; }
+@keyframes iafire { from{transform:scale(1) rotate(-5deg)} to{transform:scale(1.3) rotate(5deg)} }
+
+/* ════════════════════════════════════════════════════════════
+   ABA PROJETOS IA — Estilos
+════════════════════════════════════════════════════════════ */
+/* Hero */
+.ia-hero { position:relative; border-radius:24px; background:linear-gradient(135deg,#1A003A,#2D0060,#1A003A); border:1px solid rgba(155,48,255,.35); padding:48px 36px 40px; margin-bottom:28px; overflow:hidden; text-align:center; }
+.ia-hero-glow { position:absolute; top:-60px; left:50%; transform:translateX(-50%); width:500px; height:220px; background:radial-gradient(ellipse at center, rgba(155,48,255,.35) 0%, transparent 70%); pointer-events:none; }
+.ia-hero-badge { display:inline-flex; align-items:center; gap:8px; background:rgba(155,48,255,.18); border:1px solid rgba(155,48,255,.4); border-radius:50px; padding:6px 16px; font-size:11px; font-weight:700; color:var(--pu); letter-spacing:.08em; margin-bottom:18px; }
+.ia-hero-dot { width:8px; height:8px; background:#9B30FF; border-radius:50%; animation:pd 1.8s ease-in-out infinite; box-shadow:0 0 0 3px rgba(155,48,255,.3); flex-shrink:0; }
+.ia-hero-title { font-size:clamp(26px,5vw,44px); font-weight:900; color:#fff; line-height:1.15; margin-bottom:12px; }
+.ia-hero-hl { background:linear-gradient(135deg,#9B30FF,#C580FF,#FF80FF); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.ia-hero-sub { font-size:14px; color:#B090D0; max-width:620px; margin:0 auto 28px; line-height:1.6; }
+.ia-hero-stats { display:flex; align-items:center; justify-content:center; gap:0; background:rgba(0,0,0,.3); border:1px solid rgba(155,48,255,.2); border-radius:16px; padding:16px 24px; display:inline-flex; }
+.ia-stat { text-align:center; padding:0 20px; }
+.ia-stat-v { font-size:26px; font-weight:900; background:linear-gradient(135deg,#9B30FF,#C580FF); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.ia-stat-l { font-size:11px; color:#8070A0; font-weight:600; text-transform:uppercase; letter-spacing:.05em; margin-top:2px; }
+.ia-stat-div { width:1px; height:40px; background:rgba(155,48,255,.25); }
+
+/* Section title */
+.ia-section-title { font-size:16px; font-weight:700; color:var(--dt); margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+
+/* Grid de pacotes */
+.ia-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:16px; margin-bottom:8px; }
+.ia-card { background:linear-gradient(145deg,rgba(107,0,194,.18),rgba(155,48,255,.08)); border:1px solid rgba(155,48,255,.28); border-radius:20px; padding:22px 18px 18px; position:relative; overflow:hidden; transition:transform .2s,box-shadow .2s,border-color .2s; cursor:default; }
+.ia-card::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(155,48,255,.07) 0%,transparent 60%); pointer-events:none; }
+.ia-card:hover { transform:translateY(-4px); box-shadow:0 12px 40px rgba(107,0,194,.35); border-color:rgba(155,48,255,.5); }
+.ia-card-top { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:12px; }
+.ia-card-name { font-size:13.5px; font-weight:700; color:#fff; line-height:1.3; }
+.ia-card-emoji { font-size:22px; }
+.ia-card-invest { font-size:12px; color:#9080B0; font-weight:500; margin-bottom:10px; }
+.ia-card-yield-label { font-size:10px; color:#8070A0; font-weight:700; text-transform:uppercase; letter-spacing:.07em; margin-bottom:3px; }
+.ia-card-yield { font-size:28px; font-weight:900; color:#22C55E; line-height:1; margin-bottom:4px; }
+.ia-card-yield-sub { font-size:11px; color:#22C55E; font-weight:600; opacity:.75; margin-bottom:14px; }
+.ia-card-tags { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:16px; }
+.ia-tag { font-size:10px; font-weight:600; padding:3px 8px; border-radius:50px; }
+.ia-tag-pct { background:rgba(155,48,255,.2); color:var(--pu); border:1px solid rgba(155,48,255,.3); }
+.ia-tag-days { background:rgba(34,197,94,.12); color:#4ADE80; border:1px solid rgba(34,197,94,.25); }
+.ia-card-return { font-size:11px; color:#7060A0; margin-bottom:14px; }
+.ia-card-return span { color:#B090D0; font-weight:600; }
+.btn-invest { width:100%; padding:11px; background:linear-gradient(135deg,#5500A0,#9B30FF); color:#fff; border:none; border-radius:12px; font-size:13px; font-weight:700; font-family:'Outfit',sans-serif; cursor:pointer; position:relative; overflow:hidden; transition:transform .15s,box-shadow .15s,filter .15s; box-shadow:0 4px 18px rgba(107,0,194,.35); }
+.btn-invest::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(255,255,255,.15),transparent 55%); pointer-events:none; }
+.btn-invest:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(107,0,194,.5); filter:brightness(1.08); }
+
+/* Meus projetos ativos */
+.ia-empty { text-align:center; padding:48px 20px; color:#6050A0; }
+.ia-empty-ico { font-size:40px; margin-bottom:12px; opacity:.5; }
+.ia-empty-t { font-size:15px; font-weight:600; color:#8070A0; margin-bottom:6px; }
+.ia-empty-s { font-size:12.5px; color:#5040A0; }
+.ia-proj-list { display:flex; flex-direction:column; gap:12px; }
+.ia-proj { background:var(--dc); border:1px solid var(--dbd); border-radius:16px; padding:18px 20px; }
+.ia-proj-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:8px; }
+.ia-proj-name { font-size:14px; font-weight:700; color:#fff; }
+.ia-proj-status { font-size:11px; font-weight:600; padding:4px 10px; border-radius:50px; background:rgba(34,197,94,.12); color:#4ADE80; border:1px solid rgba(34,197,94,.25); }
+.ia-proj-status.expired { background:rgba(239,68,68,.12); color:#F87171; border-color:rgba(239,68,68,.25); }
+.ia-proj-row { display:flex; gap:20px; flex-wrap:wrap; margin-bottom:12px; }
+.ia-proj-info { flex:1; min-width:120px; }
+.ia-proj-info-l { font-size:10.5px; color:#7060A0; font-weight:600; text-transform:uppercase; letter-spacing:.05em; margin-bottom:3px; }
+.ia-proj-info-v { font-size:15px; font-weight:700; color:var(--dt); }
+.ia-proj-info-v.green { color:#22C55E; }
+.ia-proj-pb-wrap { margin-bottom:14px; }
+.ia-proj-pb-label { display:flex; justify-content:space-between; font-size:11px; color:#7060A0; margin-bottom:6px; }
+.ia-proj-pb { height:6px; background:rgba(155,48,255,.15); border-radius:50px; overflow:hidden; }
+.ia-proj-pb-fill { height:100%; background:linear-gradient(90deg,#6B00C2,#9B30FF); border-radius:50px; transition:width .5s; }
+.btn-sacar-rend-ia { padding:10px 18px; background:linear-gradient(135deg,#0F5A2E,#22C55E); color:#fff; border:none; border-radius:10px; font-size:12.5px; font-weight:700; font-family:'Outfit',sans-serif; cursor:pointer; transition:transform .15s,filter .15s,opacity .2s; box-shadow:0 3px 14px rgba(34,197,94,.3); }
+.btn-sacar-rend-ia:hover:not(:disabled) { transform:translateY(-1px); filter:brightness(1.08); }
+.btn-sacar-rend-ia:disabled { opacity:.4; cursor:not-allowed; }
+
+/* Modal IA Confirmação */
+.ia-mo { position:fixed; inset:0; background:rgba(15,15,15,.65); backdrop-filter:blur(8px); z-index:400; display:flex; align-items:center; justify-content:center; padding:20px; opacity:0; pointer-events:none; transition:opacity .3s; }
+.ia-mo.show { opacity:1; pointer-events:auto; }
+.ia-md { background:linear-gradient(145deg,#1A003A,#0F0F0F); border:1px solid rgba(155,48,255,.35); border-radius:24px; box-shadow:0 8px 40px rgba(107,0,194,.35),0 40px 80px rgba(0,0,0,.5); padding:40px 36px 36px; width:100%; max-width:440px; text-align:center; transform:translateY(24px) scale(.97); transition:transform .35s cubic-bezier(.22,1,.36,1); }
+.ia-mo.show .ia-md { transform:translateY(0) scale(1); }
+.ia-md-ico { font-size:44px; margin-bottom:14px; animation:pop .4s cubic-bezier(.22,1,.36,1) both; }
+.ia-md-t { font-size:21px; font-weight:800; color:#fff; margin-bottom:6px; }
+.ia-md-s { font-size:13px; color:#9080B0; margin-bottom:22px; line-height:1.55; }
+.ia-md-box { background:rgba(155,48,255,.1); border:1px solid rgba(155,48,255,.25); border-radius:14px; padding:16px; margin-bottom:20px; text-align:left; }
+.ia-md-row { display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid rgba(155,48,255,.1); }
+.ia-md-row:last-child { border-bottom:none; }
+.ia-md-rl { font-size:12px; color:#8070A0; font-weight:500; }
+.ia-md-rv { font-size:13px; color:#fff; font-weight:700; }
+.ia-md-rv.green { color:#22C55E; }
+.ia-md-warn { display:flex; align-items:flex-start; gap:8px; background:rgba(234,179,8,.07); border:1px solid rgba(234,179,8,.22); border-radius:10px; padding:10px 14px; margin-bottom:20px; text-align:left; }
+.ia-md-warn-i { font-size:14px; flex-shrink:0; }
+.ia-md-warn-t { font-size:11.5px; color:#92400E; line-height:1.5; font-weight:500; }
+.ia-md-btns { display:flex; gap:10px; }
+.btn-ia-conf { flex:1; padding:13px; background:linear-gradient(135deg,#5500A0,#9B30FF); color:#fff; border:none; border-radius:12px; font-size:14px; font-weight:700; font-family:'Outfit',sans-serif; cursor:pointer; transition:transform .15s,filter .15s; box-shadow:0 4px 18px rgba(107,0,194,.4); }
+.btn-ia-conf:hover { transform:translateY(-1px); filter:brightness(1.08); }
+.btn-ia-canc { flex:0 0 auto; padding:13px 20px; background:transparent; color:#8070A0; border:1px solid rgba(155,48,255,.25); border-radius:12px; font-size:14px; font-weight:600; font-family:'Outfit',sans-serif; cursor:pointer; transition:background .18s; }
+.btn-ia-canc:hover { background:rgba(155,48,255,.08); }
 
 /* Seções do dashboard */
 .dash-section { display: none; }
@@ -1316,6 +1408,7 @@ html, body { width:100%; min-height:100vh; font-family:'Outfit',sans-serif; over
     <!-- ALTERAÇÃO 7: Navegação de abas — Dashboard | Notícias | Bônus | Sobre -->
     <div class="dash-tabs">
       <button class="dash-tab active" onclick="switchTab('tab-dash', this)">📊 Dashboard</button>
+      <button class="dash-tab dash-tab-ia" onclick="switchTab('tab-projetos', this); renderTabProjetos()">🤖 Projetos IA</button>
       <button class="dash-tab" onclick="switchTab('tab-news', this)">📰 Notícias</button>
       <button class="dash-tab" onclick="switchTab('tab-bonus', this); renderTabBonus()">🎁 Bônus</button>
       <button class="dash-tab" onclick="switchTab('tab-sobre', this)">🧠 Sobre</button>
@@ -1670,9 +1763,96 @@ html, body { width:100%; min-height:100vh; font-family:'Outfit',sans-serif; over
       </div>
     </div><!-- /tab-sobre -->
 
+    <!-- ══════════════════════════════════════════════════════
+         ABA: 🤖 PROJETOS IA
+    ══════════════════════════════════════════════════════ -->
+    <div class="dash-section" id="tab-projetos">
+
+      <!-- Hero IA -->
+      <div class="ia-hero">
+        <div class="ia-hero-glow"></div>
+        <div class="ia-hero-badge"><span class="ia-hero-dot"></span>ACESSO EXCLUSIVO — ALTA RENTABILIDADE</div>
+        <h1 class="ia-hero-title">Projetos de <span class="ia-hero-hl">Inteligência Artificial</span></h1>
+        <p class="ia-hero-sub">Invista em projetos isolados das maiores IAs do mundo e receba rendimentos diários muito acima do mercado. Principal bloqueado por 70 dias — rendimentos disponíveis a qualquer momento.</p>
+        <div class="ia-hero-stats">
+          <div class="ia-stat"><div class="ia-stat-v">30%+</div><div class="ia-stat-l">ao dia</div></div>
+          <div class="ia-stat-div"></div>
+          <div class="ia-stat"><div class="ia-stat-v">70</div><div class="ia-stat-l">dias validade</div></div>
+          <div class="ia-stat-div"></div>
+          <div class="ia-stat"><div class="ia-stat-v">R$35k</div><div class="ia-stat-l">retorno máx.</div></div>
+        </div>
+      </div>
+
+      <!-- Grid de pacotes -->
+      <div class="ia-section-title">🚀 Escolha seu Pacote de IA</div>
+      <div class="ia-grid" id="ia-packages-grid">
+        <!-- renderizado por renderTabProjetos() -->
+      </div>
+
+      <!-- Meus projetos ativos -->
+      <div class="ia-section-title" style="margin-top:36px;">📂 Meus Projetos Ativos</div>
+      <div id="ia-meus-projetos">
+        <!-- renderizado por renderTabProjetos() -->
+      </div>
+
+    </div><!-- /tab-projetos -->
+
   </div><!-- /shell -->
 
-  <!-- FAB -->
+  <!-- MODAL CONFIRMAÇÃO INVESTIMENTO IA -->
+  <div class="ia-mo" id="ia-modal-conf">
+    <div class="ia-md">
+      <div class="ia-md-ico">🤖</div>
+      <div class="ia-md-t" id="ia-modal-title">Confirmar Investimento</div>
+      <div class="ia-md-s" id="ia-modal-sub">Revise os detalhes antes de confirmar.</div>
+      <div class="ia-md-box" id="ia-modal-box"></div>
+      <div class="ia-md-warn">
+        <div class="ia-md-warn-i">⚠️</div>
+        <div class="ia-md-warn-t">O <strong>principal investido ficará bloqueado por 70 dias</strong>. Os rendimentos diários poderão ser sacados a qualquer momento.</div>
+      </div>
+      <div class="ia-md-btns">
+        <button class="btn-ia-canc" onclick="closeIAModal()">Cancelar</button>
+        <button class="btn-ia-conf" id="ia-modal-btn-conf" onclick="confirmarInvestIA()">✅ Confirmar Investimento</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL SAQUE RENDIMENTOS IA -->
+  <div class="ia-mo" id="ia-modal-saque">
+    <div class="ia-md">
+      <div class="ia-md-ico">💸</div>
+      <div class="ia-md-t">Sacar Rendimentos do Projeto</div>
+      <div class="ia-md-s" id="ia-saque-sub">Apenas os rendimentos serão sacados. O principal permanece investido.</div>
+      <div class="ia-md-box" id="ia-saque-box"></div>
+      <div class="ia-md-warn">
+        <div class="ia-md-warn-i">🔒</div>
+        <div class="ia-md-warn-t">O principal investido <strong>não pode ser sacado</strong> antes dos 70 dias.</div>
+      </div>
+      <div class="ia-md-btns">
+        <button class="btn-ia-canc" onclick="closeIASaqueModal()">Cancelar</button>
+        <button class="btn-ia-conf" style="background:linear-gradient(135deg,#0F5A2E,#22C55E);box-shadow:0 4px 18px rgba(34,197,94,.4);" onclick="confirmarSaqueRendIA()">💸 Sacar Agora</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL SALDO INSUFICIENTE IA -->
+  <div class="ia-mo" id="ia-modal-insuf">
+    <div class="ia-md" style="text-align:center;">
+      <div class="ia-md-ico">🔒</div>
+      <div class="ia-md-t">Saldo Insuficiente</div>
+      <div class="ia-md-s" id="ia-insuf-msg">Você precisa de saldo depositado real para ativar este pacote.</div>
+      <div class="ia-md-box" id="ia-insuf-box"></div>
+      <div class="ia-md-warn">
+        <div class="ia-md-warn-i">ℹ️</div>
+        <div class="ia-md-warn-t">Bônus de boas-vindas e bônus de indicação <strong>não podem ser usados</strong> para investir em Projetos IA. Apenas saldo depositado via Pix é aceito.</div>
+      </div>
+      <div class="ia-md-btns">
+        <button class="btn-ia-canc" onclick="document.getElementById('ia-modal-insuf').classList.remove('show')">Fechar</button>
+        <button class="btn-ia-conf" onclick="document.getElementById('ia-modal-insuf').classList.remove('show'); openDM('dm-d')">💳 Depositar Saldo Agora</button>
+      </div>
+    </div>
+  </div>
+
   <button class="fab" onclick="toggleChat()" aria-label="Suporte IA">🤖<div class="fab-b">IA</div></button>
 
   <!-- CHAT -->
@@ -1876,9 +2056,6 @@ html, body { width:100%; min-height:100vh; font-family:'Outfit',sans-serif; over
         <span id="pix-copy-ico">📋</span>
         <span id="pix-copy-lbl">Copiar código Pix</span>
       </button>
-      <button class="btn-pix-confirmar-sim" id="btn-pix-confirmar-sim" onclick="confirmarPagamentoSimulado()">
-        ✅ Confirmar Pagamento Simulado
-      </button>
       <button class="btn-pix-cancel" onclick="fecharModalPix()">Cancelar / Fechar</button>
     </div>
   </div>
@@ -1954,6 +2131,7 @@ function _fromDb(row) {
     lastLogin:        row.last_login        ?? null,
     lastDepositAt:    row.last_deposit_at   ?? null,
     lastSaqueTotalAt: row.last_saque_total_at ?? null,
+    aiProjects:       row.ai_projects        ?? [],
   };
 }
 /* JS → DB (camelCase → snake_case) — objeto completo */
@@ -1975,6 +2153,8 @@ function _toDb(u) {
     last_login:           u.lastLogin        ?? null,
     last_deposit_at:      u.lastDepositAt    ?? null,
     last_saque_total_at:  u.lastSaqueTotalAt ?? null,
+    // ai_projects é salvo via updateUser (JSONB) — não incluído no INSERT inicial
+    // para evitar erro caso a coluna ainda não exista na tabela Supabase
   };
 }
 /* JS props parciais → DB snake_case */
@@ -1986,6 +2166,7 @@ function _propsToDb(props) {
     referralEarnings:'referral_earnings', referredBy:'referred_by',
     createdAt:'created_at', lastLogin:'last_login',
     lastDepositAt:'last_deposit_at', lastSaqueTotalAt:'last_saque_total_at',
+    aiProjects:'ai_projects',
   };
   const out = {};
   for (const [k, v] of Object.entries(props)) out[MAP[k] ?? k] = v;
@@ -2085,8 +2266,18 @@ const DB = {
   /* Criação de usuário — converte para snake_case antes de inserir */
   async createUser(u) {
     const { error } = await _sb.from('users').insert(_toDb(u));
-    if (error) throw error;
-    _usersCache[u.id] = u;   // cache já tem formato JS
+    if (error) {
+      // Se for erro de coluna inexistente (ai_projects), tenta sem ela
+      if (error.code === '42703' || (error.message && error.message.includes('column'))) {
+        const dbObj = _toDb(u);
+        delete dbObj.ai_projects;
+        const { error: e2 } = await _sb.from('users').insert(dbObj);
+        if (e2) throw e2;
+      } else {
+        throw error;
+      }
+    }
+    _usersCache[u.id] = u;
     _txnsCache[u.id]  = [];
   },
 
@@ -2486,64 +2677,101 @@ function setCL(on) {
 }
 
 async function handleCadastro() {
-  const u=document.getElementById('c-u').value.trim();
-  const r=document.getElementById('c-r').value.trim().toUpperCase();
-  setFE('cf-u','');
-  if(!u){setFE('cf-u','Escolha um nome de usuário.');return;}
-  if(!checkReqs()){setFE('cf-u','O usuário não atende aos requisitos.');return;}
+  const u = document.getElementById('c-u').value.trim();
+  const r = document.getElementById('c-r').value.trim().toUpperCase();
+
+  setFE('cf-u', '');
+  if (!u) { setFE('cf-u', 'Escolha um nome de usuário.'); return; }
+  if (!checkReqs()) { setFE('cf-u', 'O usuário não atende aos requisitos.'); return; }
+
   setCL(true);
+
   try {
     const existing = await DB.fetchUserByName(u);
-    if(existing){setFE('cf-u','Usuário já em uso. Escolha outro.');showCto('Usuário já cadastrado.');setCL(false);return;}
+    if (existing) {
+      setFE('cf-u', 'Usuário já em uso. Escolha outro.');
+      showCto('Usuário já cadastrado.');
+      setCL(false);
+      return;
+    }
 
-    const chave=gerarChave(8); const id=uid(); const refCode=genRef(u); const BONUS=50;
-    let referredBy=null;
+    const chave = gerarChave(8);
+    const id = uid();
+    const refCode = genRef(u);
+    const BONUS = 50;
+    let referredBy = null;
 
-    if(r){
+    if (r) {
       const ref = await DB.fetchUserByCode(r);
-      if(ref){
-        referredBy=ref.id;
-        const com=parseFloat((BONUS*.5).toFixed(2));
-        DB.updateUser(ref.id,{
-          balance:          parseFloat((ref.balance+com).toFixed(2)),
-          referralEarnings: parseFloat(((ref.referralEarnings||0)+com).toFixed(2)),
-          referrals:        [...(ref.referrals||[]),{username:u,date:new Date().toISOString()}]
+      if (ref) {
+        referredBy = ref.id;
+        const com = parseFloat((BONUS * 0.5).toFixed(2));
+        DB.updateUser(ref.id, {
+          balance: parseFloat((ref.balance + com).toFixed(2)),
+          referralEarnings: parseFloat(((ref.referralEarnings || 0) + com).toFixed(2)),
+          referrals: [...(ref.referrals || []), { username: u, date: new Date().toISOString() }]
         });
-        DB.addTxn(ref.id,{id:'txn_'+Date.now()+'r',type:'indicacao',amount:com,
-          date:new Date().toISOString(),description:`Bônus de indicação — ${u}`});
+        DB.addTxn(ref.id, {
+          type: 'indicacao',
+          amount: com,
+          date: new Date().toISOString(),
+          description: `Bônus de indicação — ${u}`
+        });
       }
     }
 
-    const nu={
+    const nu = {
       id,
-      username:         u,
-      securityKey:      chave,
-      balance:          BONUS,
-      monthlyEarnings:  0,
-      totalEarned:      0,
-      totalDeposited:   0,
-      welcomeBonus:     BONUS,
-      referralCode:     refCode,
+      username: u,
+      securityKey: chave,
+      balance: BONUS,
+      monthlyEarnings: 0,
+      totalEarned: 0,
+      totalDeposited: 0,
+      welcomeBonus: BONUS,
+      referralCode: refCode,
       referralEarnings: 0,
-      referrals:        [],
-      referredBy:       referredBy,
-      createdAt:        new Date().toISOString(),
-      lastLogin:        new Date().toISOString(),
+      referrals: [],
+      referredBy: referredBy,
+      createdAt: new Date().toISOString(),
+      lastLogin: new Date().toISOString(),
     };
 
-    await DB.createUser(nu);
-    await DB.addTxn(id,{type:'deposito',amount:BONUS,
-      date:new Date().toISOString(),description:'🎁 Bônus de boas-vindas NexusYield'});
+    // INSERT direto — evita DataCloneError do Supabase v2 ao usar DB.createUser
+    const { error } = await _sb.from('users').insert(_toDb(nu));
+    if (error) {
+      console.error('[NexusYield] Supabase insert error:', error.message, error.code);
+      throw new Error(error.message || 'Erro ao criar conta no banco');
+    }
+
+    // Atualiza cache local manualmente
+    _usersCache[nu.id] = nu;
+    _txnsCache[nu.id]  = [];
+
+    DB.addTxn(id, {
+      type: 'deposito',
+      amount: BONUS,
+      date: new Date().toISOString(),
+      description: '🎁 Bônus de boas-vindas NexusYield'
+    });
 
     setCL(false);
-    document.getElementById('km-u').textContent=u;
-    document.getElementById('km-k').textContent=chave;
+    document.getElementById('km-u').textContent = u;
+    document.getElementById('km-k').textContent = chave;
     document.getElementById('kmo').classList.add('show');
     document.getElementById('btn-ck').focus();
-  } catch(e) {
+
+  } catch (e) {
     setCL(false);
-    showCto('Erro de conexão. Tente novamente.');
-    console.error('[NexusYield] Cadastro error:', e);
+    console.error('[NexusYield] Cadastro error:', e?.message || e);
+
+    let msg = 'Erro de conexão. Tente novamente.';
+    if (e?.message?.toLowerCase().includes('duplicate') || e?.code === '23505') {
+      msg = 'Usuário já existe. Escolha outro nome.';
+    } else if (e?.message) {
+      msg = e.message;
+    }
+    showCto(msg);
   }
 }
 
@@ -2647,8 +2875,8 @@ function renderChart() {
 }
 
 function fmtDate(iso){const d=new Date(iso);return d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});}
-function txnIco(t){return{deposito:'💳',saque:'💸',saque_bonus:'🎁',rendimento:'📈',indicacao:'🤝'}[t]||'💰';}
-function txnLbl(t){return t.description||{deposito:'Depósito',saque:'Saque',saque_bonus:'Saque de Bônus',rendimento:'Rendimento',indicacao:'Comissão de Indicação'}[t.type]||t.type;}
+function txnIco(t){return{deposito:'💳',saque:'💸',saque_bonus:'🎁',rendimento:'📈',indicacao:'🤝',invest_ia:'🤖',saque_ia:'💸'}[t]||'💰';}
+function txnLbl(t){return t.description||{deposito:'Depósito',saque:'Saque',saque_bonus:'Saque de Bônus',rendimento:'Rendimento',indicacao:'Comissão de Indicação',invest_ia:'Investimento IA',saque_ia:'Saque Rendimentos IA'}[t.type]||t.type;}
 
 function renderTxns(all=false) {
   const ts=DB.getTxns(CU.id);
@@ -2661,7 +2889,7 @@ function renderTxns(all=false) {
         <div class="ti-ico ${t.type}">${txnIco(t.type)}</div>
         <div><div class="ti-d">${txnLbl(t)}</div><div class="ti-dt">${fmtDate(t.date)}</div></div>
       </div>
-      <div class="ti-a ${t.type==='saque'?'minus':'plus'}">${t.type==='saque'?'- ':'+ '}${fmtBRL(t.amount)}</div>
+      <div class="ti-a ${(t.type==='saque'||t.type==='invest_ia')?'minus':'plus'}">${(t.type==='saque'||t.type==='invest_ia')?'- ':'+ '}${fmtBRL(Math.abs(t.amount))}</div>
     </div>`).join('');
 }
 
@@ -3403,15 +3631,19 @@ function confirmarPagamentoSimulado() {
   fecharModalPix();
   _pixValorSimulado = 0;
 
-  const u = DB.getUser(CU.id);
-  const novoBalance       = parseFloat((liveBalance + v).toFixed(2));
-  const novoDeposited     = parseFloat(((u.totalDeposited || 0) + v).toFixed(2));
+  const novoBalance   = parseFloat((liveBalance + v).toFixed(2));
+  const novoDeposited = parseFloat(((CU.totalDeposited || 0) + v).toFixed(2));
   liveBalance = novoBalance;
+
+  // Atualiza CU em memória imediatamente
+  CU.balance        = novoBalance;
+  CU.totalDeposited = novoDeposited;
+  CU.lastDepositAt  = new Date().toISOString();
 
   DB.updateUser(CU.id, {
     balance:        novoBalance,
     totalDeposited: novoDeposited,
-    lastDepositAt:  new Date().toISOString(),
+    lastDepositAt:  CU.lastDepositAt,
   });
   DB.addTxn(CU.id, {
     type:        'deposito',
@@ -3420,10 +3652,19 @@ function confirmarPagamentoSimulado() {
     description: 'Depósito via Pix',
   });
 
-  CU = DB.getUser(CU.id);
   renderDash(); renderTxns(); renderChart();
   playKaching();
   gToast('success', `✅ Depósito de ${fmtBRL(v)} confirmado! Saldo atualizado.`);
+
+  // Se veio de pacote IA, ativa automaticamente após o depósito
+  if (_iaInvestAfterPix && _iaPendingPkg) {
+    const pkg = _iaPendingPkg;
+    _iaInvestAfterPix = false;
+    setTimeout(() => {
+      _executarInvestIA(pkg);
+      switchTab('tab-projetos', document.querySelector('.dash-tab-ia'));
+    }, 800);
+  }
 }
 
 /** Copia o código Pix para o clipboard */
@@ -3633,6 +3874,311 @@ function logout(){
   document.getElementById('l-u').value='';
   document.getElementById('l-k').value='';
   goTo('login');
+}
+
+/* ════════════════════════════════════════════════════════════
+   PROJETOS IA — Definição dos pacotes
+════════════════════════════════════════════════════════════ */
+const IA_PACKAGES = [
+  { id:'grok_starter',      name:'Grok Starter',      company:'xAI',       emoji:'⚡', amount:50,    dailyYield:7.50,   pct:'15%', totalReturn:'~R$ 525' },
+  { id:'claude_advanced',   name:'Claude Advanced',   company:'Anthropic', emoji:'🧠', amount:250,   dailyYield:37.50,  pct:'15%', totalReturn:'~R$ 2.625' },
+  { id:'gemini_ultra',      name:'Gemini Ultra',      company:'Google',    emoji:'💎', amount:500,   dailyYield:75.00,  pct:'15%', totalReturn:'~R$ 5.250' },
+  { id:'openai_enterprise', name:'OpenAI Enterprise', company:'OpenAI',    emoji:'🌐', amount:950,   dailyYield:142.50, pct:'15%', totalReturn:'~R$ 9.975' },
+  { id:'xai_ultra',         name:'xAI Ultra',         company:'xAI',       emoji:'🚀', amount:1500,  dailyYield:225.00, pct:'15%', totalReturn:'~R$ 15.750' },
+  { id:'chatgpt4o_pro',     name:'ChatGPT-4o Pro',    company:'OpenAI',    emoji:'🤖', amount:2500,  dailyYield:375.00, pct:'15%', totalReturn:'~R$ 26.250' },
+  { id:'claude35_opus',     name:'Claude 3.5 Opus',   company:'Anthropic', emoji:'🔮', amount:4200,  dailyYield:630.00, pct:'15%', totalReturn:'~R$ 44.100' },
+  { id:'gemini20_ultra',    name:'Gemini 2.0 Ultra',  company:'Google',    emoji:'🌟', amount:6500,  dailyYield:975.00, pct:'15%', totalReturn:'~R$ 68.250' },
+  { id:'llama4_colossus',   name:'Llama 4 Colossus',  company:'Meta',      emoji:'🦙', amount:11000, dailyYield:1650.00,pct:'15%', totalReturn:'~R$ 115.500' },
+];
+
+/* Estado temporário para modais */
+let _iaPendingPkg    = null;  // pacote sendo confirmado p/ investimento
+let _iaPendingProjId = null;  // id do projeto p/ saque
+
+/* ── Helpers ── */
+function _getAIProjects() {
+  const u = DB.getUser(CU.id);
+  return Array.isArray(u.aiProjects) ? u.aiProjects : [];
+}
+function _saveAIProjects(projects) {
+  /* Salva no cache local sempre; persiste no Supabase só se a coluna ai_projects existir */
+  try { DB.updateUser(CU.id, { aiProjects: projects }); } catch(e) { console.warn('[IA] ai_projects column not found in Supabase yet:', e); }
+}
+function _calcAccumulatedYield(proj) {
+  const now    = Date.now();
+  const start  = new Date(proj.startDate).getTime();
+  const end    = new Date(proj.endDate).getTime();
+  const elapsed = Math.min(now, end) - start;
+  const days   = Math.max(0, elapsed / 86400000);
+  return parseFloat((days * proj.dailyYield).toFixed(2));
+}
+function _calcDaysRemaining(proj) {
+  const now = Date.now();
+  const end = new Date(proj.endDate).getTime();
+  return Math.max(0, Math.ceil((end - now) / 86400000));
+}
+function _calcDaysElapsed(proj) {
+  const now   = Date.now();
+  const start = new Date(proj.startDate).getTime();
+  const end   = new Date(proj.endDate).getTime();
+  const total = end - start;
+  const elapsed = Math.min(now, end) - start;
+  return { pct: Math.min(100, (elapsed / total) * 100), days: Math.floor(elapsed / 86400000) };
+}
+
+/* ── Renderização da aba ── */
+function renderTabProjetos() {
+  _renderIAPackages();
+  _renderMeusProjetos();
+}
+
+function _renderIAPackages() {
+  const grid = document.getElementById('ia-packages-grid');
+  if (!grid) return;
+  grid.innerHTML = IA_PACKAGES.map(pkg => `
+    <div class="ia-card">
+      <div class="ia-card-top">
+        <div>
+          <div class="ia-card-name">${pkg.name}</div>
+          <div class="ia-card-invest">Investimento: <strong style="color:#C580FF">${fmtBRL(pkg.amount)}</strong></div>
+        </div>
+        <div class="ia-card-emoji">${pkg.emoji}</div>
+      </div>
+      <div class="ia-card-yield-label">Rendimento Diário</div>
+      <div class="ia-card-yield">${fmtBRL(pkg.dailyYield)}</div>
+      <div class="ia-card-yield-sub">${pkg.pct} ao dia</div>
+      <div class="ia-card-tags">
+        <span class="ia-tag ia-tag-pct">📈 ${pkg.pct}/dia</span>
+        <span class="ia-tag ia-tag-days">⏳ 70 dias</span>
+      </div>
+      <div class="ia-card-return">Retorno total: <span>${pkg.totalReturn}</span></div>
+      <button class="btn-invest" onclick="abrirModalInvestIA('${pkg.id}')">💰 Investir Agora</button>
+    </div>
+  `).join('');
+}
+
+function _renderMeusProjetos() {
+  const el = document.getElementById('ia-meus-projetos');
+  if (!el) return;
+  const projects = _getAIProjects();
+  if (!projects.length) {
+    el.innerHTML = `
+      <div class="ia-empty">
+        <div class="ia-empty-ico">🤖</div>
+        <div class="ia-empty-t">Nenhum projeto ativo ainda</div>
+        <div class="ia-empty-s">Escolha um pacote acima para começar a investir em IA!</div>
+      </div>`;
+    return;
+  }
+  el.innerHTML = `<div class="ia-proj-list">${projects.map(proj => {
+    const acc       = _calcAccumulatedYield(proj);
+    const withdrawn = parseFloat(proj.withdrawnYield || 0);
+    const available = Math.max(0, acc - withdrawn);
+    const daysRem   = _calcDaysRemaining(proj);
+    const elapsed   = _calcDaysElapsed(proj);
+    const isExpired = daysRem === 0;
+    return `
+      <div class="ia-proj">
+        <div class="ia-proj-header">
+          <div class="ia-proj-name">${proj.emoji || '🤖'} ${proj.packageName}</div>
+          <div class="ia-proj-status${isExpired?' expired':''}">${isExpired?'⏰ Expirado':'✅ Ativo'}</div>
+        </div>
+        <div class="ia-proj-row">
+          <div class="ia-proj-info">
+            <div class="ia-proj-info-l">Principal (bloqueado)</div>
+            <div class="ia-proj-info-v">${fmtBRL(proj.amount)}</div>
+          </div>
+          <div class="ia-proj-info">
+            <div class="ia-proj-info-l">Rendimento/dia</div>
+            <div class="ia-proj-info-v green">${fmtBRL(proj.dailyYield)}</div>
+          </div>
+          <div class="ia-proj-info">
+            <div class="ia-proj-info-l">Acumulado</div>
+            <div class="ia-proj-info-v green">${fmtBRL(acc)}</div>
+          </div>
+          <div class="ia-proj-info">
+            <div class="ia-proj-info-l">Disponível p/ saque</div>
+            <div class="ia-proj-info-v green">${fmtBRL(available)}</div>
+          </div>
+        </div>
+        <div class="ia-proj-pb-wrap">
+          <div class="ia-proj-pb-label">
+            <span>Progresso: ${elapsed.days} dias passados</span>
+            <span>${daysRem} dias restantes</span>
+          </div>
+          <div class="ia-proj-pb"><div class="ia-proj-pb-fill" style="width:${elapsed.pct}%"></div></div>
+        </div>
+        <button class="btn-sacar-rend-ia" ${available <= 0?'disabled':''} onclick="abrirSaqueRendIA('${proj.id}')">
+          💸 Sacar Rendimentos ${available > 0 ? '('+fmtBRL(available)+')' : ''}
+        </button>
+      </div>`;
+  }).join('')}</div>`;
+}
+
+/* ── Modal investimento ── */
+let _iaInvestAfterPix = false;
+
+function abrirModalInvestIA(pkgId) {
+  const pkg = IA_PACKAGES.find(p => p.id === pkgId);
+  if (!pkg || !CU) return;
+
+  const totalDeposited = parseFloat(CU.totalDeposited || 0);
+  const bal            = parseFloat(CU.balance        || 0);
+  const endDate        = new Date(Date.now() + 70 * 86400000);
+
+  // Regra: só pode investir com saldo depositado real (bônus não conta)
+  if (totalDeposited < pkg.amount) {
+    // Abre modal bonito de saldo insuficiente
+    const falta = pkg.amount - totalDeposited;
+    document.getElementById('ia-insuf-msg').textContent =
+      `Para ativar "${pkg.name}" você precisa de ${fmtBRL(pkg.amount)} em saldo depositado.`;
+    document.getElementById('ia-insuf-box').innerHTML = `
+      <div class="ia-md-row"><span class="ia-md-rl">Pacote escolhido</span><span class="ia-md-rv">${pkg.emoji} ${pkg.name}</span></div>
+      <div class="ia-md-row"><span class="ia-md-rl">Necessário</span><span class="ia-md-rv" style="color:#C580FF">${fmtBRL(pkg.amount)}</span></div>
+      <div class="ia-md-row"><span class="ia-md-rl">Seu depósito real</span><span class="ia-md-rv">${fmtBRL(totalDeposited)}</span></div>
+      <div class="ia-md-row"><span class="ia-md-rl">Falta depositar</span><span class="ia-md-rv" style="color:#F87171">${fmtBRL(falta)}</span></div>
+    `;
+    document.getElementById('ia-modal-insuf').classList.add('show');
+    return;
+  }
+
+  // Saldo depositado suficiente → abre Pix com valor exato do pacote
+  _iaPendingPkg     = pkg;
+  _iaInvestAfterPix = true;
+  abrirModalPix({
+    amount:    pkg.amount,
+    pixQrCode: gerarCodigoPix(pkg.amount),
+    expiresAt: new Date(Date.now() + 30 * 60000).toISOString(),
+  });
+}
+
+function _executarInvestIA(pkg) {
+  const bal        = parseFloat(CU.balance) || 0;
+  const newBalance = parseFloat((bal - pkg.amount).toFixed(2));
+  const now        = new Date().toISOString();
+  const endDate    = new Date(Date.now() + 70*86400000).toISOString();
+  const projId     = 'iap_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
+
+  const proj = {
+    id: projId, packageId: pkg.id, packageName: pkg.name,
+    company: pkg.company, emoji: pkg.emoji,
+    amount: pkg.amount, dailyYield: pkg.dailyYield,
+    startDate: now, endDate: endDate, withdrawnYield: 0,
+  };
+
+  const projects = _getAIProjects();
+  projects.push(proj);
+
+  liveBalance = newBalance;
+  try { DB.updateUser(CU.id, { balance: newBalance, aiProjects: projects }); }
+  catch(e) { DB.updateUser(CU.id, { balance: newBalance }); }
+  DB.addTxn(CU.id, {
+    type: 'invest_ia', amount: -pkg.amount,
+    description: `Investimento IA — ${pkg.name} (${pkg.company})`, date: now,
+  });
+
+  const elBal = document.getElementById('d-bal');
+  if (elBal) elBal.textContent = fmtBRL(newBalance);
+  const sh = document.getElementById('s-h');
+  if (sh) sh.textContent = `Saldo disponível: ${fmtBRL(newBalance)}`;
+
+  // Atualiza CU em memória para manter saldo sincronizado
+  CU.balance    = newBalance;
+  CU.aiProjects = projects;
+  _iaPendingPkg = null;
+  showToast(`✅ Projeto ${pkg.name} ativado! Rendimento de ${fmtBRL(pkg.dailyYield)}/dia começa agora.`, 'success');
+  renderDash(); renderTxns();
+  setTimeout(() => { renderTabProjetos(); }, 300);
+}
+function closeIAModal() {
+  document.getElementById('ia-modal-conf').classList.remove('show');
+  _iaPendingPkg = null;
+}
+function confirmarInvestIA() {
+  // Mantido para compatibilidade — agora o fluxo passa por _executarInvestIA
+  if (!_iaPendingPkg) return;
+  _executarInvestIA(_iaPendingPkg);
+  closeIAModal();
+}
+
+/* ── Modal saque rendimentos IA ── */
+function abrirSaqueRendIA(projId) {
+  const projects = _getAIProjects();
+  const proj     = projects.find(p => p.id === projId);
+  if (!proj) return;
+  _iaPendingProjId = projId;
+  const acc       = _calcAccumulatedYield(proj);
+  const withdrawn = parseFloat(proj.withdrawnYield || 0);
+  const available = Math.max(0, parseFloat((acc - withdrawn).toFixed(2)));
+  document.getElementById('ia-saque-sub').textContent = `Projeto: ${proj.emoji} ${proj.packageName}`;
+  document.getElementById('ia-saque-box').innerHTML = `
+    <div class="ia-md-row"><span class="ia-md-rl">Rendimento acumulado</span><span class="ia-md-rv green">${fmtBRL(acc)}</span></div>
+    <div class="ia-md-row"><span class="ia-md-rl">Já sacado</span><span class="ia-md-rv">${fmtBRL(withdrawn)}</span></div>
+    <div class="ia-md-row"><span class="ia-md-rl">Disponível agora</span><span class="ia-md-rv green">${fmtBRL(available)}</span></div>
+    <div class="ia-md-row"><span class="ia-md-rl">Principal (bloqueado)</span><span class="ia-md-rv" style="color:#EF4444">${fmtBRL(proj.amount)} 🔒</span></div>
+  `;
+  document.getElementById('ia-modal-saque').classList.add('show');
+}
+function closeIASaqueModal() {
+  document.getElementById('ia-modal-saque').classList.remove('show');
+  _iaPendingProjId = null;
+}
+function confirmarSaqueRendIA() {
+  if (!_iaPendingProjId) return;
+  const projects = _getAIProjects();
+  const proj     = projects.find(p => p.id === _iaPendingProjId);
+  if (!proj) { closeIASaqueModal(); return; }
+
+  const acc       = _calcAccumulatedYield(proj);
+  const withdrawn = parseFloat(proj.withdrawnYield || 0);
+  const available = Math.max(0, parseFloat((acc - withdrawn).toFixed(2)));
+
+  if (available <= 0) { showToast('Nenhum rendimento disponível para saque.','error'); closeIASaqueModal(); return; }
+
+  /* Credita no saldo */
+  const u          = DB.getUser(CU.id);
+  const newBalance = parseFloat(((parseFloat(u.balance)||0) + available).toFixed(2));
+  proj.withdrawnYield = parseFloat((withdrawn + available).toFixed(2));
+
+  _saveAIProjects(projects);
+  liveBalance = newBalance;
+  DB.updateUser(CU.id, { balance: newBalance, totalEarned: parseFloat(((parseFloat(u.totalEarned)||0)+available).toFixed(2)) });
+  DB.addTxn(CU.id, {
+    type:        'saque_ia',
+    amount:      available,
+    description: `Rendimentos IA — ${proj.packageName}`,
+    date:        new Date().toISOString(),
+  });
+
+  /* Atualiza tela */
+  const elBal = document.getElementById('d-bal');
+  if (elBal) elBal.textContent = fmtBRL(newBalance);
+  const sh = document.getElementById('s-h');
+  if (sh) sh.textContent = `Saldo disponível: ${fmtBRL(newBalance)}`;
+
+  closeIASaqueModal();
+  showToast(`💸 Saque de ${fmtBRL(available)} solicitado com sucesso!`, 'success');
+  renderDash(); renderTxns();
+  setTimeout(() => { renderTabProjetos(); }, 300);
+}
+
+/* ── Toast helper (reusa o padrão do dashboard se existir) ── */
+function showToast(msg, type='success') {
+  /* Tenta usar o sistema de notificação nativo da plataforma */
+  try {
+    const container = document.getElementById('live-notif-container');
+    if (container) {
+      const el = document.createElement('div');
+      el.className = 'live-notif';
+      el.innerHTML = `<span style="font-size:13px;font-weight:600;color:${type==='error'?'#F87171':'#4ADE80'}">${msg}</span>`;
+      el.style.cssText = 'background:#1A003A;border:1px solid rgba(155,48,255,.4);border-radius:12px;padding:12px 16px;margin-bottom:8px;animation:slideIn .3s ease;';
+      container.prepend(el);
+      setTimeout(()=>{ el.style.opacity='0'; el.style.transition='opacity .4s'; setTimeout(()=>el.remove(),400); }, 3500);
+      return;
+    }
+  } catch(e) {}
+  /* Fallback: alert simples */
+  alert(msg);
 }
 </script>
 </body>
