@@ -2056,6 +2056,12 @@ html, body { width:100%; min-height:100vh; font-family:'Outfit',sans-serif; over
         <span id="pix-copy-ico">📋</span>
         <span id="pix-copy-lbl">Copiar código Pix</span>
       </button>
+      <div style="font-size:10.5px;color:#6B7280;text-align:center;margin:10px 0 2px;line-height:1.5;">
+    
+      </div>
+      <button class="btn-pix-confirmar-sim" id="btn-pix-confirmar-sim" onclick="confirmarPagamentoSimulado()">
+        ✅ Confirmar Pagamento Simulado
+      </button>
       <button class="btn-pix-cancel" onclick="fecharModalPix()">Cancelar / Fechar</button>
     </div>
   </div>
@@ -3292,20 +3298,35 @@ async function processDeposito() {
   document.getElementById('sp-d').style.display = 'block';
   document.getElementById('btn-d-l').textContent = 'Gerando Pix...';
 
-  await new Promise(r => setTimeout(r, 800));
+  try {
+    const { data, error } = await _sb.functions.invoke('create-pix-charge', {
+      body: { amount: v },
+    });
 
-  btn.disabled = false;
-  document.getElementById('sp-d').style.display = 'none';
-  document.getElementById('btn-d-l').textContent = 'Gerar Pix';
+    if (error || !data?.ok) {
+      const msg = data?.error || error?.message || 'Falha ao gerar Pix';
+      gToast('error', msg);
+      return;
+    }
 
-  closeDM('dm-d');
-  document.getElementById('d-v').value = '';
+    closeDM('dm-d');
+    document.getElementById('d-v').value = '';
 
-  abrirModalPix({
-    amount:    v,
-    pixQrCode: gerarCodigoPix(v),
-    expiresAt: new Date(Date.now() + 30 * 60000).toISOString(),
-  });
+    abrirModalPix({
+      amount:       data.amount,
+      payload:      data.payload,
+      encodedImage: data.encodedImage,
+      expiresAt:    data.expiresAt,
+    });
+
+  } catch (e) {
+    console.error('[NexusYield] processDeposito:', e);
+    gToast('error', 'Erro de conexão ao gerar Pix.');
+  } finally {
+    btn.disabled = false;
+    document.getElementById('sp-d').style.display = 'none';
+    document.getElementById('btn-d-l').textContent = 'Gerar Pix';
+  }
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -3577,26 +3598,31 @@ let _pixPollingInterval = null;
 let _pixValorSimulado   = 0;
 
 /**
- * Abre o modal de depósito Pix com QR Code decorativo + Copia e Cola + timer.
- * @param {{ amount, pixQrCode, expiresAt }} opts
+ * Abre o modal de depósito Pix com QR Code real (Asaas) + Copia e Cola + timer.
+ * @param {{ amount, payload, encodedImage, expiresAt }} opts
  */
-function abrirModalPix({ amount, pixQrCode, expiresAt }) {
+function abrirModalPix({ amount, payload, encodedImage, expiresAt }) {
   _pixValorSimulado = amount;
 
   // Valor
   const ve = document.getElementById('pix-modal-valor');
   if (ve) ve.textContent = fmtBRL(amount);
 
-  // Código Copia e Cola
+  // Código Copia e Cola (payload real da Asaas, fallback para gerado local)
   const ce = document.getElementById('pix-copy-code');
-  if (ce) ce.textContent = pixQrCode || 'Código indisponível';
+  if (ce) ce.textContent = payload || gerarCodigoPix(amount);
 
-  // QR Code decorativo gerado localmente
+  // QR Code: usa imagem base64 real da Asaas quando disponível
   const imgEl = document.getElementById('pix-qr-img');
   const phEl  = document.getElementById('pix-qr-placeholder');
-  if (phEl) {
-    phEl.style.display = 'flex';
-    phEl.style.padding = '0';
+  if (encodedImage && imgEl && phEl) {
+    imgEl.src = `data:image/png;base64,${encodedImage}`;
+    imgEl.style.display = 'block';
+    phEl.style.display  = 'none';
+  } else if (phEl) {
+    // Fallback: QR decorativo gerado localmente
+    phEl.style.display    = 'flex';
+    phEl.style.padding    = '0';
     phEl.style.background = 'transparent';
     phEl.innerHTML = _fakeSvgQr();
     if (imgEl) imgEl.style.display = 'none';
