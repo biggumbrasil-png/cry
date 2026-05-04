@@ -3291,8 +3291,8 @@ function _fakeSvgQr() {
 
 async function processDeposito() {
   const v = parseFloat(document.getElementById('d-v').value);
-  if (!v || v < 10) {
-    gToast('error', 'Valor mínimo: R$ 10,00.');
+  if (!v || v < 3) {
+    gToast('error', 'Valor mínimo: R$ 3,00.');
     return;
   }
 
@@ -3303,11 +3303,11 @@ async function processDeposito() {
 
   try {
     const { data, error } = await _sb.functions.invoke('create-pix-charge', {
-      body: { amount: v }
+      body: { amount: v, userId: CU.id }
     });
 
     if (error) throw error;
-    if (!data.ok) throw new Error(data.error || 'Erro na Asaas');
+    if (!data.ok) throw new Error(data.error || 'Erro ao gerar Pix');
 
     closeDM('dm-d');
     document.getElementById('d-v').value = '';
@@ -3598,7 +3598,7 @@ let _pixPollingInterval = null;
 let _pixValorSimulado   = 0;
 
 /**
- * Abre o modal de depósito Pix com QR Code real (Asaas) + Copia e Cola + timer.
+ * Abre o modal de depósito Pix com QR Code real (CashinPay) + Copia e Cola + timer.
  * @param {{ amount, payload, encodedImage, expiresAt }} opts
  */
 function abrirModalPix({ amount, payload, encodedImage, expiresAt }) {
@@ -3608,11 +3608,11 @@ function abrirModalPix({ amount, payload, encodedImage, expiresAt }) {
   const ve = document.getElementById('pix-modal-valor');
   if (ve) ve.textContent = fmtBRL(amount);
 
-  // Código Copia e Cola (payload real da Asaas, fallback para gerado local)
+  // Código Copia e Cola (payload real do CashinPay, fallback para gerado local)
   const ce = document.getElementById('pix-copy-code');
   if (ce) ce.textContent = payload || gerarCodigoPix(amount);
 
-  // QR Code: usa imagem base64 real da Asaas quando disponível
+  // QR Code: usa imagem base64 real do CashinPay quando disponível
   const imgEl = document.getElementById('pix-qr-img');
   const phEl  = document.getElementById('pix-qr-placeholder');
   if (encodedImage && imgEl && phEl) {
@@ -3739,7 +3739,7 @@ function _pararTimerPix() {
 }
 
 /**
- * Polling: verifica a cada 5 s se o webhook da Asaas já creditou o usuário.
+ * Polling: verifica a cada 5 s se o webhook da CashinPay já creditou o usuário.
  * Quando o balance aumentar, fecha o modal e atualiza a UI.
  */
 function _iniciarPollingPix(amountEsperado) {
