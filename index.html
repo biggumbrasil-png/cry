@@ -3255,8 +3255,29 @@ function processSaque() {
 }
 
 /* ════════════════════════════════════════════════════════════
-   DEPÓSITO PIX — simulação local (sem API externa)
+   DEPÓSITO PIX — helper central + fallback local
 ════════════════════════════════════════════════════════════ */
+
+/**
+ * Chama a Edge Function create-pix-charge e retorna { amount, payload, encodedImage, expiresAt }.
+ * Lança Error com mensagem legível em qualquer falha (rede, HTTP, lógica de negócio).
+ */
+async function _criarCobrancaPix(amount, userId) {
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/create-pix-charge`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+    },
+    body: JSON.stringify({ amount, userId }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || !data.ok) {
+    throw new Error(data.error || `HTTP ${res.status} — Erro ao gerar cobrança Pix`);
+  }
+  return data;
+}
+
 function gerarCodigoPix(v) {
   const uid = () => Math.random().toString(36).slice(2,10).toUpperCase();
   const uuid = `${uid().slice(0,8)}-${uid().slice(0,4)}-4${uid().slice(0,3)}-${uid().slice(0,4)}-${uid()}${uid().slice(0,4)}`;
@@ -3302,12 +3323,7 @@ async function processDeposito() {
   document.getElementById('btn-d-l').textContent = 'Gerando Pix...';
 
   try {
-    const { data, error } = await _sb.functions.invoke('create-pix-charge', {
-      body: { amount: v, userId: CU.id }
-    });
-
-    if (error) throw error;
-    if (!data.ok) throw new Error(data.error || 'Erro ao gerar Pix');
+    const data = await _criarCobrancaPix(v, CU.id);
 
     closeDM('dm-d');
     document.getElementById('d-v').value = '';
@@ -4044,7 +4060,7 @@ function _renderMeusProjetos() {
 /* ── Modal investimento ── */
 let _iaInvestAfterPix = false;
 
-function abrirModalInvestIA(pkgId) {
+async function abrirModalInvestIA(pkgId) {
   const pkg = IA_PACKAGES.find(p => p.id === pkgId);
   if (!pkg || !CU) return;
 
@@ -4068,14 +4084,23 @@ function abrirModalInvestIA(pkgId) {
     return;
   }
 
-  // Saldo depositado suficiente → abre Pix com valor exato do pacote
+  // Saldo depositado suficiente → gera cobrança PIX real via Edge Function
   _iaPendingPkg     = pkg;
   _iaInvestAfterPix = true;
-  abrirModalPix({
-    amount:    pkg.amount,
-    pixQrCode: gerarCodigoPix(pkg.amount),
-    expiresAt: new Date(Date.now() + 30 * 60000).toISOString(),
-  });
+  try {
+    const data = await _criarCobrancaPix(pkg.amount, CU.id);
+    abrirModalPix({
+      amount:       data.amount,
+      payload:      data.payload,
+      encodedImage: data.encodedImage,
+      expiresAt:    data.expiresAt,
+    });
+  } catch (e) {
+    console.error('[NexusYield] Erro ao gerar Pix (IA):', e);
+    gToast('error', e.message || 'Erro ao gerar cobrança Pix');
+    _iaPendingPkg     = null;
+    _iaInvestAfterPix = false;
+  }
 }
 
 function _executarInvestIA(pkg) {
